@@ -1,23 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
-using HIPA;
+using System.Diagnostics;
+using System.Data;
 
-namespace HIPA
-{
+namespace HIPA {
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
@@ -26,64 +15,89 @@ namespace HIPA
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-     
-        private void Calculate(object sender, RoutedEventArgs e)
-        {
             
         }
 
-        private void testDragDrop(object sender, DragEventArgs e)
+     
+        private void PrepareData(object sender, RoutedEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop, false) == true)
-            {
-                e.Effects = DragDropEffects.All;
+
+            try {
+                FileService.ReadFiles();
+               
+                
+                foreach (File file in Globals.Files) {
+                    CellService.CreateCells(file);
+                    CellService.PopulateCells(file);
+                    CellService.CalculateMinutes(file);
+                    Debug.Print("FileName: " + file.FileName);
+                    Debug.Print("Limit: " + file.Limit.ToString());
+                    Debug.Print("Cells: " + file.Cells.Count.ToString());
+                    Debug.Print("TimeFrames: " + file.Cells[0].Timeframes.Count.ToString());
+                    Debug.Print("Time Frame Test: " + file.Cells[0].Timeframes[16].Minute + " " + file.Cells[0].Timeframes[16].ID + " " + file.Cells[0].Timeframes[16].Value);
+                   
+                }
+                selectedFilesDataGrid.ItemsSource = null;
+                selectedFilesDataGrid.ItemsSource = Globals.Files;
+                CalculateButton.IsEnabled = true;
+
+            }
+            catch (Exception ex) {
+                Debug.Print(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
-        private void testDragEnter(object sender, DragEventArgs e)
-        {
-            calculationBox.Text = "Enter";
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files != null && files.Length != 0)
-            {
-                calculationBox.Text = files[0];
-            }
+        private void Calculate(object sender, RoutedEventArgs e) {
+
+           
+
         }
 
-        private void testDragOver(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effects = DragDropEffects.Copy;
-            else
-                e.Effects = DragDropEffects.None;
-        }
 
-        private void Main_DragEnter(object sender, DragEventArgs e)
+        private void OpenFiles(object sender, RoutedEventArgs e)
         {
-            calculationBox.Text = "Entered";
-            Console.WriteLine("DragEnter");
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            // Set the file dialog to filter for graphics files.
-            openFileDialog.Filter = "Text|*.txt|All|*.*";
-
-            // Allow the user to select multiple images.
-            openFileDialog.Multiselect = true;
-            openFileDialog.Title = "Select your TimeFrame Files";
+            OpenFileDialog openFileDialog = new OpenFileDialog {
+                // Set the file dialog to filter for graphics files.
+                Filter = "Text|*.txt|All|*.*",
+                // Allow the user to select multiple images.
+                Multiselect = true,
+                Title = "Select your TimeFrame Files"
+            };
+            int id = 0;
             if (openFileDialog.ShowDialog() == true)
             {
                 foreach (String file in openFileDialog.FileNames)
                 {
-                    calculationBox.AppendText(openFileDialog.FileName + "\n");
-                    HIPA.Globals.Files.Add(new SelectedFiles(0, openFileDialog.FileName));
+                    Debug.Print(file);
+                    Globals.Files.Add(new File(id, file, FileService.GetFileName(file), 0, false, false, new List<Cell>(),0,0,0, new string[0]));
+                    id++;
                 }
+                selectedFilesDataGrid.ItemsSource = Globals.Files;
+                if(Globals.Files.Count > 0){
+                    PrepareButton.IsEnabled = true;
+                    ClearButton.IsEnabled = true;
+                }
+
             }
-               
+        }
+
+        private void CloseApplication(object sender, RoutedEventArgs e) {
+           
+        }
+
+        private void OpenHelpWindow(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void Clear(object sender, RoutedEventArgs e) {
+            Globals.Files.Clear();
+            Globals.Cells.Clear();
+            selectedFilesDataGrid.ItemsSource = null;
+            CalculateButton.IsEnabled = false;
+            PrepareButton.IsEnabled = false;
+            ClearButton.IsEnabled = false;
+
         }
     }
 }

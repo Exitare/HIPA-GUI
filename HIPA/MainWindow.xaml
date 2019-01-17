@@ -5,23 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HIPA"
         mc:Ignorable="d"
-        Title="HIPA" Height="720" Width="1280"
-        x:Name="Main" DragEnter="Main_DragEnter">
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="587*"/>
-      <ColumnDefinition Width="685*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="10*"/>
-      <RowDefinition Height="3*"/>
-    </Grid.RowDefinitions>
-    <Button Content="Add" HorizontalAlignment="Left" Margin="20,57,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" />
-    <Button Content="Delete" HorizontalAlignment="Left" Margin="20,89,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.077,-0.08" />
-    <TextBox Height="296" Margin="10,343,10,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="calculationBox" Drop="testDragDrop" DragEnter="testDragEnter" DragOver="testDragOver" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
-    <Button Content="Calculate" HorizontalAlignment="Left" Margin="20,124,0,0" VerticalAlignment="Top" Width="75" Click="Calculate" IsEnabled="False"/>
-    <Menu Height="36" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-    <ProgressBar Height="20" Margin="10,129,10,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        Title="HIPA" MinHeight="720" MinWidth="1280" Height="720" Width="1280"
+        x:Name="Main">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open" Click="OpenFiles"/>
+                <MenuItem Header="_Save"/>
+                <MenuItem Header="_Close" Click="CloseApplication"/>
+            </MenuItem>
+            <MenuItem Header="_Extras">
+                <MenuItem Header="_Help" Click="OpenHelpWindow"/>
+                <MenuItem Header="_Settings"/>
+                <MenuItem Header="_About"/>
+                <MenuItem Header="_Updates"/>
+            </MenuItem>
 
-  </Grid>
+        </Menu>
+       
+        <Button Content="Calculate" x:Name="CalculateButton" HorizontalAlignment="Left" Margin="10,291,0,0" VerticalAlignment="Top" Width="75" Click="Calculate" IsEnabled="False"/>
+        <ProgressBar Margin="10,0,10,10" Height="20" VerticalAlignment="Bottom"/>
+        <DataGrid x:Name="selectedFilesDataGrid"  Height="229" Margin="10,32,10,0" VerticalAlignment="Top" RowHeight="30" ColumnWidth="100" AutoGenerateColumns="False" TabIndex="2147483641">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding ID}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Name" Binding="{Binding FileName}" Width="150"  IsReadOnly="True" />
+                <DataGridTextColumn Header="Limit" Binding="{Binding Limit}" />
+                <DataGridCheckBoxColumn Header="High Stimulus" Binding="{Binding High_Stimulus_Output}"/>
+                <DataGridTextColumn Header="Detected Cells" Binding="{Binding CellCount}"  IsReadOnly="True"/>
+                <DataGridTextColumn Header="Detected Rows" Binding="{Binding RowCount}"  IsReadOnly="True" />
+                <DataGridTextColumn Header="Detected Minutes" Binding="{Binding Minutes}"  IsReadOnly="True" Width="130"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <Button Content="Prepare Data" x:Name="PrepareButton" HorizontalAlignment="Left" Margin="10,266,0,0" VerticalAlignment="Top" Width="75" Click="PrepareData" IsEnabled="False"/>
+        <ComboBox HorizontalAlignment="Left" Margin="227,266,0,0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+        <Label Content="Label" HorizontalAlignment="Left" Margin="174,266,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.763,-4.077"/>
+        <Button Content="Clear" x:Name="ClearButton" HorizontalAlignment="Left" Margin="10,316,0,0" VerticalAlignment="Top" Width="75" Click="Clear"/>
+
+    </Grid>
 </Window>

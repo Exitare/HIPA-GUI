@@ -9,6 +9,7 @@ namespace HIPA
 {
     class Globals
     {
-        public static List<SelectedFiles> Files = new List<SelectedFiles>();
+        public static List<File> Files = new List<File>();
+        public static List<Cell> Cells = new List<Cell>();
     }
 }

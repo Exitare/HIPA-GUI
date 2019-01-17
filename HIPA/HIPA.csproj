@@ -64,7 +64,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\SelectedFiles.cs" />
+    <Compile Include="Classes\Cell.cs" />
+    <Compile Include="Classes\File.cs" />
+    <Compile Include="Classes\TimeFrame.cs" />
+    <Compile Include="Services\Cells.cs" />
+    <Compile Include="Services\File.cs" />
+    <Compile Include="Services\TimeFrame.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
