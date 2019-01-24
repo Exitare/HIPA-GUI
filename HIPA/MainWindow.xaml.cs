@@ -60,7 +60,7 @@ namespace HIPA {
                     MinimumMaximum.CalculateThreshold(file);
                     HighIntensity.Detect_Above_Below_Threshold(file);
                     HighIntensity.Count_High_Intensity_Peaks_Per_Minute(file);
-                    Write.ExportData(file);
+                    Write.Export_High_Stimulus_Counts(file);
                     this.Dispatcher.Invoke(() =>
                     {
                         progressBar.Value = progressBar.Value + step;

@@ -25,6 +25,80 @@ namespace FileService {
         }
 
 
+
+
+        public static string[,] Transpose(string[,] matrix)
+        {
+            int w = matrix.GetLength(0);
+            int h = matrix.GetLength(1);
+
+            string[,] result = new string[h, w];
+
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    result[j, i] = matrix[i, j];
+                }
+            }
+
+            return result;
+        }
+
+
+
+        public static void Export_High_Stimulus_Counts(InputFile file)
+        {
+            string filename = file.Folder + file.Name + " results " + ".txt";
+            File.Delete(filename);
+            StreamWriter sw = new StreamWriter(filename);
+
+
+            string[,] data_matrix = new string[Convert.ToInt32(file.Total_Detected_Minutes) + 2, file.CellCount];
+
+            for (int j = 0; j < file.CellCount; j++)
+            {
+                data_matrix[0, j] = file.Cells[j].Name;
+            }
+
+
+
+
+            for (int i = 1; i <= Convert.ToInt32(file.Total_Detected_Minutes) + 1; i++)
+            {
+                for (int j = 0; j < file.CellCount; j++)
+                {
+
+                    data_matrix[i, j] = file.Cells[j].High_Intensity_Counts[i - 1].ToString();
+                }
+
+            }
+
+    
+            for (int i = 0; i < data_matrix.GetLength(0); ++i)
+            {
+
+                string[] sArr = new string[file.CellCount];
+
+
+                for (int j = 0; j < data_matrix.GetLength(1); j++)
+                    sArr[j] = data_matrix[i, j];
+
+               // Console.WriteLine(String.Join("\t", sArr));
+                sw.WriteLine(String.Join("\t", sArr));
+            }
+
+            string[,] transpose = Transpose(data_matrix);
+
+
+
+
+
+
+            sw.Close();
+        }
+
+
         public static void ExportData(InputFile file)
         {
             string filename = Path.Combine(file.Folder, file.Name + "-Results-" + DateTime.Now.ToLocalTime().ToString() + ".txt");
@@ -52,7 +126,7 @@ namespace FileService {
                 } else
                 {
                     sw.WriteLine(file.Cells[i].Name + "\t");
-                    for (int j = 0; j < file.Cells[i].Timeframes.Count; ++j)
+                    for (int j = 0; j <= file.Cells[i].Timeframes.Count; ++j)
                     {
                         sw.WriteLine(file.Cells[i].Timeframes[j].Value + "\t");
                     }

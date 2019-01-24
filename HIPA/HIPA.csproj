@@ -65,7 +65,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Cell.cs" />
-    <Compile Include="Classes\File.cs" />
+    <Compile Include="Classes\InputFile.cs" />
     <Compile Include="Classes\TimeFrame.cs" />
     <Compile Include="Services\Calculations\HighIntensity.cs" />
     <Compile Include="Services\Calculations\MinimumMaximum.cs" />
