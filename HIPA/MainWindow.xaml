@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HIPA"
         mc:Ignorable="d"
         Title="HIPA" MinHeight="720" MinWidth="1280" Height="720" Width="1280"
-        x:Name="Main">
+        x:Name="Main" >
    
 
     <Grid>
@@ -16,14 +16,13 @@
         <Menu  VerticalAlignment="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="_Open" Click="OpenFiles"/>
-                <MenuItem Header="_Export" Click="OpenExportWindow"/>
                 <MenuItem Header="_Close" Click="CloseApplication"/>
             </MenuItem>
             <MenuItem Header="_Extras">
                 <MenuItem Header="_Help" Click="OpenHelpWindow"/>
                 <MenuItem Header="_Settings" Click="OpenSettings"/>
                 <MenuItem Header="_About"/>
-                <MenuItem Header="_Updates" Click="CheckForUpdates"/>
+                <MenuItem Header="_Check for Update" Click="CheckForUpdates"/>
             </MenuItem>
 
         </Menu>

@@ -20,7 +20,7 @@ namespace HIPA {
         }
 
 
-        public static void NormalizeTimeFrames(InputFile file)
+        public static void Baseline_Mean(InputFile file)
         {
             Debug.Print("Kaya execute");
             foreach (Cell cell in file.Cells)
@@ -33,9 +33,30 @@ namespace HIPA {
 
         }
 
-        public static void AurielNormalization(InputFile file)
+        public static void To_One(InputFile file)
         {
             Debug.Print("Other execute");
+
+            foreach (Cell cell in file.Cells)
+            {
+                decimal max = 0.0M;
+
+                foreach (TimeFrame timeframe in cell.Timeframes)
+                {
+                    if (timeframe.Value >= max)
+                    {
+                        max = timeframe.Value;
+                    }
+                }
+
+                Debug.Print("Maximum detected {0}", max);
+
+
+                foreach (TimeFrame timeframe in cell.Timeframes)
+                {
+                    cell.Normalized_Timeframes.Add(new TimeFrame(timeframe.ID, timeframe.Value / max, timeframe.Including_Minute, timeframe.Above_Below_Threshold));
+                }
+            }
         }
     }
 }

@@ -132,7 +132,7 @@ namespace HIPA
             foreach (String file in openFileDialog.FileNames)
             {
                 Debug.Print(file);
-                Globals.Files.Add(new InputFile(id, GetFolder(file), file, GetFileName(file), (decimal)0.6, new List<Cell>(), 0,0, 0, new string[0],372, "Kaya"));
+                Globals.Files.Add(new InputFile(id, GetFolder(file), file, GetFileName(file), (decimal)0.6, new List<Cell>(), 0,0, 0, new string[0],372, "Baseline"));
                 id++;
             }
         }

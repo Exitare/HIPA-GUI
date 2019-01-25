@@ -13,15 +13,14 @@ namespace HIPA
         public static List<InputFile> Files = new List<InputFile>();
         public static Dictionary<string, Delegate> NormalizationMethods = new Dictionary<string, Delegate>();
         public static RoutedCommand MyCommand = new RoutedCommand();
-
-
+        
 
         public delegate void NormilzationDelegate(InputFile file);
 
         public static void InitializeNormalization()
         {
-            NormalizationMethods.Add("Kaya", new NormilzationDelegate(TimeFrameNormalization.NormalizeTimeFrames));
-            NormalizationMethods.Add("Other", new NormilzationDelegate(TimeFrameNormalization.AurielNormalization));
+            NormalizationMethods.Add("Baseline", new NormilzationDelegate(TimeFrameNormalization.Baseline_Mean));
+            NormalizationMethods.Add("ToOne", new NormilzationDelegate(TimeFrameNormalization.To_One));
            
         }
 

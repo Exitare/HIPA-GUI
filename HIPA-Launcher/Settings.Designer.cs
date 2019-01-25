@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HIPA {
+namespace HIPA_Launcher {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,49 +25,34 @@ namespace HIPA {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://exitare.de/HIPA/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://exitare.de/")]
         public string URL {
             get {
                 return ((string)(this["URL"]));
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Updater.exe")]
-        public string Updater {
+        [global::System.Configuration.DefaultSettingValueAttribute("Version.xml")]
+        public string FILENAME {
             get {
-                return ((string)(this["Updater"]));
+                return ((string)(this["FILENAME"]));
+            }
+            set {
+                this["FILENAME"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Baseline")]
-        public string DefaultNormalization {
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\rapha\\Documents")]
+        public string LocalFolder {
             get {
-                return ((string)(this["DefaultNormalization"]));
+                return ((string)(this["LocalFolder"]));
             }
             set {
-                this["DefaultNormalization"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool InitialStart {
-            get {
-                return ((bool)(this["InitialStart"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Config.xml")]
-        public string ConfigFile {
-            get {
-                return ((string)(this["ConfigFile"]));
+                this["LocalFolder"] = value;
             }
         }
     }

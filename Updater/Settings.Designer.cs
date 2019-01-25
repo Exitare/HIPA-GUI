@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HIPA {
+namespace Updater {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,49 +25,31 @@ namespace HIPA {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://exitare.de/HIPA/")]
-        public string URL {
+        [global::System.Configuration.DefaultSettingValueAttribute("HIPA.exe")]
+        public string HIPA {
             get {
-                return ((string)(this["URL"]));
+                return ((string)(this["HIPA"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Updater.exe")]
-        public string Updater {
+        [global::System.Configuration.DefaultSettingValueAttribute("https://exitare.de/HIPA/")]
+        public string URI {
             get {
-                return ((string)(this["Updater"]));
+                return ((string)(this["URI"]));
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Baseline")]
-        public string DefaultNormalization {
+        [global::System.Configuration.DefaultSettingValueAttribute("Config.xml")]
+        public string Config {
             get {
-                return ((string)(this["DefaultNormalization"]));
+                return ((string)(this["Config"]));
             }
             set {
-                this["DefaultNormalization"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool InitialStart {
-            get {
-                return ((bool)(this["InitialStart"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Config.xml")]
-        public string ConfigFile {
-            get {
-                return ((string)(this["ConfigFile"]));
+                this["Config"] = value;
             }
         }
     }

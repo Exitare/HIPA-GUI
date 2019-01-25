@@ -1,9 +1,8 @@
-﻿<Application x:Class="HIPA.App"
+﻿<Application x:Class="Updater.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:HIPA"
-             StartupUri="MainWindow.xaml"
-             Exit="App_Exit" Startup="Application_Startup">
+             xmlns:local="clr-namespace:Updater"
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
          
     </Application.Resources>

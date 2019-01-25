@@ -1,0 +1,14 @@
+﻿<Window x:Class="Updater.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Updater"
+        mc:Ignorable="d"
+        Title="MainWindow" MaxHeight="98.511" MaxWidth="657.356" ResizeMode="NoResize">
+    <Grid>
+        <ProgressBar x:Name="progressBar" Margin="10,10,10,0" Height="20" VerticalAlignment="Top"/>
+        <Label x:Name="StatusLabel" Content="" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="629"/>
+
+    </Grid>
+</Window>

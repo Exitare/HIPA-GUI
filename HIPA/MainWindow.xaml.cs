@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using Microsoft.Win32;
 using System.Diagnostics;
-using System.Data;
 using System.Threading;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
 using HIPA.Windows;
 using FileService;
 using System.Windows.Input;
+using System.IO;
+using System.IO.IsolatedStorage;
+using Update;
 
 namespace HIPA {
     /// <summary>
@@ -27,16 +25,13 @@ namespace HIPA {
 
         public MainWindow()
         {
-
-
-
             InitializeComponent();
             progressBar.Value = 0;
             Globals.MyCommand.InputGestures.Add(new KeyGesture(Key.O, ModifierKeys.Control));
             Globals.InitializeNormalization();
             //Globals.Files.Add(new File(0, "", "Test", 0, new List<Cell>(), 0, 0, 0, new string[0], 0, "Kaya"));
             ComboBoxColumn.ItemsSource = Globals.NormalizationMethods.Keys;
-            RefreshFilesDataGrid();
+            
         }
 
 
@@ -51,7 +46,7 @@ namespace HIPA {
 
                 foreach (InputFile file in Globals.Files)
                 {
-                   
+
                     InputFile.PrepareFiles();
                     Debug.Print(file.Normalization_Method);
                     Mean.Calculate_Baseline_Mean(file);
@@ -65,7 +60,7 @@ namespace HIPA {
                     {
                         progressBar.Value = progressBar.Value + step;
                     });
-                   
+
                 }
 
             });
@@ -135,7 +130,7 @@ namespace HIPA {
             help.Show();
         }
 
-    
+
 
         private void Clear(object sender, RoutedEventArgs e)
         {
@@ -147,7 +142,7 @@ namespace HIPA {
 
         }
 
-  
+
         private void OpenExportWindow(object sender, RoutedEventArgs e)
         {
             ExportFiles exportFiles = new ExportFiles();
@@ -165,30 +160,46 @@ namespace HIPA {
 
         private void CheckForUpdates(object sender, RoutedEventArgs e)
         {
-            try
+            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            bool updateAvailable = Update.Update.CheckForUpdates(version);
+            if (updateAvailable)
+            {           
+                if (MessageBox.Show("Updates available!\nDo you want to start the Update?", "Update", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    // user clicked yes
+                    Debug.Print("Yes clicked");
+                    Update.Update.StartUpdates();
+                }
+            } else
             {
-
-                Process firstProc = new Process();
-                firstProc.StartInfo.FileName = "notepad.exe";
-                firstProc.EnableRaisingEvents = true;
-
-                firstProc.Start();
-
-                firstProc.WaitForExit();
-
-                //You may want to perform different actions depending on the exit code.
-                Console.WriteLine("First process exited: " + firstProc.ExitCode);
-
-                Process secondProc = new Process();
-                secondProc.StartInfo.FileName = "mspaint.exe";
-                secondProc.Start();
-
+                MessageBox.Show("No Update available", "Update");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred!!!: " + ex.Message);
-                return;
-            } 
+
+
+            //try
+            //{
+
+            //    Process firstProc = new Process();
+            //    firstProc.StartInfo.FileName = "notepad.exe";
+            //    firstProc.EnableRaisingEvents = true;
+
+            //    firstProc.Start();
+
+            //    firstProc.WaitForExit();
+
+            //    //You may want to perform different actions depending on the exit code.
+            //    Console.WriteLine("First process exited: " + firstProc.ExitCode);
+
+            //    Process secondProc = new Process();
+            //    secondProc.StartInfo.FileName = "mspaint.exe";
+            //    secondProc.Start();
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("An error occurred!!!: " + ex.Message);
+            //    return;
+            //} 
         }
 
         private void OpenSettings(object sender, RoutedEventArgs e)
@@ -196,6 +207,7 @@ namespace HIPA {
             SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.Show();
         }
+
     }
 }
 
