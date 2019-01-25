@@ -7,6 +7,11 @@ using System.Diagnostics;
 namespace HIPA {
 
     class Mean {
+        /// <summary>
+        /// Calculates the BaseLine Mean foreach Cell. This is used for the Baseline Mean Normalization
+        /// This Mean is
+        /// </summary>
+        /// <param name="file"></param>
         public static void Calculate_Baseline_Mean(InputFile file)
         {
 
@@ -15,32 +20,13 @@ namespace HIPA {
                 int count = 0;
                 decimal total = 0;
 
-                for(int i = 0; i < file.Stimulation_Timeframe; ++i)
+                for (int i = 0; i < file.Stimulation_Timeframe; ++i)
                 {
                     total = total + cell.Timeframes[i].Value;
                     count++;
                 }
-                cell.Baseline_Mean = total / count; 
-            }
-
-        }
-
-
-        public static void Calculate_Normalized_Mean(InputFile file)
-        {
-
-            foreach (Cell cell in file.Cells)
-            {
-                int count = 0;
-                decimal total = 0;
-                foreach (TimeFrame timeframe in cell.Normalized_Timeframes)
-                {
-                    total = total + timeframe.Value;
-                    count++;
-                }
-                cell.Baseline_Mean = total / cell.Timeframes.Count;
+                cell.Baseline_Mean = total / count;
             }
         }
-        
     }
 }

@@ -12,13 +12,54 @@ namespace FileService {
 
         public static void Export_Normalized_Timesframes(InputFile file)
         {
+            string filename = file.Folder + file.Name + "-Normalized Timeframes" + ".txt";
+            File.Delete(filename);
+            StreamWriter sw = new StreamWriter(filename);
 
+
+            string[,] data_matrix = new string[file.RowCount, file.CellCount];
+
+            for (int j = 0; j < file.CellCount; j++)
+            {
+                data_matrix[0, j] = file.Cells[j].Name;
+            }
+
+
+
+
+            for (int i = 1; i < file.RowCount ; i++)
+            {
+              
+                for (int j = 0; j < file.CellCount; j++)
+                {
+                    
+                    data_matrix[i, j] = file.Cells[j].Normalized_Timeframes[i - 1].Value.ToString();
+                }
+
+            }
+
+
+            for (int i = 0; i < data_matrix.GetLength(0); ++i)
+            {
+
+                string[] row = new string[file.CellCount];
+
+
+                for (int j = 0; j < data_matrix.GetLength(1); j++)
+                    row[j] = data_matrix[i, j];
+
+
+                sw.WriteLine(String.Join("\t", row));
+            }
+
+
+            sw.Close();
         }
 
 
-        public static void Export_High_Stimulus_Counts(InputFile file)
+        public static void Export_High_Intensity_Counts(InputFile file)
         {
-            string filename = file.Folder + file.Name + " results " + ".txt";
+            string filename = file.Folder + file.Name + "-High Intensity Counts" + ".txt";
             File.Delete(filename);
             StreamWriter sw = new StreamWriter(filename);
 

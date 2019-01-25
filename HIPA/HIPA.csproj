@@ -70,6 +70,7 @@
     <Compile Include="Services\Calculations\HighIntensity.cs" />
     <Compile Include="Services\Calculations\MinimumMaximum.cs" />
     <Compile Include="Services\Calculations\TimeframeNormalization.cs" />
+    <Compile Include="Services\Files\Create.cs" />
     <Compile Include="Services\Files\Read.cs" />
     <Compile Include="Services\Calculations\Mean.cs" />
     <Compile Include="Services\Files\Write.cs" />

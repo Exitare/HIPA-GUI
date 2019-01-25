@@ -46,7 +46,11 @@ namespace HIPA {
 
                 foreach (InputFile file in Globals.Files)
                 {
-
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        StatusBarLabel.Text = file.Name;
+                    });
+                    
                     InputFile.PrepareFiles();
                     Debug.Print(file.Normalization_Method);
                     Mean.Calculate_Baseline_Mean(file);
@@ -55,7 +59,8 @@ namespace HIPA {
                     MinimumMaximum.CalculateThreshold(file);
                     HighIntensity.Detect_Above_Below_Threshold(file);
                     HighIntensity.Count_High_Intensity_Peaks_Per_Minute(file);
-                    Write.Export_High_Stimulus_Counts(file);
+                    Write.Export_High_Intensity_Counts(file);
+                    Write.Export_Normalized_Timesframes(file);
                     this.Dispatcher.Invoke(() =>
                     {
                         progressBar.Value = progressBar.Value + step;
@@ -63,7 +68,12 @@ namespace HIPA {
 
                 }
 
+                this.Dispatcher.Invoke(() =>
+                {
+                    MessageBox.Show("All Files processed.");
+                });
             });
+            Calculations.IsBackground = true;
             Calculations.Start();
         }
 

@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 namespace HIPA {
 
     class MinimumMaximum {
+        /// <summary>
+        /// Find the TimeFrame Maximum for later Threshold Calculation
+        /// </summary>
+        /// <param name="file"></param>
         public static void FindTimeFrameMaximum(InputFile file)
         {
             foreach (Cell cell in file.Cells)
@@ -24,6 +28,11 @@ namespace HIPA {
 
         }
 
+        /// <summary>
+        /// 
+        /// Calculates the Threshold (e.g. 60% of Maximum)
+        /// </summary>
+        /// <param name="file"></param>
         public static void CalculateThreshold(InputFile file) {
          
                 foreach(Cell cell in file.Cells) {
