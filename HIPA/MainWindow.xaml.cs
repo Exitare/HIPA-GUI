@@ -29,7 +29,6 @@ namespace HIPA {
             progressBar.Value = 0;
             Globals.MyCommand.InputGestures.Add(new KeyGesture(Key.O, ModifierKeys.Control));
             Globals.InitializeNormalization();
-            //Globals.Files.Add(new File(0, "", "Test", 0, new List<Cell>(), 0, 0, 0, new string[0], 0, "Kaya"));
             ComboBoxColumn.ItemsSource = Globals.NormalizationMethods.Keys;
             
         }

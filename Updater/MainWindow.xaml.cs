@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,69 +24,117 @@ namespace Updater {
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        private volatile bool _completed;
-        public bool DownloadCompleted { get { return _completed; } }
-
-
-        Dictionary<string, Uri> Files = new Dictionary<string, Uri>();
-        
+        private volatile bool _download_completed;
+        public bool DownloadCompleted { get { return _download_completed; } }
 
 
         public MainWindow()
         {
+
             InitializeComponent();
-            AddFiles();
+            ProcessService.FillProcessData();
+            ProcessService.CloseAllProcesses();
+            DownloadHelper.AddDownloadFiles();
             StartDownload();
-            
+            //Process.Start("HIPA");
         }
 
 
-        public void AddFiles()
+        private async void StartDownload()
         {
-            Files.Add("Config.xml", new Uri(Settings.Default.URI + Settings.Default.Config));
-            Files.Add("Film.m4v", new Uri("https://exitare.de/Film.m4v"));
-        }
-
-
-        private void StartDownload()
-        {
-
-            foreach (KeyValuePair<string, Uri> file in Files)
+            foreach(KeyValuePair<string, Uri> file in DownloadHelper.DownloadFiles)
             {
-                Console.WriteLine(file.Key + " " + file.Value);
-                _completed = false;
-                WebClient client = new WebClient();
-                client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
-                client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressCallback);
-                client.DownloadFileAsync(file.Value, file.Key);
-
-
-
-
+                await Downloadfile(file.Key, file.Value);
+              
             }
-           // progressBar.Maximum = bytes_total;
-        }
 
-        private void DownloadProgressCallback(object sender, DownloadProgressChangedEventArgs e)
-        {
-                       // Displays the operation identifier, and the transfer progress.
-            Console.WriteLine("{0}    downloaded {1} of {2} bytes. {3} % complete...",
-                (string)e.UserState,
-                e.BytesReceived,
-                e.TotalBytesToReceive,
-                e.ProgressPercentage);
+            MessageBox.Show("Update complete.\nPress Ok to restart HIPA");
+            Process.Start("HIPA");
 
-            progressBar.Value = e.ProgressPercentage;
-            StatusLabel.Content =  e.ProgressPercentage + " % complete... ( " + e.BytesReceived +  " / " + e.TotalBytesToReceive + ")";
-
+            if (ProcessService.CheckHIPAOpened())
+            {
+                Application.Current.Shutdown();
+            }
         }
 
 
-        private void DownloadFileCompleted(object sender , AsyncCompletedEventArgs e)
+        private async Task<bool> DownloadHttpFile(string filename, Uri URI)
         {
-            Console.WriteLine("Download completed");
-            StatusLabel.Content = "Download Finished";
-            _completed = true;
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    
+                    HttpResponseMessage response = await client.GetAsync(URI);
+                    int length = int.Parse(response.Content.Headers.First(h => h.Key.Equals("Content-Length")).Value.First());
+                    Debug.Print(length.ToString());
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    // Above three lines can be replaced with new helper method below
+                    // string responseBody = await client.GetStringAsync(uri);
+
+                    //Console.WriteLine(responseBody);
+                    return true;
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine("\nException Caught!");
+                    Console.WriteLine("Message :{0} ", e.Message);
+                    return false;
+                }
+            }
+        }
+
+        private async Task<bool> Downloadfile(string filename, Uri uri)
+        {
+            try
+            {
+                Console.WriteLine(filename + " " + uri);
+                _download_completed = false;
+                WebClient client = new WebClient();
+                client.DownloadFileCompleted += new AsyncCompletedEventHandler(downloadfilecompleted);
+                client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloadprogresscallback);
+                await client.DownloadFileTaskAsync(uri, filename);
+                return true;
+            } catch(HttpRequestException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        
+        }
+
+        private void downloadprogresscallback(object sender, DownloadProgressChangedEventArgs e)
+        {
+            // displays the operation identifier, and the transfer progress.
+            //  console.writeline("{0}    downloaded {1} of {2} bytes. {3} % complete...",
+            //(string)e.userstate,
+            //e.bytesreceived,
+            //e.totalbytestoreceive,
+            //e.progresspercentage);
+            this.Dispatcher.Invoke(() =>
+            {
+
+                progressBar.Value = e.ProgressPercentage;
+                StatusLabel.Content = e.ProgressPercentage + " % complete... ( " + e.BytesReceived + " / " + e.TotalBytesToReceive + ")";
+            });
+
+
+
+
+        }
+
+
+        private void downloadfilecompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            Console.WriteLine("download completed");
+            this.Dispatcher.Invoke(() =>
+            {
+                StatusLabel.Content = "download finished";
+            });
+
+            _download_completed = true;
+
         }
 
 

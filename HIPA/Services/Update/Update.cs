@@ -9,22 +9,19 @@ using System.Threading.Tasks;
 using HIPA;
 using XML;
 namespace Update {
-   public class Update {
+    public class Update {
         public static bool CheckForUpdates(Version actualVersion)
         {
             bool[] update = new bool[2];
-        
+
             Console.WriteLine("Check for Updates");
-
-            
-
             string remoteUri = Settings.Default.URL;
             string fileName = Settings.Default.ConfigFile;
 
-          
-                // Create a new WebClient instance.
-                using (WebClient webClient = new WebClient())
-                {
+
+            // Create a new WebClient instance.
+            using (WebClient webClient = new WebClient())
+            {
                 try
                 {
                     string downloadLink = remoteUri + fileName;
@@ -38,21 +35,22 @@ namespace Update {
                 }
 
                 Version newVersion = XML.XML.LoadXML();
-                if(newVersion > actualVersion)
+                if (newVersion > actualVersion)
                 {
                     return true;
-                } else
+                }
+                else
                 {
                     return false;
                 }
             }
-          
+
         }
 
 
         public static void StartUpdates()
         {
-            
+            Process.Start("Updater.exe");
         }
 
     }
