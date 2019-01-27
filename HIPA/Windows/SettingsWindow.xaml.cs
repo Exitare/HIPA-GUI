@@ -20,6 +20,15 @@ namespace HIPA.Windows {
         public SettingsWindow()
         {
             InitializeComponent();
+            NormalizationMethodComboBox.ItemsSource = Globals.NormalizationMethods.Keys;
+            NormalizationMethodComboBox.SelectedItem = Settings.Default.DefaultNormalization;
+        }
+
+        private void NormalizationMethodChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            Console.WriteLine((sender as ComboBox).SelectedItem as string);
+            Settings.Default.DefaultNormalization = (sender as ComboBox).SelectedItem as string;
         }
     }
 }

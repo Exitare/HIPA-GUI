@@ -71,7 +71,6 @@
                 <ProgressBar x:Name="progressBar" Value="50" Width="100" Height="16"  />
             </StatusBarItem>
         </StatusBar>
-        <Button Content="Test" x:Name="test" HorizontalAlignment="Left" Margin="1187,271,0,0" VerticalAlignment="Top" Width="75" Click="Test_Click"/>
 
 
     </Grid>
