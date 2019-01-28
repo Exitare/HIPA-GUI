@@ -21,12 +21,13 @@ namespace HIPA
         private List<Cell> _cells;
         private int _cellCount;
         private int _rowCount;
-        private double _total_detected_minutes;
+        private int _timeframeCount;
+        private double _totalDetectedMinutes;
         private string[] _content;
-        private int _stimulation_timeframe;
-        private string _normalization_method;
+        private int _stimulationTimeframe;
+        private string _normalizationMethod;
 
-        public InputFile(int ID, string Folder, string Path, string Name, decimal Percentage_Limit, List<Cell> Cells, int CellCount, int RowCount, double Total_Detected_Minutes, string[] Content, int Stimulation_Timeframe, string Normalization_Method)
+        public InputFile(int ID, string Folder, string Path, string Name, decimal Percentage_Limit, List<Cell> Cells, int CellCount, int RowCount, double Total_Detected_Minutes, string[] Content, int Stimulation_Timeframe, string Normalization_Method, int TimeFrameCount)
         {
             _id = ID;
             _name = Name;
@@ -36,10 +37,11 @@ namespace HIPA
             _cells = Cells;
             _cellCount = CellCount;
             _rowCount = RowCount;
-            _total_detected_minutes = Total_Detected_Minutes;
+            _totalDetectedMinutes = Total_Detected_Minutes;
             _content = Content;
-            _stimulation_timeframe = Stimulation_Timeframe;
-            _normalization_method = Normalization_Method;
+            _stimulationTimeframe = Stimulation_Timeframe;
+            _normalizationMethod = Normalization_Method;
+            _timeframeCount = TimeframeCount;
         }
 
         public string Name { get => _name; set => _name = value; }
@@ -48,12 +50,13 @@ namespace HIPA
         public decimal Percentage_Limit { get => _percentage_limit; set => _percentage_limit = value; } 
         public int CellCount { get => _cellCount; set => _cellCount = value; }
         public int RowCount { get => _rowCount; set => _rowCount = value; }
-        public double Total_Detected_Minutes { get => _total_detected_minutes; set => _total_detected_minutes = value; }
+        public double Total_Detected_Minutes { get => _totalDetectedMinutes; set => _totalDetectedMinutes = value; }
         public string[] Content { get => _content; set => _content = value; }
-        public int Stimulation_Timeframe { get => _stimulation_timeframe; set => _stimulation_timeframe = value; }
-        public string Normalization_Method { get => _normalization_method; set => _normalization_method = value; }
+        public int Stimulation_Timeframe { get => _stimulationTimeframe; set => _stimulationTimeframe = value; }
+        public string Normalization_Method { get => _normalizationMethod; set => _normalizationMethod = value; }
         internal List<Cell> Cells { get => _cells; set => _cells = value; }
         public string Folder { get => _folder; set => _folder = value; }
+        public int TimeframeCount { get => _timeframeCount; set => _timeframeCount = value; }
 
         public static void PrepareFiles()
         {
@@ -117,7 +120,7 @@ namespace HIPA
 
             foreach (InputFile file in Globals.Files)
             {
-                if (file.ID >= id)
+                if (file.ID > id)
                 {
                     id = file.ID;
                 }
@@ -128,11 +131,18 @@ namespace HIPA
                 id = id + 1;
             }
 
+            if (Globals.Files.Count == 1)
+            {
+                id = 1;
+            }
+
+       
+
 
             foreach (String file in openFileDialog.FileNames)
             {
                 Debug.Print(file);
-                Globals.Files.Add(new InputFile(id, GetFolder(file), file, GetFileName(file), (decimal)0.6, new List<Cell>(), 0,0, 0, new string[0],372, Settings.Default.DefaultNormalization));
+                Globals.Files.Add(new InputFile(id, GetFolder(file), file, GetFileName(file), (decimal)0.6, new List<Cell>(), 0,0, 0, new string[0],372, Settings.Default.DefaultNormalization,0));
                 id++;
             }
         }

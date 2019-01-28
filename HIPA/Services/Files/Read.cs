@@ -17,6 +17,7 @@ namespace FileService {
                 string[] lines = System.IO.File.ReadAllLines(file.Path);
                 file.CellCount = Cell.Calculate_Cell_Count(lines);
                 file.RowCount = Cell.Calculate_Rows_Per_Cell(lines);
+                file.TimeframeCount = lines.Length - 1;
                 file.Content = lines;
             }
         }

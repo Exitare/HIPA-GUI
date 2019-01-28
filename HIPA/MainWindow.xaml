@@ -34,6 +34,7 @@
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="150"  IsReadOnly="True" />
                 <DataGridTextColumn Header="Detected Cells" Binding="{Binding CellCount}"  IsReadOnly="True"/>
                 <DataGridTextColumn Header="Detected Rows" Binding="{Binding RowCount}"  IsReadOnly="True" />
+                <DataGridTextColumn Header="Detected TimeFrames" Binding="{Binding TimeframeCount}"  IsReadOnly="True"  Width="130"/>
                 <DataGridTextColumn Header="Detected Minutes" Binding="{Binding Total_Detected_Minutes}"  IsReadOnly="True" Width="130"/>
                 <DataGridTextColumn Header="Limit" Binding="{Binding Percentage_Limit}" />
                 <DataGridTextColumn Header="Stimulation TimeFrame" Binding="{Binding Stimulation_Timeframe}" />

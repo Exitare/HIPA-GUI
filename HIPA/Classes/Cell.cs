@@ -95,11 +95,7 @@ namespace HIPA {
         }
 
 
-        public static void CellReset()
-        {
-
-        }
-
+    
 
         public static void Calculate_Minutes_Per_Cell(InputFile file)
         {
