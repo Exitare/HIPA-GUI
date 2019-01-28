@@ -19,8 +19,8 @@
                 <MenuItem Header="_Close" Click="CloseApplication"/>
             </MenuItem>
             <MenuItem Header="_Extras">
-                <MenuItem Header="_Help" Click="OpenHelpWindow"/>
                 <MenuItem Header="_Settings" Click="OpenSettings"/>
+                <MenuItem Header="_Help" Click="OpenHelpWindow"/>
                 <MenuItem Header="_About"/>
                 <MenuItem Header="_Check for Update" Click="CheckForUpdates"/>
             </MenuItem>

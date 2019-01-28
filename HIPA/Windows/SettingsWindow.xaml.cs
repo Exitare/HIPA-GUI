@@ -29,6 +29,7 @@ namespace HIPA.Windows {
 
             Console.WriteLine((sender as ComboBox).SelectedItem as string);
             Settings.Default.DefaultNormalization = (sender as ComboBox).SelectedItem as string;
+            Settings.Default.Save();
         }
     }
 }
