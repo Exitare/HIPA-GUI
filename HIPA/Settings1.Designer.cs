@@ -70,5 +70,41 @@ namespace HIPA {
                 return ((string)(this["ConfigFile"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Proxy_URL {
+            get {
+                return ((string)(this["Proxy_URL"]));
+            }
+            set {
+                this["Proxy_URL"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Proxy_Port {
+            get {
+                return ((int)(this["Proxy_Port"]));
+            }
+            set {
+                this["Proxy_Port"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Proxy_Active {
+            get {
+                return ((bool)(this["Proxy_Active"]));
+            }
+            set {
+                this["Proxy_Active"] = value;
+            }
+        }
     }
 }

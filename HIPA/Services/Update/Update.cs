@@ -17,34 +17,26 @@ namespace Update {
             Console.WriteLine("Check for Updates");
             string remoteUri = Settings.Default.URL;
             string fileName = Settings.Default.ConfigFile;
+            WebClient webClient = new WebClient();
+            WebProxy wp = new WebProxy(Settings.Default.Proxy_URL, Settings.Default.Proxy_Port);
 
-
-            // Create a new WebClient instance.
-            using (WebClient webClient = new WebClient())
+            if (Settings.Default.Proxy_Active)
+                webClient.Proxy = wp;
+            
+            try
             {
-                try
-                {
-                    string downloadLink = remoteUri + fileName;
-                    webClient.DownloadFile(downloadLink, fileName);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error occured");
-                    Console.WriteLine(ex.Message);
+                string downloadLink = remoteUri + fileName;
+                webClient.DownloadFile(downloadLink, fileName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occured");
+                Console.WriteLine(ex.Message);
 
-                }
-
-                Version newVersion = XML.XML.LoadXML();
-                if (newVersion > actualVersion)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
             }
 
+            Version newVersion = XML.XML.LoadXML();
+            return newVersion > actualVersion ?  true : false;
         }
 
 

@@ -30,6 +30,18 @@ namespace HIPA
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            // Set window location
+            if (Settings.Default.WindowLocation != null)
+            {
+                this.Location = Settings.Default.WindowLocation;
+            }
+
+            // Set window size
+            if (Settings.Default.WindowSize != null)
+            {
+                this.Size = Settings.Default.WindowSize;
+            }
+
             string remoteUri = Settings.Default.URL;
             string fileName = Settings.Default.Updater;
 

@@ -10,17 +10,12 @@ namespace HIPA
 {
     class Log
     {
-
-
         public static void WriteLog(string message)
         {
             StreamWriter sw = new StreamWriter("log.txt");
             sw.WriteLine(message);
 
         }
-       
-
-
     }
 
 

@@ -75,9 +75,14 @@
     <Compile Include="Services\Calculations\Mean.cs" />
     <Compile Include="Services\Files\Write.cs" />
     <Compile Include="Services\Log.cs" />
+    <Compile Include="Services\Calculations\Matrices.cs" />
     <Compile Include="Services\Update\Update.cs" />
     <Compile Include="Services\XML\Read.cs" />
-    <Compile Include="Settings.Designer.cs" />
+    <Compile Include="Settings1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ExportFiles.xaml.cs">
       <DependentUpon>ExportFiles.xaml</DependentUpon>
     </Compile>
@@ -136,7 +141,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Settings.settings" />
+    <None Include="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
