@@ -3,6 +3,8 @@
 
 .vs
 
+hipa.snk
+
 # User-specific files
 *.suo
 *.user

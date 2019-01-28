@@ -7,7 +7,7 @@
         Title="SettingsWindow" Height="300" Width="350" ResizeMode="NoResize">
     <Grid>
         <ComboBox x:Name="NormalizationMethodComboBox" Margin="212,10,12,0" VerticalAlignment="Top" SelectionChanged="NormalizationMethodChanged"/>
-        <Label Content="Default Normalization" Margin="10,10,137,0" VerticalAlignment="Top"/>
+        <Label Content="Default Normalization" Margin="0,10,137,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="197"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="212,58,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         <CheckBox Content="Use Proxy" HorizontalAlignment="Left" Margin="212,121,0,0" VerticalAlignment="Top" Width="121"/>
         <Separator HorizontalAlignment="Left" Height="21" Margin="0,37,0,0" VerticalAlignment="Top" Width="344"/>
