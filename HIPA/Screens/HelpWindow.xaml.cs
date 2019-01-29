@@ -12,12 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace HIPA.Windows {
+namespace HIPA.Screens {
     /// <summary>
-    /// Interaktionslogik für ExportFiles.xaml
+    /// Interaktionslogik für HelpWindow.xaml
     /// </summary>
-    public partial class ExportFiles : Window {
-        public ExportFiles()
+    public partial class HelpWindow : Window {
+        public HelpWindow()
         {
             InitializeComponent();
         }

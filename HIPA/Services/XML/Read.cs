@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using HIPA;
 
-namespace XML {
+namespace HIPA.Services {
     class XML {
         public static Version LoadXML()
         {

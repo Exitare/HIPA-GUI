@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
 namespace HIPA {
-    class TimeFrame {
+    partial class TimeFrame {
 
         private readonly int _id;
         private readonly decimal _value;

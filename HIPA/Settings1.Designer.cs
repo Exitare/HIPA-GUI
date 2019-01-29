@@ -73,7 +73,7 @@ namespace HIPA {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost")]
         public string Proxy_URL {
             get {
                 return ((string)(this["Proxy_URL"]));
@@ -104,6 +104,54 @@ namespace HIPA {
             }
             set {
                 this["Proxy_Active"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double Main_Window_Location_Left {
+            get {
+                return ((double)(this["Main_Window_Location_Left"]));
+            }
+            set {
+                this["Main_Window_Location_Left"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double Main_Window_Location_Top {
+            get {
+                return ((double)(this["Main_Window_Location_Top"]));
+            }
+            set {
+                this["Main_Window_Location_Top"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Proxy_Username {
+            get {
+                return ((string)(this["Proxy_Username"]));
+            }
+            set {
+                this["Proxy_Username"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Proxy_Password {
+            get {
+                return ((string)(this["Proxy_Password"]));
+            }
+            set {
+                this["Proxy_Password"] = value;
             }
         }
     }

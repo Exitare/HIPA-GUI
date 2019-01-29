@@ -3,12 +3,14 @@ using System.Windows;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Threading;
-using HIPA.Windows;
+using HIPA;
 using FileService;
 using System.Windows.Input;
 using System.IO;
 using System.IO.IsolatedStorage;
-using Update;
+using HIPA.Services;
+using HIPA.Statics;
+using HIPA.Screens;
 
 namespace HIPA {
     /// <summary>
@@ -25,14 +27,25 @@ namespace HIPA {
 
         public MainWindow()
         {
+           
             InitializeComponent();
+            if (Settings.Default.Main_Window_Location_Left != 0 && Settings.Default.Main_Window_Location_Top != 0)
+            {
+                WindowStartupLocation = WindowStartupLocation.Manual;
+                Left = Settings.Default.Main_Window_Location_Left;
+                Top = Settings.Default.Main_Window_Location_Top;
+            }
+
+            UpdateMenu.IsEnabled = Globals.ConnectionSuccessful ? true : false;
+            if (!Globals.ConnectionSuccessful) {
+                MessageBox.Show("There was a problem reaching the Remote Server\nUpdates will be disabled!\nCheck your internet and proxy settings!");
+            }
             progressBar.Value = 0;
             Globals.MyCommand.InputGestures.Add(new KeyGesture(Key.O, ModifierKeys.Control));
             Globals.InitializeNormalization();
             ComboBoxColumn.ItemsSource = Globals.NormalizationMethods.Keys;
             
         }
-
 
 
 
@@ -152,11 +165,7 @@ namespace HIPA {
         }
 
 
-        private void OpenExportWindow(object sender, RoutedEventArgs e)
-        {
-            ExportFiles exportFiles = new ExportFiles();
-            exportFiles.Show();
-        }
+      
 
         private void Test_Click(object sender, RoutedEventArgs e)
         {
@@ -170,14 +179,14 @@ namespace HIPA {
         private void CheckForUpdates(object sender, RoutedEventArgs e)
         {
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            bool updateAvailable = Update.Update.CheckForUpdates(version);
+            bool updateAvailable = Update.CheckForUpdates(version);
             if (updateAvailable)
             {           
                 if (MessageBox.Show("Updates available!\nDo you want to start the Update?", "Update", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     // user clicked yes
                     Debug.Print("Yes clicked");
-                    Update.Update.StartUpdates();
+                    Update.StartUpdates();
                 }
             } else
             {
@@ -213,10 +222,19 @@ namespace HIPA {
 
         private void OpenSettings(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsWindow = new SettingsWindow();
-            settingsWindow.Show();
+            SettingsScreen settingsScreen = new SettingsScreen();
+            settingsScreen.Show();
         }
 
+        private void WindowLocationChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine(Application.Current.MainWindow.Top);
+
+            Settings.Default.Main_Window_Location_Top = Application.Current.MainWindow.Top;
+            Settings.Default.Main_Window_Location_Left = Application.Current.MainWindow.Left;
+            Settings.Default.Save();
+
+        }
     }
 }
 

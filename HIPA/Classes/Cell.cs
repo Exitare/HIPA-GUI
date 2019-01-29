@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using HIPA.Statics;
 
 namespace HIPA {
-    class Cell {
+    partial class Cell {
 
         private string _name;
         private List<TimeFrame> _time_frames;

@@ -73,9 +73,19 @@
     <Compile Include="Classes\Cell.cs" />
     <Compile Include="Classes\InputFile.cs" />
     <Compile Include="Classes\TimeFrame.cs" />
+    <Compile Include="Pages\Settings\Calculations.xaml.cs">
+      <DependentUpon>Calculations.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\Network.xaml.cs">
+      <DependentUpon>Network.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\SettingsScreen.xaml.cs">
+      <DependentUpon>SettingsScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\Calculations\HighIntensity.cs" />
     <Compile Include="Services\Calculations\MinimumMaximum.cs" />
     <Compile Include="Services\Calculations\TimeframeNormalization.cs" />
+    <Compile Include="Services\Download\Download.cs" />
     <Compile Include="Services\Files\Create.cs" />
     <Compile Include="Services\Files\Read.cs" />
     <Compile Include="Services\Calculations\Mean.cs" />
@@ -89,15 +99,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ExportFiles.xaml.cs">
-      <DependentUpon>ExportFiles.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\HelpWindow.xaml.cs">
+    <Compile Include="Screens\HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Statics\SettingsOptions.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -106,20 +111,24 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Globals\Globals.cs" />
+    <Compile Include="Statics\Globals.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Windows\ExportFiles.xaml">
+    <Page Include="Pages\Settings\Calculations.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\HelpWindow.xaml">
+    <Page Include="Pages\Settings\Network.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\SettingsWindow.xaml">
+    <Page Include="Screens\HelpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\SettingsScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -143,7 +152,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="hipa.snk" />
-    <None Include="hipa_public.snk" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -7,10 +7,11 @@ using System.Threading;
 using System.Diagnostics;
 using FileService;
 using Microsoft.Win32;
+using HIPA.Statics;
 
 namespace HIPA
 {
-    class InputFile
+    partial class InputFile
     {
 
         private readonly int _id;

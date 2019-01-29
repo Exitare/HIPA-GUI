@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HIPA"
         mc:Ignorable="d"
         Title="HIPA" MinHeight="720" MinWidth="1280" Height="720" Width="1280"
-        x:Name="Main" >
+        x:Name="Main" LocationChanged="WindowLocationChanged" Background="LightGray" >
    
 
     <Grid>
@@ -22,7 +22,7 @@
                 <MenuItem Header="_Settings" Click="OpenSettings"/>
                 <MenuItem Header="_Help" Click="OpenHelpWindow"/>
                 <MenuItem Header="_About"/>
-                <MenuItem Header="_Check for Update" Click="CheckForUpdates"/>
+                <MenuItem Name="UpdateMenu" Header="_Check for Update" Click="CheckForUpdates"/>
             </MenuItem>
 
         </Menu>
