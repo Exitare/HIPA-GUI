@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:HIPA"
       mc:Ignorable="d" 
       d:DesignHeight="400" d:DesignWidth="700"
-      Title="Network" Background="White">
+      Title="Network" Background="LightGray">
 
     <Grid>
         <CheckBox x:Name="ProxyCheckBox" Content="Use Proxy" HorizontalAlignment="Left" Margin="420,104,0,0" VerticalAlignment="Top" Unchecked="UncheckedProxy" Checked="CheckedProxy" TabIndex="4"/>
@@ -20,7 +20,7 @@
         <TextBox x:Name="ProxyUsernameBox" HorizontalAlignment="Left" Height="23" Margin="267,59,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.017,0.565" IsEnabled="False" TabIndex="1"/>
         <Label Content="Password:" HorizontalAlignment="Left" Margin="181,96,0,0" VerticalAlignment="Top" Width="66"/>
         <Label Content="Username:" HorizontalAlignment="Left" Margin="181,56,0,0" VerticalAlignment="Top"/>
-        <PasswordBox x:Name="ProxyPasswordBox" HorizontalAlignment="Left" Margin="267,99,0,0" VerticalAlignment="Top" Width="120" Height="23" TabIndex="3"/>
+        <PasswordBox x:Name="ProxyPasswordBox" HorizontalAlignment="Left" Margin="267,99,0,0" VerticalAlignment="Top" Width="120" Height="23" TabIndex="3" IsEnabled="False"/>
 
     </Grid>
 </Page>

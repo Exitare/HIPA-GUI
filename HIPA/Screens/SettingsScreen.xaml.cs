@@ -18,8 +18,7 @@ namespace HIPA.Screens
     /// <summary>
     /// Interaktionslogik für SettingsScreen.xaml
     /// </summary>
-    public partial class SettingsScreen : Window
-    {
+    public partial class SettingsScreen : Window {
         public SettingsScreen()
         {
             InitializeComponent();
@@ -29,22 +28,24 @@ namespace HIPA.Screens
 
         private void CreateTabBar()
         {
-            CreateTab("Network", new Network());
             CreateTab("Calculations", new Calculations());
-        
+            CreateTab("Network", new Network());
+
+
 
         }
 
-     
+
         private void CreateTab(string name, Page page)
         {
             TabItem Tab = new TabItem
             {
                 Header = name
+
             };
 
+            Tab.Height = 50;
             Frame tabFrame = new Frame();
-
             tabFrame.Content = page;
             Tab.Content = tabFrame;
             TabControl.Items.Add(Tab);

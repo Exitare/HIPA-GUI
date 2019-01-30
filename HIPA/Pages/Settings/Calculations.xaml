@@ -6,12 +6,12 @@
       xmlns:local="clr-namespace:HIPA"
       mc:Ignorable="d" 
       d:DesignHeight="400" d:DesignWidth="700"
-      Title="Calculations" Background="White">
+      Title="Calculations" Background="LightGray">
 
     <Grid>
         <Button Content="Button" HorizontalAlignment="Left" Margin="665,470,0,0" VerticalAlignment="Top" Width="75"/>
-        <ComboBox x:Name="NormalizationMethodComboBox" HorizontalAlignment="Left" Margin="145,37,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="NormalizationMethodChanged"/>
-        <Label Content="Normalization Method" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="NormalizationMethodComboBox" HorizontalAlignment="Left" Margin="145,14,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="NormalizationMethodChanged"/>
+        <Label Content="Normalization Method" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.489,-0.057"/>
         <Button  Content="Save" HorizontalAlignment="Left" Margin="615,370,0,0" VerticalAlignment="Top" Width="75" Click="SaveSettings"/>
 
     </Grid>
