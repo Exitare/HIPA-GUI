@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileService {
+namespace HIPA.Files {
     class Create {
 
         public static void CreateResultDir()

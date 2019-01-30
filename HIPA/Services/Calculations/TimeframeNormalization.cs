@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using HIPA.Statics;
-namespace HIPA {
+
+namespace HIPA.Calculations {
 
     class TimeFrameNormalization {
         /// <summary>

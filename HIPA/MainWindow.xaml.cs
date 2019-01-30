@@ -4,13 +4,14 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Threading;
 using HIPA;
-using FileService;
+using HIPA.Files;
 using System.Windows.Input;
 using System.IO;
 using System.IO.IsolatedStorage;
-using HIPA.Services;
+using HIPA.Calculations;
 using HIPA.Statics;
 using HIPA.Screens;
+using HIPA.Updates;
 
 namespace HIPA {
     /// <summary>
@@ -83,6 +84,7 @@ namespace HIPA {
                 this.Dispatcher.Invoke(() =>
                 {
                     MessageBox.Show("All Files processed.");
+                    StatusBarLabel.Text = "Done";
                 });
             });
             Calculations.IsBackground = true;

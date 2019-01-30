@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using HIPA;
 
-namespace HIPA.Services {
-    class XML {
+namespace HIPA.XML {
+    partial class XMLManagement {
         public static Version LoadXML()
         {
             Version version = Version.Parse("0.0.0.0");

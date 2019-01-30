@@ -7,7 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
-using HIPA.Services;
+using HIPA.Downloads;
 namespace HIPA
 {
     /// <summary>

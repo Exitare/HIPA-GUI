@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HIPA {
+namespace HIPA.Calculations {
     class HighIntensity {
 
         public static void Detect_Above_Below_Threshold(InputFile file)

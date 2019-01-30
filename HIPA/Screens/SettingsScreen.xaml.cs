@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using HIPA.Statics;
 
+
 namespace HIPA.Screens
 {
     /// <summary>
@@ -28,7 +29,7 @@ namespace HIPA.Screens
 
         private void CreateTabBar()
         {
-            CreateTab("Calculations", new Calculations());
+            CreateTab("Calculations", new CalculationsPage());
             CreateTab("Network", new Network());
 
 

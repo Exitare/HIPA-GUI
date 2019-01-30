@@ -9,7 +9,7 @@ using System.Threading;
 using HIPA;
 using HIPA.Statics;
 
-namespace FileService {
+namespace HIPA.Files {
 
     class Read {
 

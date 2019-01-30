@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HIPA.Statics;
 
-namespace HIPA.Services
+namespace HIPA.Downloads
 {
     class Download
     {

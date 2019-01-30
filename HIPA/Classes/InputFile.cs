@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
-using FileService;
+using HIPA.Files;
 using Microsoft.Win32;
 using HIPA.Statics;
 

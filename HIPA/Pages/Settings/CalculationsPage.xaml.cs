@@ -1,28 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using HIPA;
 using HIPA.Statics;
+using Microsoft.Win32;
+using System.IO;
 
-namespace HIPA
-{
+
+namespace HIPA {
     /// <summary>
     /// Interaktionslogik für General.xaml
     /// </summary>
-    public partial class Calculations : Page
+    public partial class CalculationsPage : Page
     {
-        public Calculations()
+        public CalculationsPage()
         {
             InitializeComponent();
          
@@ -44,6 +34,10 @@ namespace HIPA
         private void SaveSettings(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void ChoosePath(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

@@ -7,16 +7,17 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using HIPA;
-using HIPA.Services;
+using HIPA.XML;
+using HIPA.Downloads;
 
-namespace HIPA.Services {
+namespace HIPA.Updates {
 
     public class Update {
         public static bool CheckForUpdates(Version actualVersion)
         {
             Console.WriteLine("Check for Updates");
             Download.DownloadConfig();
-            Version newVersion = XML.LoadXML();
+            Version newVersion = XMLManagement.LoadXML();
             return newVersion > actualVersion ? true : false;
         }
     
