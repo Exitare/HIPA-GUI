@@ -12,6 +12,7 @@ using HIPA.Calculations;
 using HIPA.Statics;
 using HIPA.Screens;
 using HIPA.Updates;
+using HIPA.Log;
 
 namespace HIPA {
     /// <summary>
@@ -30,6 +31,7 @@ namespace HIPA {
         {
            
             InitializeComponent();
+            Create.CreateFiles();
             if (Settings.Default.Main_Window_Location_Left != 0 && Settings.Default.Main_Window_Location_Top != 0)
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
@@ -63,7 +65,7 @@ namespace HIPA {
                     {
                         StatusBarLabel.Text = file.Name;
                     });
-                    
+
                     InputFile.PrepareFiles();
                     Debug.Print(file.Normalization_Method);
                     Mean.Calculate_Baseline_Mean(file);
@@ -72,10 +74,14 @@ namespace HIPA {
                     MinimumMaximum.CalculateThreshold(file);
                     HighIntensity.Detect_Above_Below_Threshold(file);
                     HighIntensity.Count_High_Intensity_Peaks_Per_Minute(file);
-                    Write.Export_High_Intensity_Counts(file);
-                    Write.Export_Normalized_Timesframes(file);
+                    bool hic_written = Write.Export_High_Intensity_Counts(file);
+                    bool nt_written = Write.Export_Normalized_Timesframes(file);
                     this.Dispatcher.Invoke(() =>
                     {
+                        if(!hic_written || !nt_written)
+                        {
+                            MessageBox.Show("There was a problem writing to the original source path.\nThe concerned files are placed in the programm execution folder", "Attention");
+                        }
                         progressBar.Value = progressBar.Value + step;
                     });
 
@@ -83,11 +89,13 @@ namespace HIPA {
 
                 this.Dispatcher.Invoke(() =>
                 {
-                    MessageBox.Show("All Files processed.");
+                    MessageBox.Show("All Files processed.", "Done");
                     StatusBarLabel.Text = "Done";
                 });
-            });
-            Calculations.IsBackground = true;
+            })
+            {
+                IsBackground = true
+            };
             Calculations.Start();
         }
 

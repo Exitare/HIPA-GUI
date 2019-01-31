@@ -22,6 +22,8 @@ namespace HIPA.Statics
         internal static List<InputFile> Files { get => files; set => files = value; }
 
         public delegate void NormilzationDelegate(InputFile file);
+        public static string ErrorLog => "ErrorLog.Txt";
+
 
         public static void InitializeNormalization()
         {

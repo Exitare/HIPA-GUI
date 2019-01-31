@@ -154,5 +154,29 @@ namespace HIPA {
                 this["Proxy_Password"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CustomOutputPath {
+            get {
+                return ((string)(this["CustomOutputPath"]));
+            }
+            set {
+                this["CustomOutputPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CustomOutputPathActive {
+            get {
+                return ((bool)(this["CustomOutputPathActive"]));
+            }
+            set {
+                this["CustomOutputPathActive"] = value;
+            }
+        }
     }
 }

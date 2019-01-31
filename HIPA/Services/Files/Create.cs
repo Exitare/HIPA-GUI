@@ -8,11 +8,17 @@ using System.Threading.Tasks;
 namespace HIPA.Files {
     class Create {
 
-        public static void CreateResultDir()
+
+        public static void CreateFiles()
         {
-            if (!File.Exists("Results"))
+            CreateLogFiles();
+        }
+
+        private static void CreateLogFiles()
+        {
+            if (!File.Exists("Log.txt"))
             {
-                File.Create("Results");
+                File.Create("Log.txt");
             }
         }
       

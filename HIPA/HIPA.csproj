@@ -44,14 +44,20 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>hipa.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ookii.Dialogs.Wpf.1.0.0\lib\net45\Ookii.Dialogs.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -90,7 +96,7 @@
     <Compile Include="Services\Files\Read.cs" />
     <Compile Include="Services\Calculations\Mean.cs" />
     <Compile Include="Services\Files\Write.cs" />
-    <Compile Include="Services\Log.cs" />
+    <Compile Include="Services\Log\Log.cs" />
     <Compile Include="Services\Calculations\Matrices.cs" />
     <Compile Include="Services\Update\Update.cs" />
     <Compile Include="Services\XML\Read.cs" />
@@ -152,6 +158,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="hipa.snk" />
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
