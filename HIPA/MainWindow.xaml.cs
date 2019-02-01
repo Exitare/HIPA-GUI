@@ -42,6 +42,7 @@ namespace HIPA {
             UpdateMenu.IsEnabled = Globals.ConnectionSuccessful ? true : false;
             if (!Globals.ConnectionSuccessful) {
                 MessageBox.Show("There was a problem reaching the Remote Server\nUpdates will be disabled!\nCheck your internet and proxy settings!");
+                Logging.WriteLog("Error reaching the Remote Server. Disable Updates", LogLevel.Error); ;
             }
             progressBar.Value = 0;
             Globals.MyCommand.InputGestures.Add(new KeyGesture(Key.O, ModifierKeys.Control));

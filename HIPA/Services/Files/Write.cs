@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using HIPA;
 using System.Diagnostics;
 using HIPA.Calculations;
-
+using HIPA.Log;
 namespace HIPA.Files {
     class Write {
 
@@ -44,8 +44,8 @@ namespace HIPA.Files {
             }
             catch (Exception ex)
             {
-                //Log
-
+                Logging.WriteLog(ex.Message, LogLevel.Error);
+                Logging.WriteLog("Could not create file in source folder. Used own execution folder!", LogLevel.Error);
                 filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase)  + "-Normalized Timeframes-" + DateTime.Today.ToShortDateString() + ".txt";
                 StreamWriter sw = new StreamWriter(filename);
 
@@ -102,6 +102,8 @@ namespace HIPA.Files {
             }
             catch (Exception ex)
             {
+                Logging.WriteLog(ex.Message, LogLevel.Error);
+                Logging.WriteLog("Could not create file in source folder. Used own execution folder!", LogLevel.Error);
                 filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
                 StreamWriter sw = new StreamWriter(filename);
                 string[,] data_matrix = Matrices.CreateHighIntensityCountsMatrix(file);
