@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HIPA.Statics;
 
 namespace HIPA.Files {
     class Create {
@@ -16,9 +17,14 @@ namespace HIPA.Files {
 
         private static void CreateLogFiles()
         {
-            if (!File.Exists("Log.txt"))
+            if (!File.Exists(Globals.Log))
             {
-                File.Create("Log.txt");
+                File.Create(Globals.Log).Close();
+            }
+
+            if (!File.Exists(Globals.ErrorLog))
+            {
+                File.Create(Globals.ErrorLog).Close();
             }
         }
       

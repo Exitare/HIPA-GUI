@@ -66,7 +66,6 @@ namespace HIPA
             {
                 try
                 {
-                    Debug.Print("Prepare Files");
                     Read.ReadFileContent();
                     Cell.CellBuilder();
 

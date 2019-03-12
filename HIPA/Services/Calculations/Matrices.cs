@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,28 +10,39 @@ namespace HIPA.Calculations {
     {
         public static string[,] CreateNormalizedTimeFrameMatrix(InputFile file)
         {
-            string[,] data_matrix = new string[file.RowCount, file.CellCount];
-
-            for (int j = 0; j < file.CellCount; j++)
+            try
             {
-                data_matrix[0, j] = file.Cells[j].Name;
-            }
-
-
-
-
-            for (int i = 1; i < file.RowCount; i++)
-            {
+                string[,] data_matrix = new string[file.RowCount, file.CellCount];
 
                 for (int j = 0; j < file.CellCount; j++)
                 {
-
-                    data_matrix[i, j] = file.Cells[j].Normalized_Timeframes[i - 1].Value.ToString();
+                    data_matrix[0, j] = file.Cells[j].Name;
                 }
 
-            }
 
-            return data_matrix;
+
+
+                for (int i = 1; i < file.RowCount; i++)
+                {
+
+                    for (int j = 0; j < file.CellCount; j++)
+                    {
+
+                        data_matrix[i, j] = file.Cells[j].Normalized_Timeframes[i - 1].Value.ToString();
+                    }
+
+                }
+                return data_matrix;
+            }
+            catch (Exception ex)
+            {
+                Log.Logging.WriteLog(ex.Message, Log.LogLevel.Error);
+
+                return new string[0,0];
+            }
+           
+
+           
         }
 
         public static string[,] CreateHighIntensityCountsMatrix(InputFile file)
@@ -44,8 +56,8 @@ namespace HIPA.Calculations {
 
 
 
-
-            for (int i = 1; i <= Convert.ToInt32(file.Total_Detected_Minutes) + 1; i++)
+            Debug.Print(Convert.ToString(Convert.ToInt32(file.Total_Detected_Minutes)));
+            for (int i = 1; i <= Math.Floor(file.Total_Detected_Minutes) + 1; i++)
             {
                 for (int j = 0; j < file.CellCount; j++)
                 {

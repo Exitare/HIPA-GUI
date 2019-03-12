@@ -13,6 +13,8 @@ using HIPA.Statics;
 using HIPA.Screens;
 using HIPA.Updates;
 using HIPA.Log;
+using System.Windows.Threading;
+using HIPA.Queue;
 
 namespace HIPA {
     /// <summary>
@@ -31,6 +33,7 @@ namespace HIPA {
         {
            
             InitializeComponent();
+         
             Create.CreateFiles();
             if (Settings.Default.Main_Window_Location_Left != 0 && Settings.Default.Main_Window_Location_Top != 0)
             {
@@ -51,7 +54,14 @@ namespace HIPA {
             
         }
 
-
+        void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            // Process unhandled exception
+            Logging.WriteLog(e.ToString(), LogLevel.Error);
+            Logging.WriteLog(sender.ToString(), LogLevel.Error);
+            // Prevent default unhandled exception processing
+            e.Handled = true;
+        }
 
         private void Calculate(object sender, RoutedEventArgs e)
         {
@@ -82,6 +92,7 @@ namespace HIPA {
                         if(!hic_written || !nt_written)
                         {
                             MessageBox.Show("There was a problem writing to the original source path.\nThe concerned files are placed in the programm execution folder", "Attention");
+
                         }
                         progressBar.Value = progressBar.Value + step;
                     });

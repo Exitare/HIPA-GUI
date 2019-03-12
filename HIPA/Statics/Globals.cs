@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using HIPA.Calculations;
 
@@ -22,8 +18,9 @@ namespace HIPA.Statics
         internal static List<InputFile> Files { get => files; set => files = value; }
 
         public delegate void NormilzationDelegate(InputFile file);
-        public static string ErrorLog => "ErrorLog.Txt";
-
+        public static string ErrorLog => "Error-Log.txt";
+        public static string Log => "Log.txt";
+        public static Queue<string> LogQueue = new Queue<string>();
 
         public static void InitializeNormalization()
         {

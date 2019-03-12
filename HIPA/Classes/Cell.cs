@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using HIPA.Statics;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace HIPA {
     partial class Cell {
@@ -47,10 +49,6 @@ namespace HIPA {
                 CreateCells(file);
                 PopulateCells(file);
                 Calculate_Minutes_Per_Cell(file);
-              
-                //Debug.Print("Cells: " + file.Cells.Count.ToString());
-                //Debug.Print("TimeFrames: " + file.Cells[0].Timeframes.Count.ToString());
-
             }
         }
 
@@ -63,7 +61,7 @@ namespace HIPA {
             {
                 Cells.Add(new Cell("Line" + i, new List<TimeFrame>(), 0, 0, new List<TimeFrame>(), 0, new Dictionary<double, int>()));
             }
-
+            Debug.Print("Cell size is " + Cells.Count);
             file.Cells = Cells;
         }
 
@@ -72,24 +70,54 @@ namespace HIPA {
             string[] content = file.Content;
             for (int line = 0; line < content.Length; ++line)
             {
+               
                 content[line].Trim(' ');
+                Regex.Replace(content[line], @"\s+", "");
+              // content[line].Replace(' ', ' ');
+              //  content[line].Replace('\t', '-');
 
+                const string reduceMultiSpace = @"[ ]{2,}";
+                content[line] = Regex.Replace(content[line].Replace("\t", "|"), reduceMultiSpace, "|");
+
+               Debug.Print(content[line] + "Lenght is " + content[line].Length);
                 if (content.Length != 0)
                 {
-                    string[] values = content[line].Split('\t');
+                    string[] cellValues = content[line].Split('|');
+                    for (int i = 0; i < cellValues.Length; ++i)
+                    {
+                        if(cellValues[i] == "")
+                        {
+                            Debug.Print(cellValues[i] + " i ist: " + i);
+                        }
+                     
+                    }
+
                     for (int cell = 0; cell < file.CellCount; ++cell)
                     {
+                       
                         if (line == 0)
                         {
-                            file.Cells[cell].Name = values[cell];
+                            file.Cells[cell].Name = cellValues[cell];
                         }
                         else
                         {
-                            if (decimal.TryParse(values[cell].Replace('.', ','), out decimal doublevalue))
+                           
+                       
+                          
+                            if (decimal.TryParse(cellValues[cell].Replace('.', ','), out decimal doublevalue))
+                            {
                                 file.Cells[cell].Timeframes.Add(TimeFrame.CreateTimeFrame(line, doublevalue, file));
+                            }
+                            else
+                            {
+                                Log.Logging.WriteLog("Could not convert to Decimal because value is " + cellValues[cell] + " for cell  " + file.Cells[cell].Name + " and line " + line, Log.LogLevel.Error);
+                            }
+                               
                         }
+                   
                     }
                 }
+             
 
             }
 

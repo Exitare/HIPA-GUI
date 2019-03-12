@@ -47,7 +47,7 @@ namespace HIPA.Files {
                 Logging.WriteLog(ex.Message, LogLevel.Error);
                 Logging.WriteLog("Could not create file in source folder. Used own execution folder!", LogLevel.Error);
                 filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase)  + "-Normalized Timeframes-" + DateTime.Today.ToShortDateString() + ".txt";
-                StreamWriter sw = new StreamWriter(filename);
+                StreamWriter sw = new StreamWriter(new Uri(filename).LocalPath);
 
 
                 string[,] data_matrix = Matrices.CreateNormalizedTimeFrameMatrix(file);
@@ -105,7 +105,7 @@ namespace HIPA.Files {
                 Logging.WriteLog(ex.Message, LogLevel.Error);
                 Logging.WriteLog("Could not create file in source folder. Used own execution folder!", LogLevel.Error);
                 filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
-                StreamWriter sw = new StreamWriter(filename);
+                StreamWriter sw = new StreamWriter(new Uri(filename).LocalPath);
                 string[,] data_matrix = Matrices.CreateHighIntensityCountsMatrix(file);
                 for (int i = 0; i < data_matrix.GetLength(0); ++i)
                 {

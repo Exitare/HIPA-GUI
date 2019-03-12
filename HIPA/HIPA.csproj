@@ -98,6 +98,7 @@
     <Compile Include="Services\Files\Write.cs" />
     <Compile Include="Services\Log\Log.cs" />
     <Compile Include="Services\Calculations\Matrices.cs" />
+    <Compile Include="Services\Queue\Queue.cs" />
     <Compile Include="Services\Update\Update.cs" />
     <Compile Include="Services\XML\Read.cs" />
     <Compile Include="Settings1.Designer.cs">
@@ -179,7 +180,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Config.xml" />
+    <Resource Include="Config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
