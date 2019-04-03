@@ -23,18 +23,12 @@ namespace HIPA
 
         void App_Exit(object sender, ExitEventArgs e)
         {
-
             Debug.Print("Closed");
-
-
-
-
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            Download.DownloadUpdater();
-          
+            Download.DownloadUpdater(); 
         }
     }
 }
