@@ -61,7 +61,9 @@ namespace HIPA {
             {
                 Cells.Add(new Cell("Line" + i, new List<TimeFrame>(), 0, 0, new List<TimeFrame>(), 0, new Dictionary<double, int>()));
             }
+#if DEBUG
             Debug.Print("Cell size is " + Cells.Count);
+#endif
             file.Cells = Cells;
         }
 
@@ -73,69 +75,82 @@ namespace HIPA {
                
                 content[line].Trim(' ');
                 Regex.Replace(content[line], @"\s+", "");
-              // content[line].Replace(' ', ' ');
-              //  content[line].Replace('\t', '-');
-
+         
                 const string reduceMultiSpace = @"[ ]{2,}";
-                content[line] = Regex.Replace(content[line].Replace("\t", "|"), reduceMultiSpace, "|");
+                content[line] = Regex.Replace(content[line].Replace("\t", "|"), reduceMultiSpace, "");
 
-               Debug.Print(content[line] + "Lenght is " + content[line].Length);
+                string previousValue = "";
                 if (content.Length != 0)
                 {
+                    
                     string[] cellValues = content[line].Split('|');
-                    for (int i = 0; i < cellValues.Length; ++i)
+                    List<string> cellValueList = new List<string>(cellValues);
+                    for (int i = 0; i < cellValueList.Count(); ++i)
                     {
-                        if(cellValues[i] == "")
-                        {
-                            Debug.Print(cellValues[i] + " i ist: " + i);
-                        }
-                     
+                        if (cellValueList[i] == "")
+                            cellValueList.RemoveAt(i);
                     }
 
-                    for (int cell = 0; cell < file.CellCount; ++cell)
+                    Debug.Print("Cell values are {0}", cellValueList.Count());
+
+                    for (int cell = 0; cell < file.CellCount; cell++)
                     {
-                       
+                     
                         if (line == 0)
-                        {
-                            file.Cells[cell].Name = cellValues[cell];
-                        }
+                            file.Cells[cell].Name = cellValueList[cell];
+
                         else
                         {
-                           
-                       
                           
-                            if (decimal.TryParse(cellValues[cell].Replace('.', ','), out decimal doublevalue))
+                         
+                            if (decimal.TryParse(cellValueList[cell].Replace('.', ','), out decimal doublevalue))
                             {
-                                file.Cells[cell].Timeframes.Add(TimeFrame.CreateTimeFrame(line, doublevalue, file));
+                                file.Cells[cell].Timeframes.Add(new TimeFrame(line, Math.Round(doublevalue, 1), Math.Floor(Convert.ToDouble(Convert.ToDouble(line) * 3.9 / 60)), false));
+                              
                             }
+
+                                
+
                             else
                             {
-                                Log.Logging.WriteLog("Could not convert to Decimal because value is " + cellValues[cell] + " for cell  " + file.Cells[cell].Name + " and line " + line, Log.LogLevel.Error);
+                                Log.Logging.WriteLog("Could not convert to Decimal because value is " + cellValueList[cell] + " for cell  " + file.Cells[cell].Name + " and line " + line, Log.LogLevel.Error);
+                                Debug.Print("Value is {0} and previous value was {1}", cellValueList[cell], previousValue);
                             }
-                               
+
+
                         }
-                   
+                        previousValue = cellValueList[cell];
                     }
                 }
-             
-
             }
-
         }
 
 
     
-
+        /// <summary>
+        /// Calculates the minutes per Cell
+        /// </summary>
+        /// <param name="file"></param>
         public static void Calculate_Minutes_Per_Cell(InputFile file)
         {
             file.Total_Detected_Minutes = file.Cells[0].Timeframes.Count * 3.9 / 60;
         }
 
+        /// <summary>
+        /// Calculates the Rows per Cell
+        /// </summary>
+        /// <param name="lines"></param>
+        /// <returns></returns>
         public static int Calculate_Rows_Per_Cell(string[] lines)
         {
             return lines.Length;
         }
 
+        /// <summary>
+        /// Calculates the cell count 
+        /// </summary>
+        /// <param name="lines"></param>
+        /// <returns></returns>
         public static int Calculate_Cell_Count(string[] lines)
         {
             int count = 0;

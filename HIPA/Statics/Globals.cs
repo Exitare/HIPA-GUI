@@ -17,15 +17,16 @@ namespace HIPA.Statics
         public static Dictionary<string, Delegate> NormalizationMethods { get => normalizationMethods; set => normalizationMethods = value; }
         internal static List<InputFile> Files { get => files; set => files = value; }
 
-        public delegate void NormilzationDelegate(InputFile file);
-        public static string ErrorLog => "Error-Log.txt";
+        public delegate void NormalizationDelegate(InputFile file);
+
+        public static string ErrorLog => "ErrorLog.txt";
         public static string Log => "Log.txt";
         public static Queue<string> LogQueue = new Queue<string>();
 
         public static void InitializeNormalization()
         {
-            NormalizationMethods.Add("Baseline", new NormilzationDelegate(TimeFrameNormalization.Baseline_Mean));
-            NormalizationMethods.Add("ToOne", new NormilzationDelegate(TimeFrameNormalization.To_One));
+            NormalizationMethods.Add("Baseline", new NormalizationDelegate(InputFile.Baseline_Mean));
+            NormalizationMethods.Add("ToOne", new NormalizationDelegate(InputFile.To_One));
            
         }
 

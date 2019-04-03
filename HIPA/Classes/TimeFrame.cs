@@ -30,10 +30,7 @@ namespace HIPA {
 
         public static TimeFrame CreateTimeFrame(int line, decimal timeFrameValue, InputFile file)
         {
-            //Debug.Print("Minute: " + Math.Floor(Convert.ToDouble(Convert.ToDouble(line) * 3.9 / 60)) + " for Line: " +  line.ToString());
-            //Debug.Print("LineNumber: " + line);
             return new TimeFrame(line, timeFrameValue, Math.Floor(Convert.ToDouble(Convert.ToDouble(line) * 3.9 / 60)), false);
-
         }
     }
 }

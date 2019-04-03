@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using HIPA.Statics;
 
-namespace HIPA.Files {
-    class Create {
+namespace HIPA.FileMgr {
 
+    class Create {
 
         public static void CreateFiles()
         {
