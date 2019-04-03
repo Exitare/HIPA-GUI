@@ -40,7 +40,9 @@ namespace HIPA {
         public decimal Threshold { get => _threshold; set => _threshold = value; }
 
 
-
+        /// <summary>
+        /// Cellbuilder which handles the cellcreation
+        /// </summary>
         public static void CellBuilder()
         {
             foreach (InputFile file in Globals.Files)
@@ -53,7 +55,10 @@ namespace HIPA {
         }
 
 
-
+        /// <summary>
+        /// Create Cells
+        /// </summary>
+        /// <param name="file"></param>
         public static void CreateCells(InputFile file)
         {
             List<Cell> Cells = new List<Cell>();
@@ -91,34 +96,23 @@ namespace HIPA {
                             cellValueList.RemoveAt(i);
                     }
 
-                    Debug.Print("Cell values are {0}", cellValueList.Count());
-
+                  
                     for (int cell = 0; cell < file.CellCount; cell++)
                     {
-                     
+
                         if (line == 0)
                             file.Cells[cell].Name = cellValueList[cell];
 
                         else
                         {
-                          
-                         
                             if (decimal.TryParse(cellValueList[cell].Replace('.', ','), out decimal doublevalue))
-                            {
                                 file.Cells[cell].Timeframes.Add(new TimeFrame(line, Math.Round(doublevalue, 1), Math.Floor(Convert.ToDouble(Convert.ToDouble(line) * 3.9 / 60)), false));
-                              
-                            }
-
-                                
 
                             else
-                            {
                                 Log.Logging.WriteLog("Could not convert to Decimal because value is " + cellValueList[cell] + " for cell  " + file.Cells[cell].Name + " and line " + line, Log.LogLevel.Error);
-                                Debug.Print("Value is {0} and previous value was {1}", cellValueList[cell], previousValue);
-                            }
-
 
                         }
+
                         previousValue = cellValueList[cell];
                     }
                 }
