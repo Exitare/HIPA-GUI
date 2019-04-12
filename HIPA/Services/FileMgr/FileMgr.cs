@@ -24,8 +24,7 @@ namespace HIPA.Services.FileMgr {
             if (!File.Exists(Globals.ErrorLog))
                 File.Create(Globals.ErrorLog).Close();
 
-        }
-      
+        }  
 
     }
 }

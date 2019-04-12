@@ -10,7 +10,12 @@ using System.Threading;
 using HIPA.Services.Log;
 
 namespace HIPA {
+
+
+   
+
     partial class Cell {
+
 
         private string _name;
         private List<TimeFrame> _time_frames;
@@ -20,7 +25,7 @@ namespace HIPA {
         private decimal _timeframe_maximum;
         private Dictionary<double,int> _high_intesity_counts;
 
-
+      
 
         public Cell(string Name, List<TimeFrame> Timeframes, decimal Threshold, decimal Baseline_Mean,  List<TimeFrame> Normalized_Timeframes, decimal TimeFrame_Maximum, Dictionary<double, int> High_Intensity_Counts) {
             _name = Name;
@@ -41,19 +46,6 @@ namespace HIPA {
         public decimal Threshold { get => _threshold; set => _threshold = value; }
 
 
-        /// <summary>
-        /// Cellbuilder which handles the cellcreation
-        /// </summary>
-        public static void CellBuilder()
-        {
-            foreach (InputFile file in Globals.Files)
-            {
-                file.Cells = new List<Cell>();
-                CreateCells(file);
-                PopulateCells(file);
-                Calculate_Minutes_Per_Cell(file);
-            }
-        }
 
 
         /// <summary>
@@ -73,12 +65,19 @@ namespace HIPA {
             file.Cells = Cells;
         }
 
-        public static void PopulateCells(InputFile file)
+        public static bool PopulateCells(InputFile file)
         {
             string[] content = file.Content;
             for (int line = 0; line < content.Length; ++line)
             {
-               
+
+                if (!content[line].ToLower().Contains('\t'))
+                {
+                    Logger.WriteLog("Could not find char \\t (Tabs) in file " + file.Name, LogLevel.Error);
+                    return false;
+                }
+                    
+                   
                 content[line].Trim(' ');
                 Regex.Replace(content[line], @"\s+", "");
          
@@ -118,25 +117,27 @@ namespace HIPA {
                     }
                 }
             }
+            return true;
         }
 
 
-    
         /// <summary>
         /// Calculates the minutes per Cell
         /// </summary>
         /// <param name="file"></param>
-        public static void Calculate_Minutes_Per_Cell(InputFile file)
+        public static void CalculateMinutes(InputFile file)
         {
             file.Total_Detected_Minutes = file.Cells[0].Timeframes.Count * 3.9 / 60;
         }
+
+
 
         /// <summary>
         /// Calculates the Rows per Cell
         /// </summary>
         /// <param name="lines"></param>
         /// <returns></returns>
-        public static int Calculate_Rows_Per_Cell(string[] lines)
+        public static int CalculateRows(string[] lines)
         {
             return lines.Length;
         }
@@ -146,7 +147,7 @@ namespace HIPA {
         /// </summary>
         /// <param name="lines"></param>
         /// <returns></returns>
-        public static int Calculate_Cell_Count(string[] lines)
+        public static int CalculateCellCount(string[] lines)
         {
             int count = 0;
             foreach (string line in lines)
@@ -163,6 +164,7 @@ namespace HIPA {
             return count;
         }
 
+       
     }
 
 

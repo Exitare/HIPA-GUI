@@ -72,17 +72,17 @@ namespace HIPA
                 try
                 {
                     ReadContent();
-                    Cell.CellBuilder();
-                    if (DataOK())
+                    if (CellBuilder() && DataOK())
                         allOK = true;
+
+                    else
+                        allOK = false;
+
                 }
                 catch (Exception ex)
                 {
-#if DEBUG
-                    Debug.Print(ex.Message);
-#endif
                     Logger.WriteLog(ex.Message, LogLevel.Error);
-                
+
                 }
             });
 
@@ -90,8 +90,6 @@ namespace HIPA
             prepareData.Start();
             prepareData.Join();
             return allOK;
-        
-           
         }
 
         /// <summary>
@@ -171,14 +169,15 @@ namespace HIPA
         }
 
 
+
         /// <summary>
         /// Reads the content of the given file and stores it
         /// </summary>
         public void ReadContent()
         {
             string[] lines = File.ReadAllLines(FolderPath);
-            CellCount = Cell.Calculate_Cell_Count(lines);
-            RowCount = Cell.Calculate_Rows_Per_Cell(lines);
+            CellCount = Cell.CalculateCellCount(lines);
+            RowCount = Cell.CalculateRows(lines);
             TimeframeCount = lines.Length - 1;
             Content = lines;
         }
@@ -189,7 +188,7 @@ namespace HIPA
         /// This Mean is
         /// </summary>
         /// <param name="file"></param>
-        public void Calculate_Baseline_Mean()
+        public void CalculateBaselineMean()
         {
             foreach (Cell cell in Cells)
             {
@@ -208,7 +207,7 @@ namespace HIPA
         /// <summary>
         /// Detects if a given timeframe value is above or below the threshold
         /// </summary>
-        public void Detect_Above_Below_Threshold()
+        public void DetectAboveBelowThreshold()
         {
             foreach (Cell cell in Cells)
             {
@@ -227,7 +226,7 @@ namespace HIPA
         /// <summary>
         /// Counts the High intensity peaks per minute
         /// </summary>
-        public void Count_High_Intensity_Peaks_Per_Minute()
+        public void CountHighIntensityPeaksPerMinute()
         {
             foreach (Cell cell in Cells)
             {
@@ -291,7 +290,7 @@ namespace HIPA
         /// Handles the correct Execution of the Chosen Normalization
         /// </summary>
         /// <param name="file"></param>
-        public void Execute_Chosen_Normalization()
+        public void ExecuteChosenNormalization()
         {
             foreach (KeyValuePair<string, Delegate> Dic in Globals.NormalizationMethods)
             {
@@ -416,7 +415,7 @@ namespace HIPA
         /// Creates the txt file for the normalized Timesframes
         /// </summary>
         /// <returns></returns>
-        public bool Export_Normalized_Timesframes()
+        public bool ExportNormalizedTimesframes()
         {
 
             string filename = Folder + Name + "-Normalized Timeframes-" + DateTime.Today.ToShortDateString() + ".txt";
@@ -482,7 +481,7 @@ namespace HIPA
         /// Creates the txt file for the high intensity counts
         /// </summary>
         /// <returns></returns>
-        public bool Export_High_Intensity_Counts()
+        public bool ExportHighIntensityCounts()
         {
             string filename = Folder + Name + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
 
@@ -535,18 +534,49 @@ namespace HIPA
         }
 
 
-        public bool DataOK()
+        private bool DataOK()
         {
+
+            double lastDetectedMinutes = 0.0;
+
             if (Cells.Count() != CellCount)
                 return false;
 
-            foreach(Cell cell in this.Cells)
+            for(int i = 0; i < Cells.Count; ++i)
             {
+                Cell cell = Cells[i];
+
                 if (cell.Timeframes.Count() < Stimulation_Timeframe)
                     Stimulation_Timeframe = cell.Timeframes.Count() / 2;
+
+                double detectedMinutes = cell.Timeframes.Count * 3.9 / 60;
+
+                if (i != 0)
+                    if (detectedMinutes != lastDetectedMinutes)
+                        return false;
+
+
+                lastDetectedMinutes = detectedMinutes;
+
             }
-                        
             return true;
+        }
+
+        
+
+        /// <summary>
+        /// Cellbuilder which handles the cellcreation
+        /// </summary>
+        public bool CellBuilder()
+        {
+            bool ok = false;
+            Cells = new List<Cell>();
+            Cell.CreateCells(this);
+            if (Cell.PopulateCells(this))
+                ok = true;
+
+            Cell.CalculateMinutes(this);
+            return ok;
         }
 
     }

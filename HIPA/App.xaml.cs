@@ -33,7 +33,6 @@ namespace HIPA
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-
             if (UpdateHandler.CheckForUpdate() && Globals.ConnectionSuccessful)
                 Globals.UpdateAvailable = true;
         }

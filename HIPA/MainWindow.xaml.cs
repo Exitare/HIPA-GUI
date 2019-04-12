@@ -10,6 +10,7 @@ using HIPA.Services.Updater;
 using HIPA.Services.FileMgr;
 using HIPA.Services.Log;
 using System.Windows.Threading;
+using System.Collections.Generic;
 
 namespace HIPA {
     /// <summary>
@@ -18,10 +19,10 @@ namespace HIPA {
     /// 
     public partial class MainWindow : Window {
 
-       
+
 
         public MainWindow()
-        { 
+        {
             InitializeComponent();
             FileMgr.CreateFiles();
 
@@ -36,9 +37,11 @@ namespace HIPA {
             UpdateMenu.IsEnabled = Globals.ConnectionSuccessful ? true : false;
             if (!Globals.ConnectionSuccessful)
                 MessageBox.Show("There was a problem reaching the Remote Server\nUpdates will be disabled!\nCheck your internet and/or proxy settings!");
-             
 
-            if(Globals.UpdateAvailable)
+
+
+
+            if (Globals.UpdateAvailable)
                 if (MessageBox.Show("Updates available!\nDo you want to start the Update?", "Update", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     UpdateHandler.StartUpdates();
 
@@ -62,15 +65,15 @@ namespace HIPA {
                         StatusBarLabel.Text = file.Name;
                     });
 
-                    file.Calculate_Baseline_Mean();
-                    file.Execute_Chosen_Normalization();
+                    file.CalculateBaselineMean();
+                    file.ExecuteChosenNormalization();
                     file.FindTimeFrameMaximum();
                     file.CalculateThreshold();
-                    file.Detect_Above_Below_Threshold();
-                    file.Count_High_Intensity_Peaks_Per_Minute();
+                    file.DetectAboveBelowThreshold();
+                    file.CountHighIntensityPeaksPerMinute();
 
-                    bool hic_written = file.Export_High_Intensity_Counts();
-                    bool nt_written = file.Export_Normalized_Timesframes();
+                    bool hic_written = file.ExportHighIntensityCounts();
+                    bool nt_written = file.ExportNormalizedTimesframes();
 
                     Dispatcher.Invoke(() =>
                     {
@@ -103,6 +106,8 @@ namespace HIPA {
 
         private void OpenFiles(object sender, RoutedEventArgs e)
         {
+           
+            List<InputFile> errorList = new List<InputFile>();
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 // Set the file dialog to filter for graphics files.
@@ -121,23 +126,46 @@ namespace HIPA {
                         InputFile.AddFilesToList(openFileDialog);
                         foreach (InputFile file in Globals.Files)
                         {
+                         
                             if (!file.PrepareFile())
-                                this.Dispatcher.Invoke(() =>
+                                Dispatcher.Invoke(() =>
                                 {
-                                    this.CalculateButton.IsEnabled = false;
+                                    errorList.Add(file);
+                                  
                                 });
-                        }
 
+                        }
                     }
                     finally
                     {
-                        this.Dispatcher.Invoke(() =>
+                        Dispatcher.Invoke(() =>
                        {
                            if (Globals.Files.Count > 0)
+                           {
+                              
+                                                        
+                               if (errorList.Count != 0)
+                               {
+                                   string errorMessage = "There were error(s) in those files:\n ";
+                                   foreach ( InputFile file in errorList)
+                                   {
+                                       errorMessage = errorMessage + "\n " + file.Name;
+                                       Globals.Files.Remove(file);
+                                   }
+                                   errorMessage = errorMessage + "\n\n More information can be found @ " + Globals.ErrorLog;
+                                   errorList.Clear();
+                                   MessageBox.Show(errorMessage, "Could not prepare files!");
+                               }
+                             
+                           }
+
+                           if(Globals.Files.Count > 0)
                            {
                                ClearButton.IsEnabled = true;
                                CalculateButton.IsEnabled = true;
                            }
+                              
+
                            RefreshFilesDataGrid();
                        });
                     }

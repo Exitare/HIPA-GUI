@@ -24,6 +24,8 @@ namespace HIPA.Statics
 
         public static bool UpdateAvailable = false;
 
+      
+
         public static void InitializeNormalization()
         {
             NormalizationMethods.Add("Baseline", new NormalizationDelegate(InputFile.Baseline_Mean));
