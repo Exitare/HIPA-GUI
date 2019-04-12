@@ -39,7 +39,7 @@
                 <DataGridTextColumn Header="Limit" Binding="{Binding Percentage_Limit}" />
                 <DataGridTextColumn Header="Stimulation TimeFrame" Binding="{Binding Stimulation_Timeframe}" />
                 <DataGridComboBoxColumn x:Name="ComboBoxColumn" Header="Normalization Method"  SelectedItemBinding="{Binding Normalization_Method}" Width="150"/>
-                <DataGridTextColumn Header="Path" Binding="{Binding SourcePath}" />
+                <DataGridTextColumn Header="Path" Binding="{Binding FolderPath}" />
             </DataGrid.Columns>
           
         </DataGrid>

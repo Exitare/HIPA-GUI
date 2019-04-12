@@ -48,7 +48,7 @@ namespace HIPA
 
         public string Name { get => _name; set => _name = value; }
         public int ID { get => _id; }
-        public string SourcePath { get => _path; set => _path = value; }
+        public string FolderPath { get => _path; set => _path = value; }
         public decimal Percentage_Limit { get => _percentage_limit; set => _percentage_limit = value; }
         public int CellCount { get => _cellCount; set => _cellCount = value; }
         public int RowCount { get => _rowCount; set => _rowCount = value; }
@@ -176,7 +176,7 @@ namespace HIPA
         /// </summary>
         public void ReadContent()
         {
-            string[] lines = System.IO.File.ReadAllLines(SourcePath);
+            string[] lines = File.ReadAllLines(FolderPath);
             CellCount = Cell.Calculate_Cell_Count(lines);
             RowCount = Cell.Calculate_Rows_Per_Cell(lines);
             TimeframeCount = lines.Length - 1;

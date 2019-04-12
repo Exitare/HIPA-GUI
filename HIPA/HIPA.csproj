@@ -97,7 +97,6 @@
     <Compile Include="Classes\Cell.cs" />
     <Compile Include="Classes\InputFile.cs" />
     <Compile Include="Classes\TimeFrame.cs" />
-    <Compile Include="Handler\ErrorHandler\Errorhandler.cs" />
     <Compile Include="Pages\Settings\CalculationsPage.xaml.cs">
       <DependentUpon>CalculationsPage.xaml</DependentUpon>
     </Compile>

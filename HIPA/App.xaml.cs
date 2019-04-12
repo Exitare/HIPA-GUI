@@ -35,7 +35,7 @@ namespace HIPA
         {
 
             if (UpdateHandler.CheckForUpdate() && Globals.ConnectionSuccessful)
-                UpdateHandler.StartUpdates();
+                Globals.UpdateAvailable = true;
         }
     }
 }

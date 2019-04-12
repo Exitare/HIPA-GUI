@@ -22,6 +22,8 @@ namespace HIPA.Statics
         public static string Log => "Log.txt";
         public static Queue<string> LogQueue = new Queue<string>();
 
+        public static bool UpdateAvailable = false;
+
         public static void InitializeNormalization()
         {
             NormalizationMethods.Add("Baseline", new NormalizationDelegate(InputFile.Baseline_Mean));

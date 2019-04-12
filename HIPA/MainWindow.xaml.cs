@@ -37,8 +37,14 @@ namespace HIPA {
             if (!Globals.ConnectionSuccessful)
                 MessageBox.Show("There was a problem reaching the Remote Server\nUpdates will be disabled!\nCheck your internet and/or proxy settings!");
              
- 
+
+            if(Globals.UpdateAvailable)
+                if (MessageBox.Show("Updates available!\nDo you want to start the Update?", "Update", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    UpdateHandler.StartUpdates();
+
+
             InitializeUIState();
+            Globals.InitializeNormalization();
             ComboBoxColumn.ItemsSource = Globals.NormalizationMethods.Keys;
         }
 

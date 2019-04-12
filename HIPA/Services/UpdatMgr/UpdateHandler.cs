@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using HIPA;
 using HIPA.Statics;
 using HIPA.Services.XML;
-using HIPA.Handler;
+
 
 namespace HIPA.Services.Updater {
 
