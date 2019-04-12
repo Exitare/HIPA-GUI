@@ -7,13 +7,18 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
-using HIPA.Downloads;
+using HIPA.Services.Updater;
+using HIPA.Statics;
+
 namespace HIPA
 {
     /// <summary>
     /// Interaktionslogik für "App.xaml"
     /// </summary>
     public partial class App : Application {
+
+
+
         public enum ApplicationExitCode {
             Success = 0,
             Failure = 1,
@@ -28,7 +33,9 @@ namespace HIPA
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            Download.DownloadUpdater(); 
+
+            if (UpdateHandler.CheckForUpdate() && Globals.ConnectionSuccessful)
+                UpdateHandler.StartUpdates();
         }
     }
 }

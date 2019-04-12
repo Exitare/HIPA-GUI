@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using HIPA.Calculations;
 
 namespace HIPA.Statics
 {
@@ -27,7 +26,6 @@ namespace HIPA.Statics
         {
             NormalizationMethods.Add("Baseline", new NormalizationDelegate(InputFile.Baseline_Mean));
             NormalizationMethods.Add("ToOne", new NormalizationDelegate(InputFile.To_One));
-           
         }
 
     }

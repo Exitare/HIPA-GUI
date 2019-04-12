@@ -5,11 +5,26 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using HIPA.Statics;
+using HIPA.Services.Log;
+using System.Diagnostics;
 
-namespace HIPA.Downloads
+namespace HIPA.Services.Updater
 {
-    class Download
+
+    class DownloadHandler
     {
+
+        public delegate void EventHandler(EventArgs args);
+        public static event EventHandler OnDownloadError = delegate { };
+
+
+        public static void DownloadFiles()
+        {
+            DownloadUpdater();
+            DownloadConfig();
+        }
+
+
         public static void DownloadUpdater()
         {
             string remoteUri = Settings.Default.URL;
@@ -32,8 +47,20 @@ namespace HIPA.Downloads
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Could not download Updater");
-                    Console.WriteLine(ex.Message);
+#if DEBUG
+                    Debug.WriteLine("Could not download Updater");
+                    Debug.WriteLine(ex.Message);
+#endif
+                    Logger.WriteLog("There was an error downloading the Updater!", LogLevel.Warning);
+                    Logger.WriteLog(ex.Message, LogLevel.Warning);
+
+                    EventHandler handler = OnDownloadError;
+                    DownloadErrorArgs args = new DownloadErrorArgs();
+                    args.Message = ex.Message;
+                    args.TimeReached = DateTime.Now;
+                    OnDownloadError(args);
+
+                    Globals.ConnectionSuccessful = false;
                 }
 
             }
@@ -50,33 +77,29 @@ namespace HIPA.Downloads
                 try
                 {
                     WebProxy wp = new WebProxy(Settings.Default.Proxy_URL, Settings.Default.Proxy_Port);
+                    if (Settings.Default.Proxy_Active)
+                        webClient.Proxy = wp;
 
-                    //if (Settings.Default.Proxy_Active)
-                    //   webClient.Proxy = wp;
                     webClient.DownloadFile(remoteUri + fileName, fileName);
+                    Globals.ConnectionSuccessful = true;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error occured");
-                    Console.WriteLine(Settings.Default.URL);
-                    Console.WriteLine(ex.Message);
-
+                    Logger.WriteLog(ex.Message, LogLevel.Error);
+                    Globals.ConnectionSuccessful = false;
                 }
             }
         }
+
+
+     
+    }
+
+
+    public class DownloadErrorArgs : EventArgs {
+        public string Message { get; set; }
+        public DateTime TimeReached { get; set; }
     }
 }
 
 
-
-////public RequestClass(String proxyURL, int port, String username, String password)
-//{
-//    //Validate proxy address
-//    var proxyURI = new Uri(string.Format("{0}:{1}", proxyURL, port));
-
-////Set credentials
-//ICredentials credentials = new NetworkCredential(username, password);
-
-//    //Set proxy
-//    this.proxy =  = new WebProxy(proxyURI, true, null, credentials);
-//}

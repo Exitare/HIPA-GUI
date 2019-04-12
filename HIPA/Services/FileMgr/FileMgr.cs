@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using HIPA.Statics;
 
-namespace HIPA.FileMgr {
+namespace HIPA.Services.FileMgr {
 
-    class Create {
+    class FileMgr {
 
         public static void CreateFiles()
         {
@@ -18,14 +18,12 @@ namespace HIPA.FileMgr {
         private static void CreateLogFiles()
         {
             if (!File.Exists(Globals.Log))
-            {
                 File.Create(Globals.Log).Close();
-            }
+
 
             if (!File.Exists(Globals.ErrorLog))
-            {
                 File.Create(Globals.ErrorLog).Close();
-            }
+
         }
       
 

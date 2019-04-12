@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HIPA.Statics;
 
-namespace HIPA.Queue {
+namespace HIPA.Services {
 
     class Queue {
 

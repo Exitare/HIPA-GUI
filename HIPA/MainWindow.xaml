@@ -62,7 +62,7 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem Grid.Column="0">
-
+                <TextBlock x:Name="versionLabel" Height="16" Width="100"></TextBlock>
             </StatusBarItem>
             <Separator Grid.Column="1" />
             <StatusBarItem Grid.Column="2">

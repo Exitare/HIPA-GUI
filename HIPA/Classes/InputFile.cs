@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
-using HIPA.FileMgr;
+using HIPA.Services;
 using Microsoft.Win32;
 using HIPA.Statics;
 using System.IO;
-using HIPA.Log;
+using HIPA.Services.Log;
 
 namespace HIPA
 {
@@ -81,7 +81,7 @@ namespace HIPA
 #if DEBUG
                     Debug.Print(ex.Message);
 #endif
-                    Logging.WriteLog(ex.Message, LogLevel.Error);
+                    Logger.WriteLog(ex.Message, LogLevel.Error);
                 
                 }
             });
@@ -99,11 +99,25 @@ namespace HIPA
         /// </summary>
         /// <param name="Path"></param>
         /// <returns></returns>
-        public static string GetFileName(string Path)
+        public static string GetName(string Path)
         {
+            string[] pathFragments = Path.Split('\\');
 
-            string[] words = Path.Split('\\');
-            return words[words.Length - 1].Split('.')[0];
+          
+
+
+            string[] nameFragments = pathFragments[pathFragments.Length - 1].Split('.');
+            string fileName = "";
+            for (int i = 0; i < nameFragments.Length; i++)
+            {
+                if(i != nameFragments.Length -1)
+                    fileName = fileName + nameFragments[i] + "_";
+
+                if (i == nameFragments.Length - 2)
+                    fileName = fileName + nameFragments[i];
+            }
+            fileName.Replace(' ', '_');
+            return fileName;
         }
 
         public static string GetFolder(string Path)
@@ -145,12 +159,13 @@ namespace HIPA
             if (ID != 0)
                 ID++;
 
+
             if (Globals.Files.Count == 1)
                 ID = 1;
-            
-            foreach (String file in openFileDialog.FileNames)
+
+            foreach (String filePath in openFileDialog.FileNames)
             {
-                Globals.Files.Add(new InputFile(ID, GetFolder(file), file, GetFileName(file), (decimal)0.6, new List<Cell>(), 0, 0, 0, new string[0], 372, Settings.Default.DefaultNormalization, 0));
+                Globals.Files.Add(new InputFile(ID, GetFolder(filePath), filePath, GetName(filePath), (decimal)0.6, new List<Cell>(), 0, 0, 0, new string[0], 372, Settings.Default.DefaultNormalization, 0));
                 ID++;
             }
         }
@@ -357,7 +372,7 @@ namespace HIPA
             }
             catch (Exception ex)
             {
-                Logging.WriteLog(ex.Message, Log.LogLevel.Error);
+                Logger.WriteLog(ex.Message, LogLevel.Error);
                 return new string[0, 0];
             }
 
@@ -434,8 +449,8 @@ namespace HIPA
             }
             catch (Exception ex)
             {
-                Logging.WriteLog(ex.Message, LogLevel.Error);
-                Logging.WriteLog("Could not create file in source folder. Use own execution folder!", LogLevel.Error);
+                Logger.WriteLog(ex.Message, LogLevel.Error);
+                Logger.WriteLog("Could not create file in source folder. Use own execution folder!", LogLevel.Error);
                 filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "-Normalized Timeframes-" + DateTime.Today.ToShortDateString() + ".txt";
                 StreamWriter sw = new StreamWriter(new Uri(filename).LocalPath);
 
@@ -495,8 +510,8 @@ namespace HIPA
             }
             catch (Exception ex)
             {
-                Logging.WriteLog(ex.Message, LogLevel.Error);
-                Logging.WriteLog("Could not create file in source folder. Used own execution folder!", LogLevel.Error);
+                Logger.WriteLog(ex.Message, LogLevel.Error);
+                Logger.WriteLog("Could not create file in source folder. Used own execution folder!", LogLevel.Error);
                 filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
                 StreamWriter sw = new StreamWriter(new Uri(filename).LocalPath);
                 string[,] data_matrix = CreateHighIntensityCountsMatrix();

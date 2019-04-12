@@ -7,6 +7,7 @@ using System.Diagnostics;
 using HIPA.Statics;
 using System.Text.RegularExpressions;
 using System.Threading;
+using HIPA.Services.Log;
 
 namespace HIPA {
     partial class Cell {
@@ -109,7 +110,7 @@ namespace HIPA {
                                 file.Cells[cell].Timeframes.Add(new TimeFrame(line, Math.Round(doublevalue, 1), Math.Floor(Convert.ToDouble(Convert.ToDouble(line) * 3.9 / 60)), false));
 
                             else
-                                Log.Logging.WriteLog("Could not convert to Decimal because value is " + cellValueList[cell] + " for cell  " + file.Cells[cell].Name + " and line " + line, Log.LogLevel.Error);
+                                Logger.WriteLog("Could not convert to Decimal because value is " + cellValueList[cell] + " for cell  " + file.Cells[cell].Name + " and line " + line, LogLevel.Error);
 
                         }
 
