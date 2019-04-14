@@ -95,7 +95,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Cell.cs" />
-    <Compile Include="Classes\InputFile.cs" />
+    <Compile Include="Classes\InputFile\Calculations.cs" />
+    <Compile Include="Classes\InputFile\CellBuilder.cs" />
+    <Compile Include="Classes\InputFile\InputFile.cs" />
+    <Compile Include="Classes\InputFile\Normalization.cs" />
+    <Compile Include="Classes\InputFile\Output.cs" />
+    <Compile Include="Classes\InputFile\Preparation.cs" />
     <Compile Include="Classes\TimeFrame.cs" />
     <Compile Include="Pages\Settings\CalculationsPage.xaml.cs">
       <DependentUpon>CalculationsPage.xaml</DependentUpon>
@@ -106,6 +111,8 @@
     <Compile Include="Screens\SettingsScreen.xaml.cs">
       <DependentUpon>SettingsScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\Misc\MiscHandler.cs" />
+    <Compile Include="Services\TaskHandler\TaskHandler.cs" />
     <Compile Include="Services\UpdatMgr\DownloadHandler.cs" />
     <Compile Include="Services\FileMgr\FileMgr.cs" />
     <Compile Include="Services\LogMgr\Log.cs" />

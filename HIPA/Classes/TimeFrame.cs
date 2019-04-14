@@ -5,26 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
+using HIPA.Classes.InputFile;
+
 namespace HIPA {
     partial class TimeFrame {
 
         private readonly int _id;
         private readonly decimal _value;
-        private readonly double _including_minute;
-        private bool _above_below_cell_threshold;
+        private readonly double _includingMinute;
+        private bool _aboveBelowCellThreshold;
 
-        public TimeFrame(int ID, decimal Value, double Including_Minute, bool Above_Below_Threshold)
+        public TimeFrame(int ID, decimal Value, double IncludingMinute, bool AboveBelowThreshold)
         {
             _id = ID;
             _value = Value;
-            _including_minute = Including_Minute;
-            _above_below_cell_threshold = Above_Below_Threshold;
+            _includingMinute = IncludingMinute;
+            _aboveBelowCellThreshold = AboveBelowThreshold;
         }
 
         public int ID { get => _id; }
         public decimal Value { get => _value; }
-        public double Including_Minute { get => _including_minute; }
-        public bool Above_Below_Threshold { get => _above_below_cell_threshold; set => _above_below_cell_threshold = value; }
+        public double IncludingMinute { get => _includingMinute; }
+        public bool AboveBelowThreshold { get => _aboveBelowCellThreshold; set => _aboveBelowCellThreshold = value; }
 
     
 

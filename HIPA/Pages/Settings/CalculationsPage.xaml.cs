@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using HIPA.Statics;
 using Microsoft.Win32;
 using System.IO;
-
+using HIPA.Classes.InputFile;
 
 namespace HIPA {
     /// <summary>
@@ -18,12 +18,11 @@ namespace HIPA {
             CustomFolderOutputCheckBox.IsChecked = Settings.Default.CustomOutputPathActive;
 
             if (CustomFolderOutputCheckBox.IsChecked.Value)
-            {
                 OutputpathBox.Text = Settings.Default.CustomOutputPath;
-            }
+            
 
-            NormalizationMethodComboBox.ItemsSource = Globals.NormalizationMethods.Keys;
-            NormalizationMethodComboBox.SelectedItem = Settings.Default.DefaultNormalization;
+           NormalizationMethodComboBox.ItemsSource = InputFile.GetNormalizationMethods();
+           NormalizationMethodComboBox.SelectedItem = Settings.Default.DefaultNormalization;
          
         }
 

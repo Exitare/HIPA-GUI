@@ -35,10 +35,10 @@
                 <DataGridTextColumn Header="Detected Cells" Binding="{Binding CellCount}"  IsReadOnly="True"/>
                 <DataGridTextColumn Header="Detected Rows" Binding="{Binding RowCount}"  IsReadOnly="True" />
                 <DataGridTextColumn Header="Detected TimeFrames" Binding="{Binding TimeframeCount}"  IsReadOnly="True"  Width="130"/>
-                <DataGridTextColumn Header="Detected Minutes" Binding="{Binding Total_Detected_Minutes}"  IsReadOnly="True" Width="130"/>
-                <DataGridTextColumn Header="Limit" Binding="{Binding Percentage_Limit}" />
-                <DataGridTextColumn Header="Stimulation TimeFrame" Binding="{Binding Stimulation_Timeframe}" />
-                <DataGridComboBoxColumn x:Name="ComboBoxColumn" Header="Normalization Method"  SelectedItemBinding="{Binding Normalization_Method}" Width="150"/>
+                <DataGridTextColumn Header="Detected Minutes" Binding="{Binding TotalDetectedMinutes}"  IsReadOnly="True" Width="130"/>
+                <DataGridTextColumn Header="Limit" Binding="{Binding PercentageLimit}" />
+                <DataGridTextColumn Header="Stimulation TimeFrame" Binding="{Binding StimulationTimeframe}" />
+                <DataGridComboBoxColumn x:Name="ComboBoxColumn" Header="Normalization Method"  SelectedItemBinding="{Binding NormalizationMethod}" Width="150"/>
                 <DataGridTextColumn Header="Path" Binding="{Binding FolderPath}" />
             </DataGrid.Columns>
           

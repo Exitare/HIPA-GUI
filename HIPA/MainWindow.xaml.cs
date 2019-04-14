@@ -11,6 +11,8 @@ using HIPA.Services.FileMgr;
 using HIPA.Services.Log;
 using System.Windows.Threading;
 using System.Collections.Generic;
+using HIPA.Classes.InputFile;
+using HIPA.Services.Misc;
 
 namespace HIPA {
     /// <summary>
@@ -46,19 +48,18 @@ namespace HIPA {
                     UpdateHandler.StartUpdates();
 
 
-            InitializeUIState();
-            Globals.InitializeNormalization();
-            ComboBoxColumn.ItemsSource = Globals.NormalizationMethods.Keys;
+            InitializeUIState();          
+            ComboBoxColumn.ItemsSource = InputFile.GetNormalizationMethods();
         }
 
         private void Calculate(object sender, RoutedEventArgs e)
         {
             progressBar.Value = 0;
-            double step = 100 / Globals.Files.Count;
+            double step = 100 / Globals.GetFiles().Count;
             Thread Calculations = new Thread(() =>
             {
 
-                foreach (InputFile file in Globals.Files)
+                foreach (InputFile file in Globals.GetFiles())
                 {
                     this.Dispatcher.Invoke(() =>
                     {
@@ -100,7 +101,7 @@ namespace HIPA {
         private void RefreshFilesDataGrid()
         {
             selectedFilesDataGrid.ItemsSource = null;
-            selectedFilesDataGrid.ItemsSource = Globals.Files;
+            selectedFilesDataGrid.ItemsSource = Globals.GetFiles();
         }
 
 
@@ -124,7 +125,7 @@ namespace HIPA {
                     try
                     {
                         InputFile.AddFilesToList(openFileDialog);
-                        foreach (InputFile file in Globals.Files)
+                        foreach (InputFile file in Globals.GetFiles())
                         {
                          
                             if (!file.PrepareFile())
@@ -140,17 +141,17 @@ namespace HIPA {
                     {
                         Dispatcher.Invoke(() =>
                        {
-                           if (Globals.Files.Count > 0)
+                           if (Globals.GetFiles().Count > 0)
                            {
                               
                                                         
                                if (errorList.Count != 0)
                                {
                                    string errorMessage = "There were error(s) in those files:\n ";
-                                   foreach ( InputFile file in errorList)
+                                   foreach (InputFile file in errorList)
                                    {
                                        errorMessage = errorMessage + "\n " + file.Name;
-                                       Globals.Files.Remove(file);
+                                       Globals.GetFiles().Remove(file);
                                    }
                                    errorMessage = errorMessage + "\n\n More information can be found @ " + Globals.ErrorLog;
                                    errorList.Clear();
@@ -159,7 +160,7 @@ namespace HIPA {
                              
                            }
 
-                           if(Globals.Files.Count > 0)
+                           if(Globals.GetFiles().Count > 0)
                            {
                                ClearButton.IsEnabled = true;
                                CalculateButton.IsEnabled = true;
@@ -195,7 +196,7 @@ namespace HIPA {
 
         private void Clear(object sender, RoutedEventArgs e)
         {
-            Globals.Files.Clear();
+            Globals.GetFiles().Clear();
 
             selectedFilesDataGrid.ItemsSource = null;
             CalculateButton.IsEnabled = false;
