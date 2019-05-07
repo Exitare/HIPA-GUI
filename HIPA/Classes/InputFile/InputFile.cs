@@ -19,7 +19,7 @@ namespace HIPA.Classes.InputFile
     partial class InputFile {
 
         private readonly int _id;
-        private string _path;
+        private string _fullpath;
         private string _folder;
         private string _name;
         private decimal _percentageLimit;
@@ -35,11 +35,11 @@ namespace HIPA.Classes.InputFile
         private readonly NormalizeToOneDelegate _normalizeToOne;
 
 
-        public InputFile(int ID, string Folder, string Path, string Name, decimal PercentageLimit, List<Cell> Cells, int CellCount, int RowCount, double TotalDetectedMinutes, string[] Content, int StimulationTimeframe, string SelectedNormalizationMethod, int TimeFrameCount)
+        public InputFile(int ID, string Folder, string FullPath, string Name, decimal PercentageLimit, List<Cell> Cells, int CellCount, int RowCount, double TotalDetectedMinutes, string[] Content, int StimulationTimeframe, string SelectedNormalizationMethod, int TimeFrameCount)
         {
             _id = ID;
             _name = Name;
-            _path = Path;
+            _fullpath = FullPath;
             _folder = Folder;
             _percentageLimit = PercentageLimit;
             _cells = Cells;
@@ -56,9 +56,10 @@ namespace HIPA.Classes.InputFile
             _normalizeToOne = new NormalizeToOneDelegate(NormalizeWithToOne);
         }
 
-        public string Name { get => _name; set => _name = value; }
         public int ID { get => _id; }
-        public string FolderPath { get => _path; set => _path = value; }
+        public string Folder { get => _folder; set => _folder = value; }
+        public string FullPath { get => _fullpath; set => _fullpath = value; }
+        public string Name { get => _name; set => _name = value; }
         public decimal PercentageLimit { get => _percentageLimit; set => _percentageLimit = value; }
         public int CellCount { get => _cellCount; set => _cellCount = value; }
         public int RowCount { get => _rowCount; set => _rowCount = value; }
@@ -67,60 +68,9 @@ namespace HIPA.Classes.InputFile
         public int StimulationTimeframe { get => _stimulationTimeframe; set => _stimulationTimeframe = value; }
         public string SelectedNormalizationMethod { get => _selectedNormalizationMethod; set => _selectedNormalizationMethod = value; }
         internal List<Cell> Cells { get => _cells; set => _cells = value; }
-        public string Folder { get => _folder; set => _folder = value; }
+       
         public int TimeframeCount { get => _timeframeCount; set => _timeframeCount = value; }
 
-     
-
-
-
-
-
-
-        /// <summary>
-        /// Resolve the file Path
-        /// </summary>
-        /// <param name="Path"></param>
-        /// <returns></returns>
-        public static string GetName(string Path)
-        {
-            string[] pathFragments = Path.Split('\\');
-
-            string[] nameFragments = pathFragments[pathFragments.Length - 1].Split('.');
-            string fileName = "";
-            for (int i = 0; i < nameFragments.Length; i++)
-            {
-                if(i != nameFragments.Length -1)
-                    fileName = fileName + nameFragments[i] + "_";
-
-                if (i == nameFragments.Length - 2)
-                    fileName = fileName + nameFragments[i];
-            }
-            fileName.Replace(' ', '_');
-            return fileName;
-        }
-
-        public static string GetFolder(string Path)
-        {
-            string[] words = Path.Split('\\');
-            string path = "";
-
-            for (int i = 0; i < words.Length - 1; ++i)
-            {
-                if (i == 0)
-                {
-                    path += words[i] + "\\";
-                }
-                else
-                {
-                    path += words[i] + "\\";
-                }
-             ;
-            }
-
-            path = path.Replace(@"\\", @"\");
-            return path;
-        }
 
         /// <summary>
         /// Adds every selected file to the list 
@@ -145,18 +95,10 @@ namespace HIPA.Classes.InputFile
 
             foreach (String filePath in openFileDialog.FileNames)
             {
-                Globals.GetFiles().Add(new InputFile(ID, GetFolder(filePath), filePath, GetName(filePath), (decimal)0.6, new List<Cell>(), 0, 0, 0, new string[0], 372, SettingsHandler.LoadStoredNormalizationMethod().Item2, 0));
+                Globals.GetFiles().Add(new InputFile(ID, Path.GetDirectoryName(filePath), filePath, Path.GetFileNameWithoutExtension(filePath), (decimal)0.6, new List<Cell>(), 0, 0, 0, new string[0], 372, SettingsHandler.LoadStoredNormalizationMethod().Item2, 0));
                 ID++;
             }
         }
-
-
-
-     
-
-
-    
-
 
         /// <summary>
         /// Handles the correct Execution of the Chosen Normalization

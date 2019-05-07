@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using HIPA.Services.Updater;
 using HIPA.Statics;
 
@@ -18,7 +19,13 @@ namespace HIPA
     /// </summary>
     public partial class App : Application {
 
-
+        void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            // Process unhandled exception
+            Debug.Print("Exeption occured");
+            // Prevent default unhandled exception processing
+            e.Handled = true;
+        }
 
         public enum ApplicationExitCode {
             Success = 0,

@@ -22,7 +22,6 @@ namespace HIPA.Classes.InputFile
    partial class InputFile
     {
 
-
         /// <summary>
         /// Prepares the given file. Generates the cells and timeframes
         /// </summary>
@@ -67,7 +66,7 @@ namespace HIPA.Classes.InputFile
         {
             try
             {
-                Content = File.ReadAllLines(FolderPath);
+                Content = File.ReadAllLines(FullPath);
                 Console.WriteLine(Content);
             }
             catch (Exception ex)
