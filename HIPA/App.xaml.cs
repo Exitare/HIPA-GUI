@@ -10,6 +10,7 @@ using System.Windows;
 using HIPA.Services.Updater;
 using HIPA.Statics;
 
+
 namespace HIPA
 {
     /// <summary>
@@ -35,6 +36,8 @@ namespace HIPA
         {
             if (UpdateHandler.CheckForUpdate() && Globals.ConnectionSuccessful)
                 Globals.UpdateAvailable = true;
+
+        
         }
     }
 }

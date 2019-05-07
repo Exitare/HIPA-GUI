@@ -33,6 +33,8 @@ namespace HIPA.Statics
 
         public static bool UpdateAvailable = false;
 
+        public static Dictionary<NormalizationMethods, string> NormalizationMethods = new Dictionary<NormalizationMethods, string>();
+
        
     }
 }

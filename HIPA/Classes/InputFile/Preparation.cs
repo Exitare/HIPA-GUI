@@ -9,6 +9,14 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
+
+enum Seperator
+{
+    TAB_SEPERATOR,
+    COMMA_SEPERATOR,
+    INVALID_SEPERATOR,
+}
+
 namespace HIPA.Classes.InputFile
 {
    partial class InputFile
@@ -28,6 +36,8 @@ namespace HIPA.Classes.InputFile
                     if (!ReadContent())
                         allOK = false;
 
+                    DetectDataSizes();
+                    Console.WriteLine("Sep is : {0}",DetectSeperator());
                    
 
                     if (CellBuilder() && DataOK())
@@ -58,6 +68,7 @@ namespace HIPA.Classes.InputFile
             try
             {
                 Content = File.ReadAllLines(FolderPath);
+                Console.WriteLine(Content);
             }
             catch (Exception ex)
             {
@@ -71,11 +82,50 @@ namespace HIPA.Classes.InputFile
                
         }
 
+        public Seperator DetectSeperator()
+        {
+            foreach(string line in Content)
+            {
+                if (line.Contains('\t'))
+                    return Seperator.TAB_SEPERATOR;
+
+                else if (line.Contains(','))
+                    return Seperator.COMMA_SEPERATOR;
+            }
+            return Seperator.INVALID_SEPERATOR;
+        }
+
+        /// <summary>
+        /// Detect all needed data sizes
+        /// </summary>
         public void DetectDataSizes()
         {
-            CellCount = Cell.CalculateCellCount(Content);
-            RowCount = Cell.CalculateRows(Content);
+            CalculateCellCount();
+            RowCount = Content.Length;
             TimeframeCount = Content.Length - 1;
+        }
+
+
+        /// <summary>
+        /// Calculates the cell count 
+        /// </summary>
+        /// <param name="lines"></param>
+        /// <returns></returns>
+        private void CalculateCellCount()
+        {
+            int count = 0;
+            foreach (string line in Content)
+            {
+                line.Trim(' ');
+                if (line.Length != 0)
+                {
+                    string[] value = line.Split('\t');
+                    count = value.Length;
+                }
+
+            }
+
+            CellCount = count;
         }
 
         /// <summary>
@@ -122,52 +172,55 @@ namespace HIPA.Classes.InputFile
         /// <returns></returns>
         public bool PopulateCells()
         {
-            for (int line = 0; line < Content.Length; ++line)
+            if (Cells.Count != 0)
             {
-
-                if (!Content[line].ToLower().Contains('\t'))
-                {
-                    Logger.WriteLog("Could not find char \\t (Tabs) in file " + Name, LogLevel.Error);
-                    return false;
-                }
-
-
-                Content[line].Trim(' ');
-                Regex.Replace(Content[line], @"\s+", "");
-
-                const string reduceMultiSpace = @"[ ]{2,}";
-                Content[line] = Regex.Replace(Content[line].Replace("\t", "|"), reduceMultiSpace, "");
-
-                string previousValue = "";
-                if (Content.Length != 0)
+                for (int line = 0; line < Content.Length; ++line)
                 {
 
-                    string[] cellValues = Content[line].Split('|');
-                    List<string> cellValueList = new List<string>(cellValues);
-                    for (int i = 0; i < cellValueList.Count(); ++i)
+                    if (!Content[line].ToLower().Contains('\t'))
                     {
-                        if (cellValueList[i] == "")
-                            cellValueList.RemoveAt(i);
+                        Logger.WriteLog("Could not find char \\t (Tabs) in file " + Name, LogLevel.Error);
+                        return false;
                     }
 
 
-                    for (int cell = 0; cell < CellCount; cell++)
+                    Content[line].Trim(' ');
+                    Regex.Replace(Content[line], @"\s+", "");
+
+                    const string reduceMultiSpace = @"[ ]{2,}";
+                    Content[line] = Regex.Replace(Content[line].Replace("\t", "|"), reduceMultiSpace, "");
+
+                    string previousValue = "";
+                    if (Content.Length != 0)
                     {
 
-                        if (line == 0)
-                            Cells[cell].Name = cellValueList[cell];
-
-                        else
+                        string[] cellValues = Content[line].Split('|');
+                        List<string> cellValueList = new List<string>(cellValues);
+                        for (int i = 0; i < cellValueList.Count(); ++i)
                         {
-                            if (decimal.TryParse(cellValueList[cell].Replace('.', ','), out decimal doublevalue))
-                                Cells[cell].Timeframes.Add(new TimeFrame(line, Math.Round(doublevalue, 1), Math.Floor(Convert.ToDouble(Convert.ToDouble(line) * 3.9 / 60)), false));
-
-                            else
-                                Logger.WriteLog("Could not convert to Decimal because value is " + cellValueList[cell] + " for cell  " + Cells[cell].Name + " and line " + line, LogLevel.Error);
-
+                            if (cellValueList[i] == "")
+                                cellValueList.RemoveAt(i);
                         }
 
-                        previousValue = cellValueList[cell];
+
+                        for (int cell = 0; cell < CellCount; cell++)
+                        {
+
+                            if (line == 0)
+                                Cells[cell].Name = cellValueList[cell];
+
+                            else
+                            {
+                                if (decimal.TryParse(cellValueList[cell].Replace('.', ','), out decimal doublevalue))
+                                    Cells[cell].Timeframes.Add(new TimeFrame(line, Math.Round(doublevalue, 1), Math.Floor(Convert.ToDouble(Convert.ToDouble(line) * 3.9 / 60)), false));
+
+                                else
+                                    Logger.WriteLog("Could not convert to Decimal because value is " + cellValueList[cell] + " for cell  " + Cells[cell].Name + " and line " + line, LogLevel.Error);
+
+                            }
+
+                            previousValue = cellValueList[cell];
+                        }
                     }
                 }
             }

@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>HIPA</RootNamespace>
     <AssemblyName>HIPA</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -112,6 +112,7 @@
       <DependentUpon>SettingsScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\Misc\MiscHandler.cs" />
+    <Compile Include="Services\SettingsHandler\SettingsHandler.cs" />
     <Compile Include="Services\TaskHandler\TaskHandler.cs" />
     <Compile Include="Services\UpdatMgr\DownloadHandler.cs" />
     <Compile Include="Services\FileMgr\FileMgr.cs" />
@@ -119,7 +120,7 @@
     <Compile Include="Services\Queue\Queue.cs" />
     <Compile Include="Services\UpdatMgr\UpdateHandler.cs" />
     <Compile Include="Services\XML\XMLHandler.cs" />
-    <Compile Include="Settings1.Designer.cs">
+    <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -127,7 +128,6 @@
     <Compile Include="Screens\HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Statics\SettingsOptions.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -184,7 +184,7 @@
     </None>
     <None Include="Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

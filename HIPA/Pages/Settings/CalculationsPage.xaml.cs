@@ -5,6 +5,8 @@ using HIPA.Statics;
 using Microsoft.Win32;
 using System.IO;
 using HIPA.Classes.InputFile;
+using HIPA.Services.SettingsHandler;
+using System.Diagnostics;
 
 namespace HIPA {
     /// <summary>
@@ -21,16 +23,18 @@ namespace HIPA {
                 OutputpathBox.Text = Settings.Default.CustomOutputPath;
             
 
-           NormalizationMethodComboBox.ItemsSource = InputFile.GetNormalizationMethods();
-           NormalizationMethodComboBox.SelectedItem = Settings.Default.DefaultNormalization;
+           NormalizationMethodComboBox.ItemsSource = SettingsHandler.GetStringNormalizationMethods();
+           NormalizationMethodComboBox.SelectedItem = SettingsHandler.LoadStoredNormalizationMethod().Item2;
          
         }
 
         private void NormalizationMethodChanged(object sender, SelectionChangedEventArgs e)
         {
+            Debug.Print("Test");
+            Console.WriteLine((sender as ComboBox).SelectedItem.ToString() as string);
+            Settings.Default.DefaultNormalization = Convert.ToInt32(SettingsHandler.GetNormalizationMethodEnumValue((sender as ComboBox).SelectedItem.ToString() as string));
 
-            Console.WriteLine((sender as ComboBox).SelectedItem as string);
-            Settings.Default.DefaultNormalization = (sender as ComboBox).SelectedItem as string;
+            Console.WriteLine("Settings {0}", Settings.Default.DefaultNormalization);
             Settings.Default.Save();
         }
 

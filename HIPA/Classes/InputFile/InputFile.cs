@@ -10,7 +10,7 @@ using Microsoft.Win32;
 using HIPA.Statics;
 using System.IO;
 using HIPA.Services.Log;
-
+using HIPA.Services.SettingsHandler;
 using HIPA.Services.Misc;
 
 
@@ -30,12 +30,12 @@ namespace HIPA.Classes.InputFile
         private double _totalDetectedMinutes;
         private string[] _content;
         private int _stimulationTimeframe;
-        private NormalizationMethods _selectedNormalizationMethod;
+        private string _selectedNormalizationMethod;
         private readonly NormalizeBaseLineDelegate _normalizeBaseLine;
         private readonly NormalizeToOneDelegate _normalizeToOne;
 
 
-        public InputFile(int ID, string Folder, string Path, string Name, decimal PercentageLimit, List<Cell> Cells, int CellCount, int RowCount, double TotalDetectedMinutes, string[] Content, int StimulationTimeframe, NormalizationMethods SelectedNormalizationMethod, int TimeFrameCount)
+        public InputFile(int ID, string Folder, string Path, string Name, decimal PercentageLimit, List<Cell> Cells, int CellCount, int RowCount, double TotalDetectedMinutes, string[] Content, int StimulationTimeframe, string SelectedNormalizationMethod, int TimeFrameCount)
         {
             _id = ID;
             _name = Name;
@@ -65,7 +65,7 @@ namespace HIPA.Classes.InputFile
         public double TotalDetectedMinutes { get => _totalDetectedMinutes; set => _totalDetectedMinutes = value; }
         public string[] Content { get => _content; set => _content = value; }
         public int StimulationTimeframe { get => _stimulationTimeframe; set => _stimulationTimeframe = value; }
-        public NormalizationMethods SelectedNormalizationMethod { get => _selectedNormalizationMethod; set => _selectedNormalizationMethod = value; }
+        public string SelectedNormalizationMethod { get => _selectedNormalizationMethod; set => _selectedNormalizationMethod = value; }
         internal List<Cell> Cells { get => _cells; set => _cells = value; }
         public string Folder { get => _folder; set => _folder = value; }
         public int TimeframeCount { get => _timeframeCount; set => _timeframeCount = value; }
@@ -145,7 +145,7 @@ namespace HIPA.Classes.InputFile
 
             foreach (String filePath in openFileDialog.FileNames)
             {
-                Globals.GetFiles().Add(new InputFile(ID, GetFolder(filePath), filePath, GetName(filePath), (decimal)0.6, new List<Cell>(), 0, 0, 0, new string[0], 372, GetNormalizationEnumValue(Settings.Default.DefaultNormalization), 0));
+                Globals.GetFiles().Add(new InputFile(ID, GetFolder(filePath), filePath, GetName(filePath), (decimal)0.6, new List<Cell>(), 0, 0, 0, new string[0], 372, SettingsHandler.LoadStoredNormalizationMethod().Item2, 0));
                 ID++;
             }
         }
@@ -163,7 +163,7 @@ namespace HIPA.Classes.InputFile
         /// </summary>
         public void ExecuteChosenNormalization()
         {
-            switch (SelectedNormalizationMethod)
+            switch (SettingsHandler.GetNormalizationMethodEnumValue(SelectedNormalizationMethod))
             {
                 case NormalizationMethods.BASELINE:
                     NormalizeWithBaselineMean();
@@ -178,14 +178,7 @@ namespace HIPA.Classes.InputFile
         }
 
 
-        public static IEnumerable<NormalizationMethods> GetNormalizationMethods()
-        {
-            return MiscHandler.EnumUtil.GetValues<NormalizationMethods>();
-        }
-     
-
        
-
         private bool DataOK()
         {
 

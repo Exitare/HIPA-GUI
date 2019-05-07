@@ -31,9 +31,6 @@ namespace HIPA.Screens
         {
             CreateTab("Calculations", new CalculationsPage());
             CreateTab("Network", new Network());
-
-
-
         }
 
 

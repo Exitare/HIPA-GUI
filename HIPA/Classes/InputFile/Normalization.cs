@@ -6,10 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-enum NormalizationMethods {
-    TO_ONE = 1,
-    BASELINE = 2,
-}
 
 namespace HIPA.Classes.InputFile
 {
@@ -22,17 +18,7 @@ namespace HIPA.Classes.InputFile
         private delegate void NormalizeToOneDelegate();
 
 
-        public static NormalizationMethods GetNormalizationEnumValue(string value)
-        {
-            if (Enum.TryParse(value, out NormalizationMethods selectedEnumValue))
-                return selectedEnumValue;
-            else
-            {
-                Logger.WriteLog("Could not detect correct normalization mehtod. Using Baseline", LogLevel.Warning);
-                return NormalizationMethods.BASELINE;
-            }
-              
-        }
+     
 
         /// <summary>
         /// Normalize each Timeframe with previous calculated Baseline Mean

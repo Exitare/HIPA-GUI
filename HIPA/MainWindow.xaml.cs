@@ -13,6 +13,7 @@ using System.Windows.Threading;
 using System.Collections.Generic;
 using HIPA.Classes.InputFile;
 using HIPA.Services.Misc;
+using HIPA.Services.SettingsHandler;
 
 namespace HIPA {
     /// <summary>
@@ -27,7 +28,7 @@ namespace HIPA {
         {
             InitializeComponent();
             FileMgr.CreateFiles();
-
+            SettingsHandler.InitializeNormalizationMethods();
             //if (Settings.Default.Main_Window_Location_Left != 0 && Settings.Default.Main_Window_Location_Top != 0)
             //{
             //    WindowStartupLocation = WindowStartupLocation.Manual;
@@ -49,11 +50,14 @@ namespace HIPA {
 
 
             InitializeUIState();          
-            ComboBoxColumn.ItemsSource = InputFile.GetNormalizationMethods();
+            ComboBoxColumn.ItemsSource = SettingsHandler.GetStringNormalizationMethods();
         }
 
         private void Calculate(object sender, RoutedEventArgs e)
         {
+
+
+
             progressBar.Value = 0;
             double step = 100 / Globals.GetFiles().Count;
             Thread Calculations = new Thread(() =>

@@ -38,7 +38,7 @@
                 <DataGridTextColumn Header="Detected Minutes" Binding="{Binding TotalDetectedMinutes}"  IsReadOnly="True" Width="130"/>
                 <DataGridTextColumn Header="Limit" Binding="{Binding PercentageLimit}" />
                 <DataGridTextColumn Header="Stimulation TimeFrame" Binding="{Binding StimulationTimeframe}" />
-                <DataGridComboBoxColumn x:Name="ComboBoxColumn" Header="Normalization Method"  SelectedItemBinding="{Binding NormalizationMethod}" Width="150"/>
+                <DataGridComboBoxColumn x:Name="ComboBoxColumn" Header="Normalization Method"  SelectedItemBinding="{Binding SelectedNormalizationMethod}" Width="150"/>
                 <DataGridTextColumn Header="Path" Binding="{Binding FolderPath}" />
             </DataGrid.Columns>
           

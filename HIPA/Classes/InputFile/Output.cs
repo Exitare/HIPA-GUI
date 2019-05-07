@@ -71,7 +71,7 @@ namespace HIPA.Classes.InputFile {
             {
                 for (int j = 0; j < CellCount; j++)
                 {
-                    data_matrix[i, j] = Cells[j].High_Intensity_Counts[i - 1].ToString();
+                    data_matrix[i, j] = Cells[j].HighIntensityCounts[i - 1].ToString();
                 }
 
             }

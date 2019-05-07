@@ -46,37 +46,8 @@ namespace HIPA {
         public Dictionary<double, int> HighIntensityCounts { get => _highIntesityCounts; set => _highIntesityCounts = value; }
         public decimal Threshold { get => _threshold; set => _threshold = value; }
 
-        /// <summary>
-        /// Calculates the Rows per Cell
-        /// </summary>
-        /// <param name="lines"></param>
-        /// <returns></returns>
-        public static int CalculateRows(string[] lines)
-        {
-            return lines.Length;
-        }
+      
 
-        /// <summary>
-        /// Calculates the cell count 
-        /// </summary>
-        /// <param name="lines"></param>
-        /// <returns></returns>
-        public static int CalculateCellCount(string[] lines)
-        {
-            int count = 0;
-            foreach (string line in lines)
-            {
-                line.Trim(' ');
-                if (line.Length != 0)
-                {
-                    string[] value = line.Split('\t');
-                    return value.Length;
-                }
-
-            }
-
-            return count;
-        }
 
        
     }
