@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using HIPA.Classes.InputFile;
 using HIPA.Services.Misc;
 using HIPA.Services.SettingsHandler;
+using System.Threading.Tasks;
 
 namespace HIPA {
     /// <summary>
@@ -109,10 +110,9 @@ namespace HIPA {
         }
 
 
-        private void OpenFiles(object sender, RoutedEventArgs e)
+        private async void OpenFiles(object sender, RoutedEventArgs e)
         {
            
-            List<InputFile> errorList = new List<InputFile>();
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 // Set the file dialog to filter for graphics files.
@@ -124,58 +124,92 @@ namespace HIPA {
 
             if (openFileDialog.ShowDialog() == true)
             {
-                Thread Prepare = new Thread(() =>
+                Task<List<string>> PrepareFiles = Task.Run(() =>
+                InputFile.PrepareFiles(openFileDialog));
+                List<string> errorList = await PrepareFiles;
+
+                errorList.Clear();
+
+                if (errorList.Count != 0)
                 {
-                    try
+                    foreach (string fileName in errorList)
                     {
-                        InputFile.AddFilesToList(openFileDialog);
-                        foreach (InputFile file in Globals.GetFiles())
-                        {
-                         
-                            if (!file.PrepareFile())
-                                Dispatcher.Invoke(() =>
-                                {
-                                    errorList.Add(file);
-                                  
-                                });
-
-                        }
+                        string errorMessage = "There were error(s) in those files:\n ";
+                        errorMessage += "\n" + fileName;
+                        errorMessage = errorMessage + "\n\n More information can be found @ " + Globals.ErrorLog;
+                        errorList.Clear();
+                        MessageBox.Show(errorMessage, "Could not prepare files!");
                     }
-                    finally
-                    {
-                        Dispatcher.Invoke(() =>
-                       {
-                           if (Globals.GetFiles().Count > 0)
-                           {
-                              
-                                                        
-                               if (errorList.Count != 0)
-                               {
-                                   string errorMessage = "There were error(s) in those files:\n ";
-                                   foreach (InputFile file in errorList)
-                                   {
-                                       errorMessage = errorMessage + "\n " + file.Name;
-                                       Globals.GetFiles().Remove(file);
-                                   }
-                                   errorMessage = errorMessage + "\n\n More information can be found @ " + Globals.ErrorLog;
-                                   errorList.Clear();
-                                   MessageBox.Show(errorMessage, "Could not prepare files!");
-                               }
-                             
-                           }
+                }
 
-                           if(Globals.GetFiles().Count > 0)
-                           {
-                               ClearButton.IsEnabled = true;
-                               CalculateButton.IsEnabled = true;
-                           }
-                              
+                StatusBarLabel.Text = "Prepared all remaining files";
+                if (Globals.GetFiles().Count > 0)
+                {
+                    ClearButton.IsEnabled = true;
+                    CalculateButton.IsEnabled = true;
+                }
 
-                           RefreshFilesDataGrid();
-                       });
-                    }
-                });
-                Prepare.Start();
+
+                RefreshFilesDataGrid();
+
+                //txt.Text = "started";// UI thread
+                //await Task.Run(() => InputFile.PrepareFiles(openFileDialog));// waits for the task to finish
+                //                                            The task is now completed.
+                //    txt.Text = "done";// UI thread
+
+                //    Thread Prepare = new Thread(() =>
+                //    {
+                //        try
+                //        {
+                //            InputFile.AddFilesToList(openFileDialog);
+                //            foreach (InputFile file in Globals.GetFiles())
+                //            {
+
+                //                if (!file.PrepareFile())
+                //                    Dispatcher.Invoke(() =>
+                //                    {
+                //                        errorList.Add(file);
+
+                //                    });
+
+                //            }
+                //        }
+                //        finally
+                //        {
+                //            Dispatcher.Invoke(() =>
+                //           {
+                //               if (Globals.GetFiles().Count > 0)
+                //               {
+
+
+                //                   if (errorList.Count != 0)
+                //                   {
+                //                       string errorMessage = "There were error(s) in those files:\n ";
+                //                       foreach (InputFile file in errorList)
+                //                       {
+                //                           errorMessage = errorMessage + "\n " + file.Name;
+                //                           Globals.GetFiles().Remove(file);
+                //                       }
+                //                       errorMessage = errorMessage + "\n\n More information can be found @ " + Globals.ErrorLog;
+                //                       errorList.Clear();
+                //                       MessageBox.Show(errorMessage, "Could not prepare files!");
+                //                   }
+
+                //               }
+
+                //               if(Globals.GetFiles().Count > 0)
+                //               {
+                //                   ClearButton.IsEnabled = true;
+                //                   CalculateButton.IsEnabled = true;
+                //               }
+
+
+                //               RefreshFilesDataGrid();
+                //           });
+                //        }
+                //    });
+                //    Prepare.Start();
+                //}
             }
         }
 

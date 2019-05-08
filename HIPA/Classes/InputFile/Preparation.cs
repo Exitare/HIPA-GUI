@@ -1,9 +1,11 @@
 ﻿using HIPA.Services.Log;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using HIPA.Statics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -12,51 +14,60 @@ using System.Threading.Tasks;
 
 enum Seperator
 {
-    TAB_SEPERATOR,
-    COMMA_SEPERATOR,
+    NOT_YET_DETECTED,
+    TAB_SEPERATOR = '\t',
+    COMMA_SEPERATOR = ',',
     INVALID_SEPERATOR,
 }
 
 namespace HIPA.Classes.InputFile
 {
-   partial class InputFile
+    partial class InputFile
     {
+
+
+        public static List<string> PrepareFiles(OpenFileDialog openFileDialog)
+        {
+            List<string> errorList = new List<string>();
+            try
+            {
+                AddFilesToList(openFileDialog);
+                foreach (InputFile file in Globals.GetFiles())
+                {
+
+                    if (!file.PrepareFile())
+                        errorList.Add(file.Name);
+
+
+                }
+                return errorList;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                Debug.Print("Error occured @ prepareFiles");
+                return errorList;
+            }
+        }
+
 
         /// <summary>
         /// Prepares the given file. Generates the cells and timeframes
         /// </summary>
         public bool PrepareFile()
         {
-            bool allOK = false;
-            Thread prepareData = new Thread(() =>
+            try
             {
-                try
-                {
-                    if (!ReadContent())
-                        allOK = false;
+                if (!ReadContent() || !DetectSeperator() || !DetectDataSizes() || !CellBuilder() || !DataOK())
+                    return false;
 
-                    DetectDataSizes();
-                    Console.WriteLine("Sep is : {0}",DetectSeperator());
-                   
-
-                    if (CellBuilder() && DataOK())
-                        allOK = true;
-
-                    else
-                        allOK = false;
-
-                }
-                catch (Exception ex)
-                {
-                    Logger.WriteLog(ex.Message, LogLevel.Error);
-                    allOK = false;
-                }
-            });
-
-
-            prepareData.Start();
-            prepareData.Join();
-            return allOK;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex.Message, LogLevel.Error);
+                return false;
+            }
         }
 
         /// <summary>
@@ -78,30 +89,49 @@ namespace HIPA.Classes.InputFile
             }
 
             return true;
-               
+
         }
 
-        public Seperator DetectSeperator()
+        public bool DetectSeperator()
         {
-            foreach(string line in Content)
+
+            if (Content[0].Contains('\t'))
+                DetectedSeperator = Seperator.TAB_SEPERATOR;
+
+            else if (Content[0].Contains(','))
+                DetectedSeperator = Seperator.COMMA_SEPERATOR;
+
+            else
+                DetectedSeperator = Seperator.INVALID_SEPERATOR;
+
+            Seperator _tempSeperator = Seperator.NOT_YET_DETECTED;
+
+            // Test all lines
+            foreach (string line in Content)
             {
                 if (line.Contains('\t'))
-                    return Seperator.TAB_SEPERATOR;
+                    _tempSeperator = Seperator.TAB_SEPERATOR;
 
                 else if (line.Contains(','))
-                    return Seperator.COMMA_SEPERATOR;
+                    _tempSeperator = Seperator.COMMA_SEPERATOR;
+
+
+                if (_tempSeperator != DetectedSeperator)
+                    return false;
             }
-            return Seperator.INVALID_SEPERATOR;
+
+            return true;
         }
 
         /// <summary>
         /// Detect all needed data sizes
         /// </summary>
-        public void DetectDataSizes()
+        public bool DetectDataSizes()
         {
-            CalculateCellCount();
+
             RowCount = Content.Length;
             TimeframeCount = Content.Length - 1;
+            return CalculateCellCount();
         }
 
 
@@ -110,121 +140,95 @@ namespace HIPA.Classes.InputFile
         /// </summary>
         /// <param name="lines"></param>
         /// <returns></returns>
-        private void CalculateCellCount()
+        private bool CalculateCellCount()
         {
-            int count = 0;
-            foreach (string line in Content)
+            try
             {
-                line.Trim(' ');
-                if (line.Length != 0)
+                int count = 0;
+                foreach (string line in Content)
                 {
-                    string[] value = line.Split('\t');
-                    count = value.Length;
+                    line.Trim(' ');
+                    if (line.Length != 0)
+                    {
+                        string[] value = line.Split((char)DetectedSeperator);
+                        count = value.Length;
+                    }
+
                 }
 
+                CellCount = count;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                Debug.Print("Error occured while calculating Cell Count");
+                return false;
             }
 
-            CellCount = count;
         }
 
         /// <summary>
         /// Calculates the minutes per Cell
         /// </summary>
-        public void CalculateMinutes()
+        public bool CalculateMinutes()
         {
-            double lastDetectedMinutes = 0;
+            try
+            {
+                double lastDetectedMinutes = 0;
+                for (int i = 0; i < Cells.Count; ++i)
+                {
+                    if (i == 0)
+                        lastDetectedMinutes = Cells[i].Timeframes.Count * 3.9 / 60;
+
+                    else
+                    {
+                        if (lastDetectedMinutes != Cells[i].Timeframes.Count * 3.9 / 60)
+                            TotalDetectedMinutes = 0;
+                    }
+                }
+
+                TotalDetectedMinutes = Cells[0].Timeframes.Count * 3.9 / 60;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                Debug.Print("Error occured while calculating total minutes");
+                return false;
+            }
+
+        }
+
+
+        private bool DataOK()
+        {
+
+            double lastDetectedMinutes = 0.0;
+
+            if (Cells.Count() != CellCount)
+                return false;
+
             for (int i = 0; i < Cells.Count; ++i)
             {
-                if (i == 0)
-                    lastDetectedMinutes = Cells[i].Timeframes.Count * 3.9 / 60;
+                Cell cell = Cells[i];
 
-                else
-                {
-                    if (lastDetectedMinutes != Cells[i].Timeframes.Count * 3.9 / 60)
-                        TotalDetectedMinutes = 0;
-                }
-            }
+                if (cell.Timeframes.Count() < StimulationTimeframe)
+                    StimulationTimeframe = cell.Timeframes.Count() / 2;
 
-            TotalDetectedMinutes = Cells[0].Timeframes.Count * 3.9 / 60;
-        }
+                double detectedMinutes = cell.Timeframes.Count * 3.9 / 60;
 
-        /// <summary>
-        /// Create Cells
-        /// </summary>
-        public  void CreateCells()
-        {
-            for (int i = 0; i < CellCount; ++i)
-            {
-                Cells.Add(new Cell("Line" + i, new List<TimeFrame>(), 0, 0, new List<TimeFrame>(), 0, new Dictionary<double, int>()));
-            }
-#if DEBUG
-            Debug.Print("Cell size is " + Cells.Count);
-#endif
-        }
-
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public bool PopulateCells()
-        {
-            if (Cells.Count != 0)
-            {
-                for (int line = 0; line < Content.Length; ++line)
-                {
-
-                    if (!Content[line].ToLower().Contains('\t'))
-                    {
-                        Logger.WriteLog("Could not find char \\t (Tabs) in file " + Name, LogLevel.Error);
+                if (i != 0)
+                    if (detectedMinutes != lastDetectedMinutes)
                         return false;
-                    }
 
 
-                    Content[line].Trim(' ');
-                    Regex.Replace(Content[line], @"\s+", "");
+                lastDetectedMinutes = detectedMinutes;
 
-                    const string reduceMultiSpace = @"[ ]{2,}";
-                    Content[line] = Regex.Replace(Content[line].Replace("\t", "|"), reduceMultiSpace, "");
-
-                    string previousValue = "";
-                    if (Content.Length != 0)
-                    {
-
-                        string[] cellValues = Content[line].Split('|');
-                        List<string> cellValueList = new List<string>(cellValues);
-                        for (int i = 0; i < cellValueList.Count(); ++i)
-                        {
-                            if (cellValueList[i] == "")
-                                cellValueList.RemoveAt(i);
-                        }
-
-
-                        for (int cell = 0; cell < CellCount; cell++)
-                        {
-
-                            if (line == 0)
-                                Cells[cell].Name = cellValueList[cell];
-
-                            else
-                            {
-                                if (decimal.TryParse(cellValueList[cell].Replace('.', ','), out decimal doublevalue))
-                                    Cells[cell].Timeframes.Add(new TimeFrame(line, Math.Round(doublevalue, 1), Math.Floor(Convert.ToDouble(Convert.ToDouble(line) * 3.9 / 60)), false));
-
-                                else
-                                    Logger.WriteLog("Could not convert to Decimal because value is " + cellValueList[cell] + " for cell  " + Cells[cell].Name + " and line " + line, LogLevel.Error);
-
-                            }
-
-                            previousValue = cellValueList[cell];
-                        }
-                    }
-                }
             }
             return true;
         }
+
 
     }
 }

@@ -33,9 +33,11 @@ namespace HIPA.Classes.InputFile
         private string _selectedNormalizationMethod;
         private readonly NormalizeBaseLineDelegate _normalizeBaseLine;
         private readonly NormalizeToOneDelegate _normalizeToOne;
+        private Seperator _detectedSeperator;
 
 
-        public InputFile(int ID, string Folder, string FullPath, string Name, decimal PercentageLimit, List<Cell> Cells, int CellCount, int RowCount, double TotalDetectedMinutes, string[] Content, int StimulationTimeframe, string SelectedNormalizationMethod, int TimeFrameCount)
+        public InputFile(int ID, string Folder, string FullPath, string Name, decimal PercentageLimit, List<Cell> Cells, int CellCount, int RowCount, double TotalDetectedMinutes, string[] Content,
+            int StimulationTimeframe, string SelectedNormalizationMethod, int TimeFrameCount, Seperator DetectedSeperator)
         {
             _id = ID;
             _name = Name;
@@ -50,16 +52,16 @@ namespace HIPA.Classes.InputFile
             _stimulationTimeframe = StimulationTimeframe;
             _selectedNormalizationMethod = SelectedNormalizationMethod;
             _timeframeCount = TimeFrameCount;
-
+            _detectedSeperator = DetectedSeperator;
            
             _normalizeBaseLine = new NormalizeBaseLineDelegate(NormalizeWithBaselineMean);
             _normalizeToOne = new NormalizeToOneDelegate(NormalizeWithToOne);
         }
 
         public int ID { get => _id; }
-        public string Folder { get => _folder; set => _folder = value; }
-        public string FullPath { get => _fullpath; set => _fullpath = value; }
-        public string Name { get => _name; set => _name = value; }
+        public string Folder { get => _folder; }
+        public string FullPath { get => _fullpath;}
+        public string Name { get => _name;}
         public decimal PercentageLimit { get => _percentageLimit; set => _percentageLimit = value; }
         public int CellCount { get => _cellCount; set => _cellCount = value; }
         public int RowCount { get => _rowCount; set => _rowCount = value; }
@@ -68,9 +70,8 @@ namespace HIPA.Classes.InputFile
         public int StimulationTimeframe { get => _stimulationTimeframe; set => _stimulationTimeframe = value; }
         public string SelectedNormalizationMethod { get => _selectedNormalizationMethod; set => _selectedNormalizationMethod = value; }
         internal List<Cell> Cells { get => _cells; set => _cells = value; }
-       
         public int TimeframeCount { get => _timeframeCount; set => _timeframeCount = value; }
-
+        public Seperator DetectedSeperator { get => _detectedSeperator; set => _detectedSeperator = value; }
 
         /// <summary>
         /// Adds every selected file to the list 
@@ -93,9 +94,9 @@ namespace HIPA.Classes.InputFile
             if (Globals.GetFiles().Count == 1)
                 ID = 1;
 
-            foreach (String filePath in openFileDialog.FileNames)
+            foreach (string filePath in openFileDialog.FileNames)
             {
-                Globals.GetFiles().Add(new InputFile(ID, Path.GetDirectoryName(filePath), filePath, Path.GetFileNameWithoutExtension(filePath), (decimal)0.6, new List<Cell>(), 0, 0, 0, new string[0], 372, SettingsHandler.LoadStoredNormalizationMethod().Item2, 0));
+                Globals.GetFiles().Add(new InputFile(ID, Path.GetDirectoryName(filePath), filePath, Path.GetFileNameWithoutExtension(filePath), (decimal)0.6, new List<Cell>(), 0, 0, 0, new string[0], 372, SettingsHandler.LoadStoredNormalizationMethod().Item2, 0, Seperator.NOT_YET_DETECTED));
                 ID++;
             }
         }
@@ -119,35 +120,6 @@ namespace HIPA.Classes.InputFile
             }
         }
 
-
-       
-        private bool DataOK()
-        {
-
-            double lastDetectedMinutes = 0.0;
-
-            if (Cells.Count() != CellCount)
-                return false;
-
-            for(int i = 0; i < Cells.Count; ++i)
-            {
-                Cell cell = Cells[i];
-
-                if (cell.Timeframes.Count() < StimulationTimeframe)
-                    StimulationTimeframe = cell.Timeframes.Count() / 2;
-
-                double detectedMinutes = cell.Timeframes.Count * 3.9 / 60;
-
-                if (i != 0)
-                    if (detectedMinutes != lastDetectedMinutes)
-                        return false;
-
-
-                lastDetectedMinutes = detectedMinutes;
-
-            }
-            return true;
-        }
 
         
 
