@@ -51,8 +51,8 @@ namespace HIPA.Services.Updater
                     Debug.WriteLine("Could not download Updater");
                     Debug.WriteLine(ex.Message);
 #endif
-                    Logger.WriteLog("There was an error downloading the Updater!", LogLevel.Warning);
-                    Logger.WriteLog(ex.Message, LogLevel.Warning);
+                    // Logger.WriteLog("There was an error downloading the Updater!", LogLevel.Warning);
+                    // Logger.WriteLog(ex.Message, LogLevel.Warning);
 
                     EventHandler handler = OnDownloadError;
                     DownloadErrorArgs args = new DownloadErrorArgs();
@@ -85,7 +85,7 @@ namespace HIPA.Services.Updater
                 }
                 catch (Exception ex)
                 {
-                    Logger.WriteLog(ex.Message, LogLevel.Error);
+                    //Logger.WriteLog(ex.Message, LogLevel.Error);
                     Globals.ConnectionSuccessful = false;
                 }
             }

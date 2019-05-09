@@ -27,14 +27,13 @@ namespace HIPA.Statics
 
         public delegate void NormalizationDelegate(InputFile file);
 
-        public static string ErrorLog => "ErrorLog.txt";
-        public static string Log => "Log.txt";
+        public static string ErrorLogFileName => "ErrorLog.txt";
+        public static string LogFileName => "Log.txt";
         public static Queue<string> LogQueue = new Queue<string>();
 
         public static bool UpdateAvailable = false;
 
         public static Dictionary<NormalizationMethods, string> NormalizationMethods = new Dictionary<NormalizationMethods, string>();
 
-       
     }
 }

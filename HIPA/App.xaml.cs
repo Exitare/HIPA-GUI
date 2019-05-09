@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
 using HIPA.Services.Updater;
 using HIPA.Statics;
+using HIPA.Services.Log;
 
 
 namespace HIPA
@@ -19,12 +13,13 @@ namespace HIPA
     /// </summary>
     public partial class App : Application {
 
-        void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            // Process unhandled exception
-            Debug.Print("Exeption occured");
-            // Prevent default unhandled exception processing
+            MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message, "Exception Sample", MessageBoxButton.OK, MessageBoxImage.Warning);
+            Logger.logger.Error(e.Exception.StackTrace);
+          
             e.Handled = true;
+            Application.Current.Shutdown(21);
         }
 
         public enum ApplicationExitCode {
@@ -36,11 +31,13 @@ namespace HIPA
 
         void App_Exit(object sender, ExitEventArgs e)
         {
+           // Logger.logger("Application closed", LogLevel.Info);
             Debug.Print("Closed");
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            //Logger.WriteLog("Application startup", LogLevel.Info);
             if (UpdateHandler.CheckForUpdate() && Globals.ConnectionSuccessful)
                 Globals.UpdateAvailable = true;
 

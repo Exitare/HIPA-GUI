@@ -20,8 +20,8 @@ namespace HIPA.Services.XML {
             }
             catch (Exception ex)
             {
-                Logger.WriteLog("Could not load XML File", LogLevel.Error);
-                Logger.WriteLog(ex.Message, LogLevel.Error);
+                //Logger.WriteLog("Could not load XML File", LogLevel.Error);
+                //Logger.WriteLog(ex.Message, LogLevel.Error);
             }
 
             return version;

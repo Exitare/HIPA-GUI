@@ -15,6 +15,15 @@ using HIPA.Classes.InputFile;
 using HIPA.Services.Misc;
 using HIPA.Services.SettingsHandler;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Data;
+
+enum DGColumnIDs
+{
+    PERCENTAGE_LIMIT = 7,
+    STIMULATION_TIMEFRAME = 8
+}
+
 
 namespace HIPA {
     /// <summary>
@@ -23,13 +32,16 @@ namespace HIPA {
     /// 
     public partial class MainWindow : Window {
 
-
-
+     
         public MainWindow()
         {
             InitializeComponent();
             FileMgr.CreateFiles();
+            Logger.ConfigureLogger();
             SettingsHandler.InitializeNormalizationMethods();
+            selectedFilesDataGrid.CellEditEnding += DataGrid_CellEditEnding;
+
+          
             //if (Settings.Default.Main_Window_Location_Left != 0 && Settings.Default.Main_Window_Location_Top != 0)
             //{
             //    WindowStartupLocation = WindowStartupLocation.Manual;
@@ -42,9 +54,6 @@ namespace HIPA {
             if (!Globals.ConnectionSuccessful)
                 MessageBox.Show("There was a problem reaching the Remote Server\nUpdates will be disabled!\nCheck your internet and/or proxy settings!");
 
-
-
-
             if (Globals.UpdateAvailable)
                 if (MessageBox.Show("Updates available!\nDo you want to start the Update?", "Update", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     UpdateHandler.StartUpdates();
@@ -52,6 +61,8 @@ namespace HIPA {
 
             InitializeUIState();          
             ComboBoxColumn.ItemsSource = SettingsHandler.GetStringNormalizationMethods();
+            string s = null;
+            s.Trim();
         }
 
         private void Calculate(object sender, RoutedEventArgs e)
@@ -108,7 +119,36 @@ namespace HIPA {
             selectedFilesDataGrid.ItemsSource = null;
             selectedFilesDataGrid.ItemsSource = Globals.GetFiles();
         }
+        //TODO 
+        // Implement checks for user input
+        void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
 
+            DataGridColumn column = e.Column;
+            DataGridRow row = e.Row;
+            int rowID = ((DataGrid)sender).ItemContainerGenerator.IndexFromContainer(row);
+            int colummID = column.DisplayIndex;
+
+            if (e.EditAction == DataGridEditAction.Commit)
+            {
+                if (column != null)
+                {
+                    switch (colummID)
+                    {
+                        case (int)DGColumnIDs.STIMULATION_TIMEFRAME:
+                            
+                            break;
+
+                        case (int)DGColumnIDs.PERCENTAGE_LIMIT:
+
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
 
         private async void OpenFiles(object sender, RoutedEventArgs e)
         {
@@ -136,7 +176,7 @@ namespace HIPA {
                     {
                         string errorMessage = "There were error(s) in those files:\n ";
                         errorMessage += "\n" + fileName;
-                        errorMessage = errorMessage + "\n\n More information can be found @ " + Globals.ErrorLog;
+                        errorMessage = errorMessage + "\n\n More information can be found @ " + Globals.ErrorLogFileName;
                         errorList.Clear();
                         MessageBox.Show(errorMessage, "Could not prepare files!");
                     }
@@ -151,65 +191,6 @@ namespace HIPA {
 
 
                 RefreshFilesDataGrid();
-
-                //txt.Text = "started";// UI thread
-                //await Task.Run(() => InputFile.PrepareFiles(openFileDialog));// waits for the task to finish
-                //                                            The task is now completed.
-                //    txt.Text = "done";// UI thread
-
-                //    Thread Prepare = new Thread(() =>
-                //    {
-                //        try
-                //        {
-                //            InputFile.AddFilesToList(openFileDialog);
-                //            foreach (InputFile file in Globals.GetFiles())
-                //            {
-
-                //                if (!file.PrepareFile())
-                //                    Dispatcher.Invoke(() =>
-                //                    {
-                //                        errorList.Add(file);
-
-                //                    });
-
-                //            }
-                //        }
-                //        finally
-                //        {
-                //            Dispatcher.Invoke(() =>
-                //           {
-                //               if (Globals.GetFiles().Count > 0)
-                //               {
-
-
-                //                   if (errorList.Count != 0)
-                //                   {
-                //                       string errorMessage = "There were error(s) in those files:\n ";
-                //                       foreach (InputFile file in errorList)
-                //                       {
-                //                           errorMessage = errorMessage + "\n " + file.Name;
-                //                           Globals.GetFiles().Remove(file);
-                //                       }
-                //                       errorMessage = errorMessage + "\n\n More information can be found @ " + Globals.ErrorLog;
-                //                       errorList.Clear();
-                //                       MessageBox.Show(errorMessage, "Could not prepare files!");
-                //                   }
-
-                //               }
-
-                //               if(Globals.GetFiles().Count > 0)
-                //               {
-                //                   ClearButton.IsEnabled = true;
-                //                   CalculateButton.IsEnabled = true;
-                //               }
-
-
-                //               RefreshFilesDataGrid();
-                //           });
-                //        }
-                //    });
-                //    Prepare.Start();
-                //}
             }
         }
 

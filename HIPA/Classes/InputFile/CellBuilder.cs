@@ -89,9 +89,11 @@ namespace HIPA.Classes.InputFile {
                                 if (decimal.TryParse(cellValueList[cell].Replace('.', ','), out decimal doublevalue))
                                     Cells[cell].Timeframes.Add(new TimeFrame(line, Math.Round(doublevalue, 1), Math.Floor(Convert.ToDouble(Convert.ToDouble(line) * 3.9 / 60)), false));
 
+                                //TODO Correct error Log
                                 else
-                                    Logger.WriteLog("Could not convert to Decimal because value is " + cellValueList[cell] + "for file " + Name + " for cell  " + Cells[cell].Name + " and line " + line, LogLevel.Error);
-                                   
+                                    Debug.Print("Error");
+                                   // Logger.WriteLog("Could not convert to Decimal because value is " + cellValueList[cell] + "for file " + Name + " for cell  " + Cells[cell].Name + " and line " + line, LogLevel.Error);
+
                             }
 
 

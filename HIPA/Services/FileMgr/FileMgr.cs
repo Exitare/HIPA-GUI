@@ -17,12 +17,12 @@ namespace HIPA.Services.FileMgr {
 
         private static void CreateLogFiles()
         {
-            if (!File.Exists(Globals.Log))
-                File.Create(Globals.Log).Close();
+            if (!File.Exists(Globals.LogFileName))
+                File.Create(Globals.LogFileName).Close();
 
 
-            if (!File.Exists(Globals.ErrorLog))
-                File.Create(Globals.ErrorLog).Close();
+            if (!File.Exists(Globals.ErrorLogFileName))
+                File.Create(Globals.ErrorLogFileName).Close();
 
         }  
 

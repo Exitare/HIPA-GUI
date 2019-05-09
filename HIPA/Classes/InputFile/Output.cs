@@ -44,7 +44,7 @@ namespace HIPA.Classes.InputFile {
             }
             catch (Exception ex)
             {
-                Logger.WriteLog(ex.Message, LogLevel.Error);
+              //  Logger.WriteLog(ex.Message, LogLevel.Error);
                 return new string[0, 0];
             }
         }
@@ -118,8 +118,8 @@ namespace HIPA.Classes.InputFile {
             }
             catch (Exception ex)
             {
-                Logger.WriteLog(ex.Message, LogLevel.Error);
-                Logger.WriteLog("Could not create file in source folder. Use own execution folder!", LogLevel.Error);
+                //  Logger.WriteLog(ex.Message, LogLevel.Error);
+                //  Logger.WriteLog("Could not create file in source folder. Use own execution folder!", LogLevel.Error);
                 filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "-Normalized Timeframes-" + DateTime.Today.ToShortDateString() + ".txt";
                 StreamWriter sw = new StreamWriter(new Uri(filename).LocalPath);
 
@@ -179,8 +179,8 @@ namespace HIPA.Classes.InputFile {
             }
             catch (Exception ex)
             {
-                Logger.WriteLog(ex.Message, LogLevel.Error);
-                Logger.WriteLog("Could not create file in source folder. Used own execution folder!", LogLevel.Error);
+                //Logger.WriteLog(ex.Message, LogLevel.Error);
+                // Logger.WriteLog("Could not create file in source folder. Used own execution folder!", LogLevel.Error);
                 filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
                 StreamWriter sw = new StreamWriter(new Uri(filename).LocalPath);
                 string[,] data_matrix = CreateHighIntensityCountsMatrix();

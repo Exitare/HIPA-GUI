@@ -58,6 +58,7 @@ namespace HIPA.Classes.InputFile
         {
             try
             {
+
                 if (!ReadContent() || !DetectSeperator() || !DetectDataSizes() || !CellBuilder() || !DataOK())
                     return false;
 
@@ -65,7 +66,7 @@ namespace HIPA.Classes.InputFile
             }
             catch (Exception ex)
             {
-                Logger.WriteLog(ex.Message, LogLevel.Error);
+                // Logger.WriteLog(ex.Message, LogLevel.Error);
                 return false;
             }
         }
@@ -83,13 +84,25 @@ namespace HIPA.Classes.InputFile
             catch (Exception ex)
             {
                 Content = new string[0];
-                Logger.WriteLog("Could not read file " + Name, LogLevel.Error);
-                Logger.WriteLog(ex.Message, LogLevel.Error);
+                // Logger.WriteLog("Could not read file " + Name, LogLevel.Error);
+                // Logger.WriteLog(ex.Message, LogLevel.Error);
                 return false;
             }
 
             return true;
 
+        }
+
+        public bool FileValid()
+        {
+            try
+            {
+                return true;
+            } catch (Exception ex)
+            {
+                Debug.Print(ex.Message);
+                return false;
+            }
         }
 
         public bool DetectSeperator()
