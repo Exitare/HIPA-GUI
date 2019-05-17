@@ -17,6 +17,7 @@ using HIPA.Services.SettingsHandler;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Forms.Design;
 
 enum DGColumnIDs
 {
@@ -43,12 +44,20 @@ namespace HIPA
             SettingsHandler.InitializeNormalizationMethods();
             selectedFilesDataGrid.CellEditEnding += DataGrid_CellEditEnding;
 
-
-            if (Settings.Default.Main_Window_Location_Left != 0 && Settings.Default.Main_Window_Location_Top != 0)
+            double locationLeft = Settings.Default.Main_Window_Location_Left;
+            double locationTop = Settings.Default.Main_Window_Location_Top;
+           
+            if (locationLeft != 0 &&locationTop != 0)
             {
-                WindowStartupLocation = WindowStartupLocation.Manual;
-                Left = Settings.Default.Main_Window_Location_Left;
-                Top = Settings.Default.Main_Window_Location_Top;
+                if(locationLeft < -1000 || locationLeft > 1000 ||locationTop < -1000 ||locationTop > 1000)
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen;                
+                else
+                {
+                    WindowStartupLocation = WindowStartupLocation.Manual;
+                    Left = Settings.Default.Main_Window_Location_Left;
+                    Top = Settings.Default.Main_Window_Location_Top;
+                }
+
             }
 
             versionLabel.Text = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion;
