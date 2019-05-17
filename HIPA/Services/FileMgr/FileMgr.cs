@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HIPA.Statics;
+using HIPA.Services.Log;
 
 namespace HIPA.Services.FileMgr {
 
@@ -45,6 +46,13 @@ namespace HIPA.Services.FileMgr {
                     // This will raise an exception if the path is read only or do not have access to view the permissions. 
                     System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(Settings.Default.CustomOutputPath);
                     return true;
+                }
+                catch(DirectoryNotFoundException)
+                {
+                    Settings.Default.CustomOutputPathActive = false;
+                    Settings.Default.CustomOutputPath = "";
+                    Settings.Default.Save();
+                    return false;
                 }
                 catch (UnauthorizedAccessException)
                 {

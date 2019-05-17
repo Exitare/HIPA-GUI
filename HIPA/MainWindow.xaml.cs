@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Forms.Design;
+using System.IO;
 
 enum DGColumnIDs
 {
@@ -62,6 +63,7 @@ namespace HIPA
                 }
 
             }
+
 
             versionLabel.Text = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion;
             UpdateMenu.IsEnabled = Globals.ConnectionSuccessful ? true : false;
