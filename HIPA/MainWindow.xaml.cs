@@ -44,12 +44,12 @@ namespace HIPA
             selectedFilesDataGrid.CellEditEnding += DataGrid_CellEditEnding;
 
 
-            //if (Settings.Default.Main_Window_Location_Left != 0 && Settings.Default.Main_Window_Location_Top != 0)
-            //{
-            //    WindowStartupLocation = WindowStartupLocation.Manual;
-            //    Left = Settings.Default.Main_Window_Location_Left;
-            //    Top = Settings.Default.Main_Window_Location_Top;
-            //}
+            if (Settings.Default.Main_Window_Location_Left != 0 && Settings.Default.Main_Window_Location_Top != 0)
+            {
+                WindowStartupLocation = WindowStartupLocation.Manual;
+                Left = Settings.Default.Main_Window_Location_Left;
+                Top = Settings.Default.Main_Window_Location_Top;
+            }
 
             versionLabel.Text = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion;
             UpdateMenu.IsEnabled = Globals.ConnectionSuccessful ? true : false;
