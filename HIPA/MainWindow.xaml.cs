@@ -42,12 +42,15 @@ namespace HIPA
             FileMgr.CreateFiles();
             Logger.ConfigureLogger();
             SettingsHandler.InitializeNormalizationMethods();
+            if (!FileMgr.CheckCustomPath())
+                MessageBox.Show("Could not write to given output path. Using own directory!", "Path");
+
             selectedFilesDataGrid.CellEditEnding += DataGrid_CellEditEnding;
 
             double locationLeft = Settings.Default.Main_Window_Location_Left;
             double locationTop = Settings.Default.Main_Window_Location_Top;
            
-            if (locationLeft != 0 &&locationTop != 0)
+            if (locationLeft != 0 && locationTop != 0)
             {
                 if(locationLeft < -1000 || locationLeft > 1000 ||locationTop < -1000 ||locationTop > 1000)
                     WindowStartupLocation = WindowStartupLocation.CenterScreen;                

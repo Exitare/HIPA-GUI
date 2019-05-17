@@ -29,7 +29,7 @@ namespace HIPA.Screens
 
         private void CreateTabBar()
         {
-            CreateTab("Calculations", new CalculationsPage());
+            CreateTab("Files", new FilePage());
             CreateTab("Network", new Network());
         }
 

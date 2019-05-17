@@ -31,7 +31,8 @@ namespace HIPA
 
         void App_Exit(object sender, ExitEventArgs e)
         {
-           // Logger.logger("Application closed", LogLevel.Info);
+            Settings.Default.Save();
+            // Logger.logger("Application closed", LogLevel.Info);
             Debug.Print("Closed");
         }
 

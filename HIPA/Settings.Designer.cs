@@ -178,5 +178,17 @@ namespace HIPA {
                 this["CustomOutputPathActive"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CopySourceFile {
+            get {
+                return ((bool)(this["CopySourceFile"]));
+            }
+            set {
+                this["CopySourceFile"] = value;
+            }
+        }
     }
 }

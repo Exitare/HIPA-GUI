@@ -112,8 +112,8 @@
     <Compile Include="Classes\InputFile\Output.cs" />
     <Compile Include="Classes\InputFile\Preparation.cs" />
     <Compile Include="Classes\TimeFrame.cs" />
-    <Compile Include="Pages\Settings\CalculationsPage.xaml.cs">
-      <DependentUpon>CalculationsPage.xaml</DependentUpon>
+    <Compile Include="Pages\Settings\FilePage.xaml.cs">
+      <DependentUpon>FilePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings\Network.xaml.cs">
       <DependentUpon>Network.xaml</DependentUpon>
@@ -151,7 +151,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\Settings\CalculationsPage.xaml">
+    <Page Include="Pages\Settings\FilePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

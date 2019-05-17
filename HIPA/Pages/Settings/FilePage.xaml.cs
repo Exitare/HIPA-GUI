@@ -7,14 +7,15 @@ using System.IO;
 using HIPA.Classes.InputFile;
 using HIPA.Services.SettingsHandler;
 using System.Diagnostics;
+using HIPA.Services.FileMgr;
 
 namespace HIPA {
     /// <summary>
     /// Interaktionslogik für General.xaml
     /// </summary>
-    public partial class CalculationsPage : Page
+    public partial class FilePage : Page
     {
-        public CalculationsPage()
+        public FilePage()
         {
             InitializeComponent();
             CustomFolderOutputCheckBox.IsChecked = Settings.Default.CustomOutputPathActive;
@@ -42,6 +43,22 @@ namespace HIPA {
 
         private void SaveSettings(object sender, RoutedEventArgs e)
         {
+
+            if (CustomFolderOutputCheckBox.IsChecked.Value && OutputpathBox.Text == "")
+            {
+                MessageBox.Show("You cannot save an empty output directory. Please choose a valid path!");
+                CustomFolderOutputCheckBox.IsChecked = false;
+                return;
+            }
+             
+            if(CustomFolderOutputCheckBox.IsChecked.Value && !FileMgr.CheckCustomPath(OutputpathBox.Text))
+            {
+                MessageBox.Show("Directory is not writeable! Please choose another directory");
+                CustomFolderOutputCheckBox.IsChecked = false;
+                OutputpathBox.Text = "";
+                return;
+            }
+
             Settings.Default.CustomOutputPath = OutputpathBox.Text;
             Settings.Default.CustomOutputPathActive = CustomFolderOutputCheckBox.IsChecked.Value;
             Settings.Default.Save();
@@ -54,6 +71,21 @@ namespace HIPA {
             OutputpathBox.Text = browserDialog.SelectedPath;
         }
 
-     
+        private void CopySourceFileCheckboxChecked(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.CopySourceFile = CopySourceFileCheckbox.IsChecked.Value;
+            Settings.Default.Save();
+        }
+
+        private void CustomFolderOutputCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.CustomOutputPathActive = CustomFolderOutputCheckBox.IsChecked.Value;
+            Settings.Default.Save();
+
+            if (CustomFolderOutputCheckBox.IsChecked.Value)
+                SelectFolderButton.IsEnabled = true;
+            else
+                SelectFolderButton.IsEnabled = false;
+        }
     }
 }
