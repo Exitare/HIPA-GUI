@@ -44,6 +44,7 @@ namespace HIPA.Services.Log {
             config.AddRuleForAllLevels(consoleTarget); // all to console
             config.AddRuleForAllLevels(infoLog);
             config.AddRuleForOneLevel(LogLevel.Error, errorLog);
+            config.AddRuleForOneLevel(LogLevel.Fatal, errorLog);
 
             LogManager.Configuration = config;
         }

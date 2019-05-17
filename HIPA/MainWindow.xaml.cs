@@ -25,14 +25,16 @@ enum DGColumnIDs
 }
 
 
-namespace HIPA {
+namespace HIPA
+{
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
     /// 
-    public partial class MainWindow : Window {
+    public partial class MainWindow : Window
+    {
 
-     
+
         public MainWindow()
         {
             InitializeComponent();
@@ -41,13 +43,13 @@ namespace HIPA {
             SettingsHandler.InitializeNormalizationMethods();
             selectedFilesDataGrid.CellEditEnding += DataGrid_CellEditEnding;
 
-          
+
             //if (Settings.Default.Main_Window_Location_Left != 0 && Settings.Default.Main_Window_Location_Top != 0)
             //{
             //    WindowStartupLocation = WindowStartupLocation.Manual;
             //    Left = Settings.Default.Main_Window_Location_Left;
             //    Top = Settings.Default.Main_Window_Location_Top;
-            //} 
+            //}
 
             versionLabel.Text = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion;
             UpdateMenu.IsEnabled = Globals.ConnectionSuccessful ? true : false;
@@ -59,59 +61,62 @@ namespace HIPA {
                     UpdateHandler.StartUpdates();
 
 
-            InitializeUIState();          
+            InitializeUIState();
             ComboBoxColumn.ItemsSource = SettingsHandler.GetStringNormalizationMethods();
-            string s = null;
-            s.Trim();
+
         }
 
-        private void Calculate(object sender, RoutedEventArgs e)
+        private async void Calculate(object sender, RoutedEventArgs e)
         {
-
-
-
             progressBar.Value = 0;
             double step = 100 / Globals.GetFiles().Count;
-            Thread Calculations = new Thread(() =>
+
+
+            Task Calculations = Task.Run(() =>
             {
 
                 foreach (InputFile file in Globals.GetFiles())
                 {
-                    this.Dispatcher.Invoke(() =>
+                    try
                     {
-                        StatusBarLabel.Text = file.Name;
-                    });
+                        Dispatcher.Invoke(() =>
+                        {
+                            StatusBarLabel.Text = file.Name;
+                        });
 
-                    file.CalculateBaselineMean();
-                    file.ExecuteChosenNormalization();
-                    file.FindTimeFrameMaximum();
-                    file.CalculateThreshold();
-                    file.DetectAboveBelowThreshold();
-                    file.CountHighIntensityPeaksPerMinute();
+                        file.CalculateBaselineMean();
+                        file.ExecuteChosenNormalization();
+                        file.FindTimeFrameMaximum();
+                        file.CalculateThreshold();
+                        file.DetectAboveBelowThreshold();
+                        file.CountHighIntensityPeaksPerMinute();
+                        file.ExportHighIntensityCounts();
+                        file.ExportNormalizedTimesframes();
 
-                    bool hic_written = file.ExportHighIntensityCounts();
-                    bool nt_written = file.ExportNormalizedTimesframes();
-
-                    Dispatcher.Invoke(() =>
+                        Dispatcher.Invoke(() =>
+                        {
+                            progressBar.Value += step;
+                        });
+                    }
+                    catch (Exception ex)
                     {
-                        if (!hic_written || !nt_written)
-                            MessageBox.Show("There was a problem writing to the original source path.\nThe concerned files are placed in the program execution folder", "Attention");
+                        Dispatcher.Invoke(() =>
+                        {
 
-                        progressBar.Value = progressBar.Value + step;
-                    });
+                            if (MessageBox.Show(ex.Message + "\nError occured.\nWould you like to proceed to process remaining files?\nYou could find more information about the error in the logs", "Error occured!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                                return;
+
+                        });
+                    }
+
 
                 }
 
-                this.Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Show("All Files processed.", "Done");
-                    StatusBarLabel.Text = "Done";
-                });
-            })
-            {
-                IsBackground = true
-            };
-            Calculations.Start();
+            });
+            await Calculations;
+
+            MessageBox.Show("All Files processed.", "Done");
+            StatusBarLabel.Text = "Done";
         }
 
         private void RefreshFilesDataGrid()
@@ -119,14 +124,14 @@ namespace HIPA {
             selectedFilesDataGrid.ItemsSource = null;
             selectedFilesDataGrid.ItemsSource = Globals.GetFiles();
         }
-        //TODO 
-        // Implement checks for user input
+
+        //TODO Implement checks for user input
         void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
 
             DataGridColumn column = e.Column;
-            DataGridRow row = e.Row;
-            int rowID = ((DataGrid)sender).ItemContainerGenerator.IndexFromContainer(row);
+            //DataGridRow row = e.Row;
+            //int rowID = ((DataGrid)sender).ItemContainerGenerator.IndexFromContainer(row);
             int colummID = column.DisplayIndex;
 
             if (e.EditAction == DataGridEditAction.Commit)
@@ -136,7 +141,7 @@ namespace HIPA {
                     switch (colummID)
                     {
                         case (int)DGColumnIDs.STIMULATION_TIMEFRAME:
-                            
+
                             break;
 
                         case (int)DGColumnIDs.PERCENTAGE_LIMIT:
@@ -152,7 +157,7 @@ namespace HIPA {
 
         private async void OpenFiles(object sender, RoutedEventArgs e)
         {
-           
+
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 // Set the file dialog to filter for graphics files.
@@ -164,33 +169,53 @@ namespace HIPA {
 
             if (openFileDialog.ShowDialog() == true)
             {
-                Task<List<string>> PrepareFiles = Task.Run(() =>
-                InputFile.PrepareFiles(openFileDialog));
-                List<string> errorList = await PrepareFiles;
-
-                errorList.Clear();
-
-                if (errorList.Count != 0)
+                Task Preparation = Task.Run(() =>
                 {
-                    foreach (string fileName in errorList)
-                    {
-                        string errorMessage = "There were error(s) in those files:\n ";
-                        errorMessage += "\n" + fileName;
-                        errorMessage = errorMessage + "\n\n More information can be found @ " + Globals.ErrorLogFileName;
-                        errorList.Clear();
-                        MessageBox.Show(errorMessage, "Could not prepare files!");
-                    }
-                }
 
-                StatusBarLabel.Text = "Prepared all remaining files";
+                    InputFile.AddFilesToList(openFileDialog);
+
+                    foreach (InputFile file in Globals.GetFiles())
+                    {
+                        try
+                        {
+                            if (!file.Prepared)
+                                file.PrepareFile();
+                        }
+                        catch (Exception ex)
+                        {
+
+                            file.Invalid = true;
+                            if (MessageBox.Show(ex.Message + "\nError occured. Would you like to process all remaining files?", "Error occured!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                                return;
+                        }
+                    }
+
+
+                });
+
+                await Preparation;
+
+                Task Cleanup = Task.Run(() =>
+                {
+                    Globals.GetFiles().RemoveAll(file => file.Invalid == true);
+                });
+
+                await Cleanup;
+
+                if (Globals.GetFiles().Count != 0)
+                    StatusBarLabel.Text = "Prepared all remaining files";
+                else
+                    StatusBarLabel.Text = "No files to process";
+
                 if (Globals.GetFiles().Count > 0)
                 {
                     ClearButton.IsEnabled = true;
                     CalculateButton.IsEnabled = true;
                 }
 
-
                 RefreshFilesDataGrid();
+
+
             }
         }
 

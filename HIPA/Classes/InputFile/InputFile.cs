@@ -31,13 +31,13 @@ namespace HIPA.Classes.InputFile
         private string[] _content;
         private int _stimulationTimeframe;
         private string _selectedNormalizationMethod;
-        private readonly NormalizeBaseLineDelegate _normalizeBaseLine;
-        private readonly NormalizeToOneDelegate _normalizeToOne;
         private Seperator _detectedSeperator;
+        private bool _prepared;
+        private bool _invalid;
 
 
         public InputFile(int ID, string Folder, string FullPath, string Name, decimal PercentageLimit, List<Cell> Cells, int CellCount, int RowCount, double TotalDetectedMinutes, string[] Content,
-            int StimulationTimeframe, string SelectedNormalizationMethod, int TimeFrameCount, Seperator DetectedSeperator)
+            int StimulationTimeframe, string SelectedNormalizationMethod, int TimeFrameCount, Seperator DetectedSeperator, bool Prepared, bool Invalid)
         {
             _id = ID;
             _name = Name;
@@ -53,9 +53,9 @@ namespace HIPA.Classes.InputFile
             _selectedNormalizationMethod = SelectedNormalizationMethod;
             _timeframeCount = TimeFrameCount;
             _detectedSeperator = DetectedSeperator;
-           
-            _normalizeBaseLine = new NormalizeBaseLineDelegate(NormalizeWithBaselineMean);
-            _normalizeToOne = new NormalizeToOneDelegate(NormalizeWithToOne);
+            _prepared = Prepared;
+            _invalid = Invalid;
+            
         }
 
         public int ID { get => _id; }
@@ -72,7 +72,8 @@ namespace HIPA.Classes.InputFile
         internal List<Cell> Cells { get => _cells; set => _cells = value; }
         public int TimeframeCount { get => _timeframeCount; set => _timeframeCount = value; }
         public Seperator DetectedSeperator { get => _detectedSeperator; set => _detectedSeperator = value; }
-
+        public bool Prepared { get => _prepared; set => _prepared = value; }
+        public bool Invalid { get => _invalid; set => _invalid = value; }
         /// <summary>
         /// Adds every selected file to the list 
         /// </summary>
@@ -96,29 +97,12 @@ namespace HIPA.Classes.InputFile
 
             foreach (string filePath in openFileDialog.FileNames)
             {
-                Globals.GetFiles().Add(new InputFile(ID, Path.GetDirectoryName(filePath), filePath, Path.GetFileNameWithoutExtension(filePath), (decimal)0.6, new List<Cell>(), 0, 0, 0, new string[0], 372, SettingsHandler.LoadStoredNormalizationMethod().Item2, 0, Seperator.NOT_YET_DETECTED));
+                Globals.GetFiles().Add(new InputFile(ID, Path.GetDirectoryName(filePath), filePath, Path.GetFileNameWithoutExtension(filePath), (decimal)0.6, new List<Cell>(), 0, 0, 0, new string[0], 372, SettingsHandler.LoadStoredNormalizationMethod().Item2, 0, Seperator.NOT_YET_DETECTED,false, false));
                 ID++;
             }
         }
 
-        /// <summary>
-        /// Handles the correct Execution of the Chosen Normalization
-        /// </summary>
-        public void ExecuteChosenNormalization()
-        {
-            switch (SettingsHandler.GetNormalizationMethodEnumValue(SelectedNormalizationMethod))
-            {
-                case NormalizationMethods.BASELINE:
-                    NormalizeWithBaselineMean();
-                    break;
-
-                case NormalizationMethods.TO_ONE:
-                    NormalizeWithToOne();
-                    break;
-                default:
-                    break;
-            }
-        }
+      
 
 
         
@@ -127,3 +111,4 @@ namespace HIPA.Classes.InputFile
 
     }
 }
+

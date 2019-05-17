@@ -26,86 +26,72 @@ namespace HIPA.Classes.InputFile
     {
 
 
-        public static List<string> PrepareFiles(OpenFileDialog openFileDialog)
-        {
-            List<string> errorList = new List<string>();
-            try
-            {
-                AddFilesToList(openFileDialog);
-                foreach (InputFile file in Globals.GetFiles())
-                {
-
-                    if (!file.PrepareFile())
-                        errorList.Add(file.Name);
-
-
-                }
-                return errorList;
-            }
-            catch (Exception ex)
-            {
-                Debug.Print(ex.Message);
-                Debug.Print("Error occured @ prepareFiles");
-                return errorList;
-            }
-        }
 
 
         /// <summary>
         /// Prepares the given file. Generates the cells and timeframes
         /// </summary>
-        public bool PrepareFile()
+        public void PrepareFile()
         {
-            try
-            {
-
-                if (!ReadContent() || !DetectSeperator() || !DetectDataSizes() || !CellBuilder() || !DataOK())
-                    return false;
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                // Logger.WriteLog(ex.Message, LogLevel.Error);
-                return false;
-            }
+            ReadContent();
+            FileValid();
+            DetectSeperator();
+            DetectDataSizes();
+            CalculateCellCount();
+            CellBuilder();
+            DataOK();
+            Prepared = true;
+            return;
         }
 
         /// <summary>
         /// Reads the content of the given file and stores it
         /// </summary>
-        public bool ReadContent()
+        public void ReadContent()
         {
             try
             {
                 Content = File.ReadAllLines(FullPath);
-                Console.WriteLine(Content);
             }
             catch (Exception ex)
             {
-                Content = new string[0];
-                // Logger.WriteLog("Could not read file " + Name, LogLevel.Error);
-                // Logger.WriteLog(ex.Message, LogLevel.Error);
-                return false;
+                Logger.logger.Fatal(ex.Message);
+                Logger.logger.Fatal(ex.StackTrace);
+                throw;
             }
-
-            return true;
-
+            return;
         }
 
-        public bool FileValid()
+        public void FileValid()
         {
+           
             try
             {
-                return true;
-            } catch (Exception ex)
+                foreach (string line in Content)
+                {
+                    if (line.Contains("Average") || line.Contains("Err"))
+                        continue;
+
+                    if (Regex.Matches(line, @"[a-zA-Z]").Count != 0)
+                    {
+                        StackTrace stackTrace = new StackTrace();
+                        Logger.logger.Fatal("Found invalid character");
+                        Logger.logger.Fatal(stackTrace.ToString());
+                        throw new Exceptions.InvalidCharacterFound("Found invalid character");
+                    }
+                      
+                }
+                return;
+            } 
+            catch (Exception ex)
             {
-                Debug.Print(ex.Message);
-                return false;
-            }
+                Logger.logger.Fatal(ex.Message);
+                Logger.logger.Fatal(ex.StackTrace);
+                throw;
+            } 
         }
 
-        public bool DetectSeperator()
+        public void DetectSeperator()
         {
 
             if (Content[0].Contains('\t'))
@@ -128,23 +114,38 @@ namespace HIPA.Classes.InputFile
                 else if (line.Contains(','))
                     _tempSeperator = Seperator.COMMA_SEPERATOR;
 
-
-                if (_tempSeperator != DetectedSeperator)
-                    return false;
+                try
+                {
+                    if (_tempSeperator != DetectedSeperator)
+                        throw new Exceptions.InvalidSeperator("There are different seperators used in the file");
+                }
+                 catch (Exception ex)
+                {
+                    Logger.logger.Fatal(ex.Message);
+                    Logger.logger.Fatal(ex.StackTrace);
+                    throw;
+                }
             }
 
-            return true;
+            return;
         }
 
         /// <summary>
         /// Detect all needed data sizes
         /// </summary>
-        public bool DetectDataSizes()
+        public void DetectDataSizes()
         {
-
-            RowCount = Content.Length;
-            TimeframeCount = Content.Length - 1;
-            return CalculateCellCount();
+            try
+            {
+                RowCount = Content.Length;
+                TimeframeCount = Content.Length - 1;
+            } catch (Exception ex)
+            {
+                Logger.logger.Fatal(ex.Message);
+                Logger.logger.Fatal(ex.StackTrace);
+                throw;
+            }
+           
         }
 
 
@@ -153,7 +154,7 @@ namespace HIPA.Classes.InputFile
         /// </summary>
         /// <param name="lines"></param>
         /// <returns></returns>
-        private bool CalculateCellCount()
+        private void CalculateCellCount()
         {
             try
             {
@@ -170,13 +171,13 @@ namespace HIPA.Classes.InputFile
                 }
 
                 CellCount = count;
-                return true;
+                return;
             }
             catch (Exception ex)
             {
-                Debug.Print(ex.Message);
-                Debug.Print("Error occured while calculating Cell Count");
-                return false;
+                Logger.logger.Fatal(ex.Message);
+                Logger.logger.Fatal(ex.StackTrace);
+                throw;
             }
 
         }
@@ -184,7 +185,7 @@ namespace HIPA.Classes.InputFile
         /// <summary>
         /// Calculates the minutes per Cell
         /// </summary>
-        public bool CalculateMinutes()
+        public void CalculateMinutes()
         {
             try
             {
@@ -202,25 +203,25 @@ namespace HIPA.Classes.InputFile
                 }
 
                 TotalDetectedMinutes = Cells[0].Timeframes.Count * 3.9 / 60;
-                return true;
+                return;
             }
             catch (Exception ex)
             {
-                Debug.Print(ex.Message);
-                Debug.Print("Error occured while calculating total minutes");
-                return false;
+                Logger.logger.Fatal(ex.Message);
+                Logger.logger.Fatal(ex.StackTrace);
+                throw;
             }
 
         }
 
-
-        private bool DataOK()
+        //TODO Fix bug which causes false positives
+        private void DataOK()
         {
 
             double lastDetectedMinutes = 0.0;
 
             if (Cells.Count() != CellCount)
-                return false;
+                throw new Exceptions.DataCheckNotPassed("Cell count not matching");
 
             for (int i = 0; i < Cells.Count; ++i)
             {
@@ -233,13 +234,13 @@ namespace HIPA.Classes.InputFile
 
                 if (i != 0)
                     if (detectedMinutes != lastDetectedMinutes)
-                        return false;
+                        throw new Exceptions.DataCheckNotPassed("Detected Minutes not matching");
 
 
                 lastDetectedMinutes = detectedMinutes;
 
             }
-            return true;
+            return;
         }
 
 

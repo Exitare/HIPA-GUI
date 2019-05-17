@@ -1,14 +1,36 @@
-﻿using System;
+﻿using HIPA.Services.SettingsHandler;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HIPA.Services.Log;
 
 namespace HIPA.Classes.InputFile {
     partial class InputFile
     {
 
+        /// <summary>
+        /// Handles the correct Execution of the Chosen Normalization
+        /// </summary>
+        public void ExecuteChosenNormalization()
+        {
+            switch (SettingsHandler.GetNormalizationMethodEnumValue(SelectedNormalizationMethod))
+            {
+                case NormalizationMethods.BASELINE:
+                    NormalizeWithBaselineMean();
+                    break;
 
+                case NormalizationMethods.TO_ONE:
+                    NormalizeWithToOne();
+                    break;
+                default:
+                    //TODO handle this error correct, or check on startup if value is valid and change it properly
+                    //throw new Exceptions.NoNormalizationMethodFound();
+                    NormalizeWithBaselineMean();
+                    break;
+            }
+        }
 
         /// <summary>
         /// Find the TimeFrame Maximum for later Threshold Calculation
@@ -25,6 +47,10 @@ namespace HIPA.Classes.InputFile {
                         maximum = timeframe.Value;
 
                 }
+
+                if (maximum == 0)
+                    throw new Exceptions.NoTimeFrameMaximumDetected("Maximum is still 0.");
+
                 cell.TimeFrameMaximum = maximum;
             }
 
@@ -39,7 +65,17 @@ namespace HIPA.Classes.InputFile {
         {
             foreach (Cell cell in Cells)
             {
-                cell.Threshold = cell.TimeFrameMaximum * PercentageLimit;
+                try
+                {
+                    cell.Threshold = cell.TimeFrameMaximum * PercentageLimit;
+                }
+                catch (Exception ex)
+                {
+                    Logger.logger.Fatal(ex.Message);
+                    Logger.logger.Fatal(ex.StackTrace);
+                    throw new Exceptions.CouldNotCalculateThreshold("Could not calculate Treshold");
+
+                }               
             }
 
         }
@@ -58,10 +94,22 @@ namespace HIPA.Classes.InputFile {
 
                 for (int i = 0; i < StimulationTimeframe; ++i)
                 {
-                    total = total + cell.Timeframes[i].Value;
+                    total += cell.Timeframes[i].Value;
                     count++;
                 }
-                cell.BaselineMean = total / count;
+
+                try
+                {
+                    cell.BaselineMean = total / count;
+                }
+                catch (Exception ex)
+                {
+                    Logger.logger.Fatal(ex.Message);
+                    Logger.logger.Fatal(ex.StackTrace);
+                    throw new Exceptions.CouldNotCalculateBaselineMean("Could not calculate Baseline mean");
+                    
+                }
+               
             }
         }
 
@@ -93,22 +141,28 @@ namespace HIPA.Classes.InputFile {
             {
                 foreach (TimeFrame timeframe in cell.NormalizedTimeframes)
                 {
-
-                    if (!cell.HighIntensityCounts.ContainsKey(timeframe.IncludingMinute))
+                    try
                     {
-                        if (timeframe.AboveBelowThreshold)
-                            cell.HighIntensityCounts.Add(timeframe.IncludingMinute, 1);
+                        if (!cell.HighIntensityCounts.ContainsKey(timeframe.IncludingMinute))
+                        {
+                            if (timeframe.AboveBelowThreshold)
+                                cell.HighIntensityCounts.Add(timeframe.IncludingMinute, 1);
 
+                            else
+                                cell.HighIntensityCounts.Add(timeframe.IncludingMinute, 0);
+                        }
                         else
-                            cell.HighIntensityCounts.Add(timeframe.IncludingMinute, 0);
+                        {
+                            if (timeframe.AboveBelowThreshold)
+                                cell.HighIntensityCounts[timeframe.IncludingMinute] = cell.HighIntensityCounts[timeframe.IncludingMinute] + 1;
+                        }
                     }
-                    else
+                    catch(Exception ex)
                     {
-                        if (timeframe.AboveBelowThreshold)
-                            cell.HighIntensityCounts[timeframe.IncludingMinute] = cell.HighIntensityCounts[timeframe.IncludingMinute] + 1;
+                        Logger.logger.Fatal(ex.Message);
+                        Logger.logger.Fatal(ex.StackTrace);
+                        throw new Exceptions.CouldNotCountHighIntensityPeaksPerMinute();
                     }
-
-
                 }
             }
         }

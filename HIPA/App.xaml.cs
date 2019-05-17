@@ -15,7 +15,7 @@ namespace HIPA
 
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message, "Exception Sample", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message + "\n For more information have a look at the Logs folder", "HIPA", MessageBoxButton.OK, MessageBoxImage.Warning);
             Logger.logger.Error(e.Exception.StackTrace);
           
             e.Handled = true;

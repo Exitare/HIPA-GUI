@@ -44,7 +44,8 @@ namespace HIPA.Classes.InputFile {
             }
             catch (Exception ex)
             {
-              //  Logger.WriteLog(ex.Message, LogLevel.Error);
+                Logger.logger.Error(ex.Message);
+                Logger.logger.Error(ex.StackTrace);
                 return new string[0, 0];
             }
         }
@@ -82,10 +83,10 @@ namespace HIPA.Classes.InputFile {
 
 
         /// <summary>
-        /// Creates the txt file for the normalized Timesframes
+        ///  Creates the txt file for the normalized Timesframes
         /// </summary>
         /// <returns></returns>
-        public bool ExportNormalizedTimesframes()
+        public void ExportNormalizedTimesframes()
         {
 
             string filename = Folder + Name + "-Normalized Timeframes-" + DateTime.Today.ToShortDateString() + ".txt";
@@ -96,6 +97,9 @@ namespace HIPA.Classes.InputFile {
                 StreamWriter sw = new StreamWriter(filename);
 
                 string[,] data_matrix = CreateNormalizedTimeFrameMatrix();
+
+                if (data_matrix.GetLength(0) == 0 || data_matrix.GetLength(1) == 0)
+                    throw new Exceptions.DataMatrixEmpty();
 
                 Debug.Print("Row Count is {0} and Column Count is {1}", data_matrix.GetLength(0), data_matrix.GetLength(1));
 
@@ -114,12 +118,18 @@ namespace HIPA.Classes.InputFile {
 
 
                 sw.Close();
-                return true;
+                return;
             }
             catch (Exception ex)
             {
-                //  Logger.WriteLog(ex.Message, LogLevel.Error);
-                //  Logger.WriteLog("Could not create file in source folder. Use own execution folder!", LogLevel.Error);
+                Logger.logger.Error(ex.Message);
+                Logger.logger.Error(ex.StackTrace);
+
+                if(ex is Exceptions.DataMatrixEmpty)
+                {
+                    throw new Exceptions.DataMatrixEmpty();
+                }
+
                 filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "-Normalized Timeframes-" + DateTime.Today.ToShortDateString() + ".txt";
                 StreamWriter sw = new StreamWriter(new Uri(filename).LocalPath);
 
@@ -142,7 +152,7 @@ namespace HIPA.Classes.InputFile {
 
 
                 sw.Close();
-                return false;
+                return;
             }
 
         }
@@ -151,7 +161,7 @@ namespace HIPA.Classes.InputFile {
         /// Creates the txt file for the high intensity counts
         /// </summary>
         /// <returns></returns>
-        public bool ExportHighIntensityCounts()
+        public void ExportHighIntensityCounts()
         {
             string filename = Folder + Name + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
 
@@ -160,6 +170,9 @@ namespace HIPA.Classes.InputFile {
                 StreamWriter sw = new StreamWriter(filename);
 
                 string[,] data_matrix = CreateHighIntensityCountsMatrix();
+                if (data_matrix.GetLength(0) == 0 || data_matrix.GetLength(1) == 0)
+                    throw new Exceptions.DataMatrixEmpty();
+
                 for (int i = 0; i < data_matrix.GetLength(0); ++i)
                 {
 
@@ -169,21 +182,22 @@ namespace HIPA.Classes.InputFile {
                     for (int j = 0; j < data_matrix.GetLength(1); j++)
                         row[j] = data_matrix[i, j];
 
-
                     sw.WriteLine(String.Join("\t", row));
                 }
 
 
                 sw.Close();
-                return true;
             }
             catch (Exception ex)
             {
-                //Logger.WriteLog(ex.Message, LogLevel.Error);
-                // Logger.WriteLog("Could not create file in source folder. Used own execution folder!", LogLevel.Error);
+                Logger.logger.Error(ex.Message);
+                Logger.logger.Error(ex.StackTrace);
+
                 filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
                 StreamWriter sw = new StreamWriter(new Uri(filename).LocalPath);
+
                 string[,] data_matrix = CreateHighIntensityCountsMatrix();
+
                 for (int i = 0; i < data_matrix.GetLength(0); ++i)
                 {
 
@@ -199,7 +213,6 @@ namespace HIPA.Classes.InputFile {
 
 
                 sw.Close();
-                return false;
             }
         }
     }

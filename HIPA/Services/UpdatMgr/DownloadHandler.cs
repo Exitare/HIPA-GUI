@@ -37,7 +37,7 @@ namespace HIPA.Services.Updater
                 // Download the Web resource and save it into the current filesystem folder.
                 try
                 {
-                   
+
                     WebProxy wp = new WebProxy(Settings.Default.Proxy_URL, Settings.Default.Proxy_Port);
                     if (Settings.Default.Proxy_Active)
                         webClient.Proxy = wp;
@@ -51,8 +51,9 @@ namespace HIPA.Services.Updater
                     Debug.WriteLine("Could not download Updater");
                     Debug.WriteLine(ex.Message);
 #endif
-                    // Logger.WriteLog("There was an error downloading the Updater!", LogLevel.Warning);
-                    // Logger.WriteLog(ex.Message, LogLevel.Warning);
+                    Logger.logger.Error("There was an error downloading the Updater!");
+                    Logger.logger.Error(ex.Message);
+                    Logger.logger.Error(ex.StackTrace);
 
                     EventHandler handler = OnDownloadError;
                     DownloadErrorArgs args = new DownloadErrorArgs();
@@ -85,7 +86,8 @@ namespace HIPA.Services.Updater
                 }
                 catch (Exception ex)
                 {
-                    //Logger.WriteLog(ex.Message, LogLevel.Error);
+                    Logger.logger.Error(ex.Message);
+                    Logger.logger.Error(ex.StackTrace);
                     Globals.ConnectionSuccessful = false;
                 }
             }
