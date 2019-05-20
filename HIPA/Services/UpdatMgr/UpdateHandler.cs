@@ -50,7 +50,6 @@ namespace HIPA.Services.Updater {
         {
             if (IsConnectedToInternet())
             {
-                //DownloadHandler.DownloadSetup();
                 Version version = GetRemoteVersion();
                 if (version == Version.Parse("0.0.0.0"))
                     Globals.UpdateAvailable = true;
