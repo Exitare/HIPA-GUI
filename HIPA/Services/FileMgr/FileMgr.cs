@@ -19,12 +19,18 @@ namespace HIPA.Services.FileMgr {
 
         private static void CreateLogFiles()
         {
-            if (!File.Exists(Globals.LogFileName))
-                File.Create(Globals.LogFileName).Close();
+
+            Directory.CreateDirectory(Globals.HIPAFolder);
+            Directory.CreateDirectory(Globals.LogsFolder);
+            Directory.CreateDirectory(Globals.HIPATempFolder);
+
+          
+            if (!File.Exists(Globals.LogTextFile))
+                File.Create(Globals.LogTextFile).Close();
 
 
-            if (!File.Exists(Globals.ErrorLogFileName))
-                File.Create(Globals.ErrorLogFileName).Close();
+            if (!File.Exists(Globals.ErrorLogTextFile))
+                File.Create(Globals.ErrorLogTextFile).Close();
 
         }
 

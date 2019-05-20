@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Input;
 using HIPA.Classes.InputFile;
 
@@ -27,8 +28,19 @@ namespace HIPA.Statics
 
         public delegate void NormalizationDelegate(InputFile file);
 
-        public static string ErrorLogFileName => "ErrorLog.txt";
-        public static string LogFileName => "Log.txt";
+        public static string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        public static string HIPAFolder = Path.Combine(appDataFolder, "HIPA");
+        public static string LogsFolder = Path.Combine(HIPAFolder, LogDirectory);
+        public static string LogTextFile = Path.Combine(LogsFolder, LogFileName);
+        public static string ErrorLogTextFile = Path.Combine(LogsFolder, ErrorLogFileName);
+        public static string HIPATempFolder = Path.Combine(Path.GetTempPath(), "HIPA");
+        public static string HIPATempFolderSetupEXEFileName = Path.Combine(HIPATempFolder,"setup.exe");
+        public static string HIPATempFolderSetupMSIFileName = Path.Combine(HIPATempFolder,"setup.msi");
+
+        private static string LogDirectory => "Logs";
+        private static string ErrorLogFileName => "ErrorLog.txt";
+        private static string LogFileName => "Log.txt";
+
         public static Queue<string> LogQueue = new Queue<string>();
 
         public static bool UpdateAvailable = false;

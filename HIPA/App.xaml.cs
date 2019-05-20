@@ -4,7 +4,7 @@ using System.Windows.Threading;
 using HIPA.Services.Updater;
 using HIPA.Statics;
 using HIPA.Services.Log;
-
+using HIPA.Services.FileMgr;
 
 namespace HIPA
 {
@@ -17,6 +17,10 @@ namespace HIPA
         {
             MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message + "\n For more information have a look at the Logs folder", "HIPA", MessageBoxButton.OK, MessageBoxImage.Warning);
             Logger.logger.Error(e.Exception.StackTrace);
+            Logger.logger.Error(e.Exception.Message);
+            Logger.logger.Error(e.Exception.InnerException.Message);
+            Logger.logger.Error(e.Exception.InnerException.StackTrace);
+          
           
             e.Handled = true;
             Application.Current.Shutdown(21);
@@ -33,16 +37,15 @@ namespace HIPA
         {
             Settings.Default.Save();
             // Logger.logger("Application closed", LogLevel.Info);
-            Debug.Print("Closed");
+
+
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            //Logger.WriteLog("Application startup", LogLevel.Info);
-            if (UpdateHandler.CheckForUpdate() && Globals.ConnectionSuccessful)
-                Globals.UpdateAvailable = true;
-
-        
+            FileMgr.CreateFiles();
+            Logger.ConfigureLogger();
+            UpdateHandler.CheckForUpdate();
         }
     }
 }

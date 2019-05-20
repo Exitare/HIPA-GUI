@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using HIPA.Statics;
 using HIPA.Services.Log;
 using System.Diagnostics;
+using System.IO;
+using HIPA.Services.Misc;
+using System.Runtime.InteropServices;
 
 namespace HIPA.Services.Updater
 {
@@ -14,26 +17,15 @@ namespace HIPA.Services.Updater
     class DownloadHandler
     {
 
-        public delegate void EventHandler(EventArgs args);
-        public static event EventHandler OnDownloadError = delegate { };
-
-
-        public static void DownloadFiles()
+        public static void DownloadSetup()
         {
-            DownloadUpdater();
-            DownloadConfig();
-        }
-
-
-        public static void DownloadUpdater()
-        {
-            string remoteUri = Settings.Default.URL;
-            string fileName = Settings.Default.Updater;
-
             // Create a new WebClient instance.
+            string exeURL = Settings.Default.URL + Settings.Default.SetupEXE;
+            string msiURL = Settings.Default.URL + Settings.Default.SetupMSI ;
+
             using (WebClient webClient = new WebClient())
             {
-                string url = remoteUri + fileName;
+                string url = Settings.Default.URL + Settings.Default.SetupEXE;
                 // Download the Web resource and save it into the current filesystem folder.
                 try
                 {
@@ -42,66 +34,26 @@ namespace HIPA.Services.Updater
                     if (Settings.Default.Proxy_Active)
                         webClient.Proxy = wp;
 
-                    webClient.DownloadFile(url, fileName);
-                    Globals.ConnectionSuccessful = true;
+                    webClient.DownloadFile(exeURL, Globals.HIPATempFolderSetupEXEFileName);
+                    webClient.DownloadFile(msiURL, Globals.HIPATempFolderSetupMSIFileName);
                 }
                 catch (Exception ex)
                 {
-#if DEBUG
-                    Debug.WriteLine("Could not download Updater");
-                    Debug.WriteLine(ex.Message);
-#endif
-                    Logger.logger.Error("There was an error downloading the Updater!");
-                    Logger.logger.Error(ex.Message);
-                    Logger.logger.Error(ex.StackTrace);
-
-                    EventHandler handler = OnDownloadError;
-                    DownloadErrorArgs args = new DownloadErrorArgs();
-                    args.Message = ex.Message;
-                    args.TimeReached = DateTime.Now;
-                    OnDownloadError(args);
-
-                    Globals.ConnectionSuccessful = false;
+                    Logger.logger.Warn("There was an error downloading the Updater!");
+                    Logger.logger.Warn(ex.Message);
+                    Logger.logger.Warn(ex.StackTrace);
+                    if (ex.InnerException != null)
+                    {
+                        Logger.logger.Warn(ex.InnerException.Message);
+                        Logger.logger.Warn(ex.InnerException.StackTrace);
+                    }
                 }
 
             }
         }
-
-        public static void DownloadConfig()
-        {
-            string remoteUri = Settings.Default.URL;
-            string fileName = Settings.Default.ConfigFile;
-
-
-            using (WebClient webClient = new WebClient())
-            {
-                try
-                {
-                    WebProxy wp = new WebProxy(Settings.Default.Proxy_URL, Settings.Default.Proxy_Port);
-                    if (Settings.Default.Proxy_Active)
-                        webClient.Proxy = wp;
-
-                    webClient.DownloadFile(remoteUri + fileName, fileName);
-                    Globals.ConnectionSuccessful = true;
-                }
-                catch (Exception ex)
-                {
-                    Logger.logger.Error(ex.Message);
-                    Logger.logger.Error(ex.StackTrace);
-                    Globals.ConnectionSuccessful = false;
-                }
-            }
-        }
-
-
-     
     }
 
 
-    public class DownloadErrorArgs : EventArgs {
-        public string Message { get; set; }
-        public DateTime TimeReached { get; set; }
-    }
 }
 
 

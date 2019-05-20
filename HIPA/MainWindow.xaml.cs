@@ -40,8 +40,8 @@ namespace HIPA
         public MainWindow()
         {
             InitializeComponent();
-            FileMgr.CreateFiles();
-            Logger.ConfigureLogger();
+           
+           
             SettingsHandler.InitializeNormalizationMethods();
             if (!FileMgr.CheckCustomPath())
                 MessageBox.Show("Could not write to given output path. Using own directory!", "Path");
@@ -63,7 +63,7 @@ namespace HIPA
                 }
 
             }
-
+          
 
             versionLabel.Text = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion;
             UpdateMenu.IsEnabled = Globals.ConnectionSuccessful ? true : false;
@@ -72,7 +72,7 @@ namespace HIPA
 
             if (Globals.UpdateAvailable)
                 if (MessageBox.Show("Updates available!\nDo you want to start the Update?", "Update", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    UpdateHandler.StartUpdates();
+                    UpdateHandler.StartUpdate();
 
 
             InitializeUIState();
@@ -236,6 +236,7 @@ namespace HIPA
         private void InitializeUIState()
         {
             progressBar.Value = 0;
+
         }
 
 
@@ -264,10 +265,11 @@ namespace HIPA
 
         private void CheckForUpdates(object sender, RoutedEventArgs e)
         {
-            if (UpdateHandler.CheckForUpdate())
+            UpdateHandler.CheckForUpdate();
+            if (Globals.UpdateAvailable)
             {
                 if (MessageBox.Show("Updates available!\nDo you want to start the Update?", "Update", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    UpdateHandler.StartUpdates();
+                    UpdateHandler.StartUpdate();
             }
             else
                 MessageBox.Show("No Update available", "Update");

@@ -34,10 +34,10 @@ namespace HIPA {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Updater.exe")]
-        public string Updater {
+        [global::System.Configuration.DefaultSettingValueAttribute("setup.exe")]
+        public string SetupEXE {
             get {
-                return ((string)(this["Updater"]));
+                return ((string)(this["SetupEXE"]));
             }
         }
         
@@ -188,6 +188,15 @@ namespace HIPA {
             }
             set {
                 this["CopySourceFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Setup.msi")]
+        public string SetupMSI {
+            get {
+                return ((string)(this["SetupMSI"]));
             }
         }
     }
