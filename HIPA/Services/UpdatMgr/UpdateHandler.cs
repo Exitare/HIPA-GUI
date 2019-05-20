@@ -50,7 +50,11 @@ namespace HIPA.Services.Updater {
         {
             if (IsConnectedToInternet())
             {
-                DownloadHandler.DownloadSetup();
+                //DownloadHandler.DownloadSetup();
+                Version version = GetRemoteVersion();
+                if (version == Version.Parse("0.0.0.0"))
+                    Globals.UpdateAvailable = true;
+
                 if(GetRemoteVersion() > Version.Parse(FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion))
                     Globals.UpdateAvailable = true;
             }
@@ -62,7 +66,12 @@ namespace HIPA.Services.Updater {
         public static Version GetRemoteVersion()
         {
             Version ver = new Version(0, 0, 0, 0);
-            string urlAddress = "https://raw.githubusercontent.com/hipa-org/HIPA-GUI/dev/HIPA/Properties/AssemblyInfo.cs";
+            string urlAddress = "";
+#if DEBUG
+            urlAddress = "https://raw.githubusercontent.com/hipa-org/HIPA-GUI/dev/HIPA/Properties/AssemblyInfo.cs";
+#else
+           urlAddress = "https://raw.githubusercontent.com/hipa-org/HIPA-GUI/master/HIPA/Properties/AssemblyInfo.cs";
+#endif
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlAddress);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -95,6 +104,7 @@ namespace HIPA.Services.Updater {
 
         public static void StartUpdate()
         {
+            DownloadHandler.DownloadSetup();
             Process.Start(Globals.HIPATempFolderSetupEXEFileName);
             System.Windows.Application.Current.Shutdown();
         }
