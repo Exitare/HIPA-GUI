@@ -18,10 +18,14 @@ namespace HIPA
             MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message + "\n For more information have a look at the Logs folder", "HIPA", MessageBoxButton.OK, MessageBoxImage.Warning);
             Logger.logger.Error(e.Exception.StackTrace);
             Logger.logger.Error(e.Exception.Message);
-            Logger.logger.Error(e.Exception.InnerException.Message);
-            Logger.logger.Error(e.Exception.InnerException.StackTrace);
-          
-          
+            if(e.Exception.InnerException != null)
+            {
+                Logger.logger.Error(e.Exception.InnerException.Message);
+                Logger.logger.Error(e.Exception.InnerException.StackTrace);
+
+            }
+
+
             e.Handled = true;
             Application.Current.Shutdown(21);
         }
