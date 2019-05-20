@@ -30,16 +30,17 @@
         <Button Content="Calculate" x:Name="CalculateButton" HorizontalAlignment="Left" Margin="10,266,0,0" VerticalAlignment="Top" Width="75" Click="Calculate" IsEnabled="False"/>
         <DataGrid x:Name="selectedFilesDataGrid"  Height="229" Margin="10,32,10,0" VerticalAlignment="Top" RowHeight="30" ColumnWidth="100" AutoGenerateColumns="False" TabIndex="0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding ID}" IsReadOnly="True" Width="50" />
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="150"  IsReadOnly="True" />
-                <DataGridTextColumn Header="Detected Cells" Binding="{Binding CellCount}"  IsReadOnly="True"/>
-                <DataGridTextColumn Header="Detected Rows" Binding="{Binding RowCount}"  IsReadOnly="True" />
-                <DataGridTextColumn Header="Detected TimeFrames" Binding="{Binding TimeframeCount}"  IsReadOnly="True"  Width="130"/>
-                <DataGridTextColumn Header="Detected Minutes" Binding="{Binding Total_Detected_Minutes}"  IsReadOnly="True" Width="130"/>
-                <DataGridTextColumn Header="Limit" Binding="{Binding Percentage_Limit}" />
-                <DataGridTextColumn Header="Stimulation TimeFrame" Binding="{Binding Stimulation_Timeframe}" />
-                <DataGridComboBoxColumn x:Name="ComboBoxColumn" Header="Normalization Method"  SelectedItemBinding="{Binding Normalization_Method}" Width="150"/>
-                <DataGridTextColumn Header="Path" Binding="{Binding SourcePath}" />
+                <DataGridTextColumn Header="ID" Binding="{Binding ID,  Mode=OneWay}" IsReadOnly="True" Width="50" />
+                <DataGridTextColumn Header="Name" Binding="{Binding Name,  Mode=OneWay}" Width="150"  IsReadOnly="True" />
+                <DataGridTextColumn Header="Detected Cells" Binding="{Binding CellCount,  Mode=OneWay}"  IsReadOnly="True"/>
+                <DataGridTextColumn Header="Detected Rows" Binding="{Binding RowCount,  Mode=OneWay}"  IsReadOnly="True" />
+                <DataGridTextColumn Header="Detected TimeFrames" Binding="{Binding TimeframeCount,  Mode=OneWay}"  IsReadOnly="True"  Width="130"/>
+                <DataGridTextColumn Header="Detected Minutes" Binding="{Binding TotalDetectedMinutes,  Mode=OneWay}"  IsReadOnly="True" Width="130"/>
+                <DataGridTextColumn Header="Limit" Binding="{Binding PercentageLimit}" />
+                <DataGridTextColumn Header="Stimulation TimeFrame" Binding="{Binding StimulationTimeframe}" />
+                <DataGridComboBoxColumn x:Name="ComboBoxColumn" Header="Normalization Method"  SelectedItemBinding="{Binding SelectedNormalizationMethod}" Width="150"/>
+                <DataGridTextColumn Header="Path" Binding="{Binding Folder,  Mode=OneWay}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Seperator" Binding="{Binding DetectedSeperator,  Mode=OneWay}"  IsReadOnly="True"/>
             </DataGrid.Columns>
           
         </DataGrid>
@@ -62,7 +63,7 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem Grid.Column="0">
-
+                <TextBlock x:Name="versionLabel" Height="16" Width="100"></TextBlock>
             </StatusBarItem>
             <Separator Grid.Column="1" />
             <StatusBarItem Grid.Column="2">

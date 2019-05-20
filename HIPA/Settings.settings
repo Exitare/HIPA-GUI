@@ -5,11 +5,11 @@
     <Setting Name="URL" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://exitare.de/HIPA/</Value>
     </Setting>
-    <Setting Name="Updater" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Updater.exe</Value>
+    <Setting Name="SetupEXE" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">setup.exe</Value>
     </Setting>
-    <Setting Name="DefaultNormalization" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Baseline</Value>
+    <Setting Name="DefaultNormalization" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="InitialStart" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
@@ -43,6 +43,12 @@
     </Setting>
     <Setting Name="CustomOutputPathActive" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CopySourceFile" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="SetupMSI" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Setup.msi</Value>
     </Setting>
   </Settings>
 </SettingsFile>
