@@ -97,7 +97,7 @@ namespace HIPA
                         {
                             StatusBarLabel.Text = file.Name;
                         });
-
+                        Console.WriteLine("Using timeframe {0}", file.StimulationTimeframe);
                         file.CalculateBaselineMean();
                         file.ExecuteChosenNormalization();
                         file.FindTimeFrameMaximum();

@@ -37,6 +37,7 @@ namespace HIPA.Classes.InputFile {
                 {
                     for (int j = 0; j < CellCount; j++)
                     {
+                        Debug.Print("Normalized Timeframe {0}", Cells[j].NormalizedTimeframes[i - 1].Value.ToString());
                         data_matrix[i, j] = Cells[j].NormalizedTimeframes[i - 1].Value.ToString();
                     }
                 }
@@ -104,9 +105,10 @@ namespace HIPA.Classes.InputFile {
             else
                 filename = FullPath + Name + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
 
+            File.Delete(filename);
             try
             {
-
+              
                 StreamWriter sw = new StreamWriter(filename);
                 for (int i = 0; i < data_matrix.GetLength(0); ++i)
                 {
@@ -117,6 +119,9 @@ namespace HIPA.Classes.InputFile {
                     for (int j = 0; j < data_matrix.GetLength(1); j++)
                         row[j] = data_matrix[i, j];
 
+                   
+                    foreach(string text in row)
+                        Console.WriteLine("Normalized {0}",text);
 
                     sw.WriteLine(String.Join("\t", row));
                 }
@@ -164,6 +169,8 @@ namespace HIPA.Classes.InputFile {
                 filename = Settings.Default.CustomOutputPath + "\\" + Name + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
             else
                 filename = FullPath + Name + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
+
+            File.Delete(filename);
 
             try
             {

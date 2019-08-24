@@ -1,6 +1,7 @@
 ﻿using HIPA.Services.Log;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace HIPA.Classes.InputFile
             {
                 foreach (TimeFrame timeframe in cell.Timeframes)
                 {
+                    // Debug.Print("Normalization {0}", timeframe.Value / cell.BaselineMean);
                     cell.NormalizedTimeframes.Add(new TimeFrame(timeframe.ID, timeframe.Value / cell.BaselineMean, timeframe.IncludingMinute, timeframe.AboveBelowThreshold));
                 }
             }
