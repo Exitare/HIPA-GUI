@@ -62,6 +62,7 @@ namespace HIPA {
             Settings.Default.CustomOutputPath = OutputpathBox.Text;
             Settings.Default.CustomOutputPathActive = CustomFolderOutputCheckBox.IsChecked.Value;
             Settings.Default.Save();
+            MessageBox.Show("Settings saved", "Settings", MessageBoxButton.OK);
         }
 
         private void ChoosePath(object sender, RoutedEventArgs e)

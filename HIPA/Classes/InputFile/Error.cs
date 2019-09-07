@@ -6,9 +6,7 @@ namespace HIPA.Classes.InputFile
     partial class InputFile
     {
         public class InputFileError
-        {
-            private StackTrace stackTrace;
-           
+        {         
 
         }
     }

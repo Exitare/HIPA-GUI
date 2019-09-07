@@ -91,39 +91,24 @@ namespace HIPA
 
                 foreach (InputFile file in Globals.GetFiles())
                 {
-                    try
+                    Dispatcher.Invoke(() =>
                     {
-                        Dispatcher.Invoke(() =>
-                        {
-                            StatusBarLabel.Text = file.Name;
-                        });
-                        Console.WriteLine("Using timeframe {0}", file.StimulationTimeframe);
-                        file.CalculateBaselineMean();
-                        file.ExecuteChosenNormalization();
-                        file.FindTimeFrameMaximum();
-                        file.CalculateThreshold();
-                        file.DetectAboveBelowThreshold();
-                        file.CountHighIntensityPeaksPerMinute();
-                        file.ExportHighIntensityCounts();
-                        file.ExportNormalizedTimesframes();
+                        StatusBarLabel.Text = file.Name;
+                    });
 
-                        Dispatcher.Invoke(() =>
-                        {
-                            progressBar.Value += step;
-                        });
-                    }
-                    catch (Exception ex)
+                    file.CalculateBaselineMean();
+                    file.ExecuteChosenNormalization();
+                    file.FindTimeFrameMaximum();
+                    file.CalculateThreshold();
+                    file.DetectAboveBelowThreshold();
+                    file.CountHighIntensityPeaksPerMinute();
+                    file.ExportHighIntensityCounts();
+                    file.ExportNormalizedTimesframes();
+
+                    Dispatcher.Invoke(() =>
                     {
-                        Dispatcher.Invoke(() =>
-                        {
-
-                            if (MessageBox.Show(ex.Message + "\nError occured.\nWould you like to proceed to process remaining files?\nYou could find more information about the error in the logs", "Error occured!", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
-                                return;
-
-                        });
-                    }
-
-
+                        progressBar.Value += step;
+                    });
                 }
 
             });

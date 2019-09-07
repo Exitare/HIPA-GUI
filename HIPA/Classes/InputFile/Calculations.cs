@@ -87,6 +87,7 @@ namespace HIPA.Classes.InputFile {
         /// <param name="file"></param>
         public void CalculateBaselineMean()
         {
+
             foreach (Cell cell in Cells)
             {
                 int count = 0;
@@ -107,9 +108,9 @@ namespace HIPA.Classes.InputFile {
                     Logger.logger.Fatal(ex.Message);
                     Logger.logger.Fatal(ex.StackTrace);
                     throw new Exceptions.CouldNotCalculateBaselineMean("Could not calculate Baseline mean");
-                    
+
                 }
-               
+
             }
         }
 

@@ -37,7 +37,6 @@ namespace HIPA.Classes.InputFile {
                 {
                     for (int j = 0; j < CellCount; j++)
                     {
-                        Debug.Print("Normalized Timeframe {0}", Cells[j].NormalizedTimeframes[i - 1].Value.ToString());
                         data_matrix[i, j] = Cells[j].NormalizedTimeframes[i - 1].Value.ToString();
                     }
                 }
