@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIPA", "HIPA\HIPA.csproj", "{4F647128-EB26-412E-953F-272B02637931}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HIPASetup", "Setup\Setup.vdproj", "{1C365E5A-2506-4292-B21D-ACA5FB731BA4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,8 +15,6 @@ Global
 		{4F647128-EB26-412E-953F-272B02637931}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F647128-EB26-412E-953F-272B02637931}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F647128-EB26-412E-953F-272B02637931}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C365E5A-2506-4292-B21D-ACA5FB731BA4}.Debug|Any CPU.ActiveCfg = Debug
-		{1C365E5A-2506-4292-B21D-ACA5FB731BA4}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
