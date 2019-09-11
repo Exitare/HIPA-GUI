@@ -102,7 +102,7 @@ namespace HIPA.Classes.InputFile {
             if (Settings.Default.CustomOutputPathActive)
                 filename = Settings.Default.CustomOutputPath + "\\" + Name + "-Normalized-Timeframes-" + datetime + ".txt";
             else
-                filename = Name + "-Normalized-Timeframes-" + datetime + ".txt";
+                filename = this.Folder + "\\" + Name + "-Normalized-Timeframes-" + datetime + ".txt";
            
             try
             {
@@ -163,7 +163,7 @@ namespace HIPA.Classes.InputFile {
             if (Settings.Default.CustomOutputPathActive)
                 filename = Settings.Default.CustomOutputPath + "\\" + Name + "-High-Intensity-Counts-" + datetime + ".txt";
             else
-                filename = Name + "-High-Intensity-Counts-" + datetime + ".txt";
+                filename = this.Folder + "\\" + Name + "-High-Intensity-Counts-" + datetime + ".txt";
 
             try
             {
@@ -206,6 +206,15 @@ namespace HIPA.Classes.InputFile {
                 }
 
                 sw.Close();
+            }
+        }
+
+
+        public void CopySource()
+        {
+            if (Settings.Default.CopySourceFile)
+            {
+
             }
         }
     }
