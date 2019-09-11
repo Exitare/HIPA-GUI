@@ -102,7 +102,7 @@ namespace HIPA.Classes.InputFile {
             if (Settings.Default.CustomOutputPathActive)
                 filename = Settings.Default.CustomOutputPath + "\\" + Name + "-NormalizedTimeframes-" + DateTime.Today.ToShortDateString() + ".txt";
             else
-                filename = FullPath + Name + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
+                filename = FullPath + Name + "-NormalizedTimeframes-" + DateTime.Today.ToShortDateString() + ".txt";
 
             File.Delete(filename);
             try
@@ -165,9 +165,9 @@ namespace HIPA.Classes.InputFile {
             string[,] data_matrix = CreateHighIntensityCountsMatrix();
             string filename;
             if (Settings.Default.CustomOutputPathActive)
-                filename = Settings.Default.CustomOutputPath + "\\" + Name + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
+                filename = Settings.Default.CustomOutputPath + "\\" + Name + "-HighIntensityCounts-" + DateTime.Today.ToShortDateString() + ".txt";
             else
-                filename = FullPath + Name + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
+                filename = FullPath + Name + "-HighIntensityCounts-" + DateTime.Today.ToShortDateString() + ".txt";
 
             File.Delete(filename);
 
