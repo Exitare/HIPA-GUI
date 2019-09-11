@@ -32,10 +32,10 @@ namespace HIPA {
         private void NormalizationMethodChanged(object sender, SelectionChangedEventArgs e)
         {
             Debug.Print("Test");
-            Console.WriteLine((sender as ComboBox).SelectedItem.ToString() as string);
+            Debug.WriteLine((sender as ComboBox).SelectedItem.ToString() as string);
             Settings.Default.DefaultNormalization = Convert.ToInt32(SettingsHandler.GetNormalizationMethodEnumValue((sender as ComboBox).SelectedItem.ToString() as string));
 
-            Console.WriteLine("Settings {0}", Settings.Default.DefaultNormalization);
+            Debug.WriteLine("Settings {0}", Settings.Default.DefaultNormalization);
             Settings.Default.Save();
         }
 

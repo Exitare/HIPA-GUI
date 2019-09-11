@@ -90,21 +90,20 @@ namespace HIPA.Classes.InputFile {
 
         }
 
-
         /// <summary>
         ///  Creates the txt file for the normalized Timesframes
         /// </summary>
         /// <returns></returns>
         public void ExportNormalizedTimesframes()
         {
+            string datetime = DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss");
             string[,] data_matrix = CreateNormalizedTimeFrameMatrix();
             string filename;
             if (Settings.Default.CustomOutputPathActive)
-                filename = Settings.Default.CustomOutputPath + "\\" + Name + "-NormalizedTimeframes-" + DateTime.Today.ToShortDateString() + ".txt";
+                filename = Settings.Default.CustomOutputPath + "\\" + Name + "-Normalized-Timeframes-" + datetime + ".txt";
             else
-                filename = FullPath + Name + "-NormalizedTimeframes-" + DateTime.Today.ToShortDateString() + ".txt";
-
-            File.Delete(filename);
+                filename = Name + "-Normalized-Timeframes-" + datetime + ".txt";
+           
             try
             {
               
@@ -118,22 +117,18 @@ namespace HIPA.Classes.InputFile {
                     for (int j = 0; j < data_matrix.GetLength(1); j++)
                         row[j] = data_matrix[i, j];
 
-                   
-                    foreach(string text in row)
-                        Console.WriteLine("Normalized {0}",text);
-
                     sw.WriteLine(String.Join("\t", row));
                 }
                 sw.Close();
                 return;
             }
+
             catch (Exception ex)
             {
+
                 Logger.logger.Error(ex.Message);
                 Logger.logger.Error(ex.StackTrace);
-                
-
-                filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + Name + "-Normalized Timeframes-" + DateTime.Today.ToShortDateString() + ".txt";
+                filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + Name + "-Normalized-Timeframes-" + datetime + ".txt";
                 StreamWriter sw = new StreamWriter(new Uri(filename).LocalPath);
 
                 for (int i = 0; i < data_matrix.GetLength(0); ++i)
@@ -162,14 +157,13 @@ namespace HIPA.Classes.InputFile {
         /// <returns></returns>
         public void ExportHighIntensityCounts()
         {
+            string datetime = DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss");
             string[,] data_matrix = CreateHighIntensityCountsMatrix();
             string filename;
             if (Settings.Default.CustomOutputPathActive)
-                filename = Settings.Default.CustomOutputPath + "\\" + Name + "-HighIntensityCounts-" + DateTime.Today.ToShortDateString() + ".txt";
+                filename = Settings.Default.CustomOutputPath + "\\" + Name + "-High-Intensity-Counts-" + datetime + ".txt";
             else
-                filename = FullPath + Name + "-HighIntensityCounts-" + DateTime.Today.ToShortDateString() + ".txt";
-
-            File.Delete(filename);
+                filename = Name + "-High-Intensity-Counts-" + datetime + ".txt";
 
             try
             {
@@ -195,7 +189,7 @@ namespace HIPA.Classes.InputFile {
                 Logger.logger.Error(ex.Message);
                 Logger.logger.Error(ex.StackTrace);
 
-                filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + Name + "-High Intensity Counts-" + DateTime.Today.ToShortDateString() + ".txt";
+                filename = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + Name + "-High-Intensity-Counts-" + datetime + ".txt";
                 StreamWriter sw = new StreamWriter(new Uri(filename).LocalPath);
 
                 for (int i = 0; i < data_matrix.GetLength(0); ++i)
